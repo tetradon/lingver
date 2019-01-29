@@ -1,0 +1,3 @@
+rootProject.name = 'lingver'
+
+include 'lingver-api', 'lingver-ui'
