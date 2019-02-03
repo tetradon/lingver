@@ -1,7 +1,7 @@
 package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.Word;
-import com.kotlart.lingver.respoitory.WordRepository;
+import com.kotlart.lingver.respository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

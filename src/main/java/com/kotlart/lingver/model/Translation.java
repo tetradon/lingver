@@ -1,5 +1,6 @@
 package com.kotlart.lingver.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,5 +23,6 @@ public class Translation extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = Word.TABLE_NAME + FK_SUFFIX)
+    @JsonBackReference
     private Word word;
 }

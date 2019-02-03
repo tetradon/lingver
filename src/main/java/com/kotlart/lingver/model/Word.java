@@ -1,5 +1,6 @@
 package com.kotlart.lingver.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,6 +22,7 @@ public class Word extends AbstractEntity {
     private Timestamp insertDate;
     private String insertUser;
 
-    @OneToMany(mappedBy = Word.TABLE_NAME)
+    @OneToMany(mappedBy = Word.TABLE_NAME, fetch = FetchType.EAGER)
+    @JsonManagedReference
     private List<Translation> translations;
 }
