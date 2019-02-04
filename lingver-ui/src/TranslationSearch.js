@@ -27,7 +27,7 @@ class TranslationSearch extends Component {
                 fetch(`/translation?word=${this.state.userSearch}`)
                     .then(response => response.json())
                     .then(data => this.setState({translations: data}));
-            }, 1000)
+            }, 300)
         });
     }
 
