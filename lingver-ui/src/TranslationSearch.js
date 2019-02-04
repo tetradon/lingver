@@ -8,7 +8,7 @@ class TranslationSearch extends Component {
         super(props);
         this.state = {
             translations: [],
-            value: '',
+            userSearch: '',
             typing: false,
             typingTimeout: 0
         };
@@ -16,19 +16,17 @@ class TranslationSearch extends Component {
     }
 
     handleChange(event) {
-        const self = this;
-
-        if (self.state.typingTimeout) {
-            clearTimeout(self.state.typingTimeout);
+        if (this.state.typingTimeout) {
+            clearTimeout(this.state.typingTimeout);
         }
 
-        self.setState({
-            value: event.target.value,
+        this.setState({
+            userSearch: event.target.value,
             typing: false,
-            typingTimeout: setTimeout(function () {
-                fetch(`/translation?word=${self.state.value}`)
+            typingTimeout: setTimeout(() => {
+                fetch(`/translation?word=${this.state.userSearch}`)
                     .then(response => response.json())
-                    .then(data => self.setState({translations: data}));
+                    .then(data => this.setState({translations: data}));
             }, 1000)
         });
     }
@@ -48,7 +46,7 @@ class TranslationSearch extends Component {
                 <LingverNavbar/>
                 <Container fluid>
                     <InputGroup>
-                        <Input type="text" value={this.state.value}
+                        <Input type="text" value={this.state.userSearch}
                                onChange={this.handleChange}/>
                     </InputGroup>
                     <ul>{translationList}</ul>
