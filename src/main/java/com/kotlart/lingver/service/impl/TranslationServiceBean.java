@@ -20,6 +20,6 @@ public class TranslationServiceBean implements TranslationService {
 
     @Override
     public List<Translation> findByWordValue(String word) {
-        return translationRepository.findByWordValue(word);
+        return translationRepository.findByWordValueIgnoreCase(word);
     }
 }
