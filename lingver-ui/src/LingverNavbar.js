@@ -23,11 +23,11 @@ export default class LingverNavbar extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
                 <Nav className="ml-auto" navbar>
                     <NavItem>
-                        <NavLink
-                            href="#">Link</NavLink>
+                        <NavLink tag={Link}
+                                 to="/search">Search</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink href="#">Link</NavLink>
+                        <NavLink href="#">Logout</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>

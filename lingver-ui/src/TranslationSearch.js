@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Container, Input, InputGroup} from 'reactstrap';
+import {Button, Container, Input, InputGroup, ListGroup, ListGroupItem} from 'reactstrap';
 import LingverNavbar from './LingverNavbar';
 
 
@@ -36,9 +36,11 @@ class TranslationSearch extends Component {
         const {translations} = this.state;
 
         const translationList = translations.map(word => {
-            return <li key={word.id}>
-                {word.value}
-            </li>
+            return (
+                <ListGroupItem key={word.id}>
+                    {word.value} <Button className="float-right" size="sm" color="primary">+</Button>
+                </ListGroupItem>
+            )
         });
 
         return (
@@ -49,7 +51,7 @@ class TranslationSearch extends Component {
                         <Input type="text" value={this.state.userSearch}
                                onChange={this.handleChange}/>
                     </InputGroup>
-                    <ul>{translationList}</ul>
+                    <ListGroup>{translationList}</ListGroup>
                 </Container>
             </div>
         );
