@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collection;
 
 @RestController
-public class WordEndpoint {
+public class WordController {
     private WordRepository repository;
 
     @Autowired
-    public WordEndpoint(WordRepository repository) {
+    public WordController(WordRepository repository) {
         this.repository = repository;
     }
 
