@@ -13,7 +13,7 @@ public class Exercise extends AbstractEntity {
     public static final String TABLE_NAME = "exercise";
     @Id
     @Column(name = TABLE_NAME + FK_SUFFIX)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 }

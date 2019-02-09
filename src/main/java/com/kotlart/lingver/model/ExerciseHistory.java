@@ -14,7 +14,7 @@ public class ExerciseHistory extends AbstractEntity {
     public static final String TABLE_NAME = "exercise_history";
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp date;
     private Boolean result;

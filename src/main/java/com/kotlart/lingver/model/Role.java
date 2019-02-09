@@ -14,7 +14,7 @@ public class Role extends AbstractEntity {
     public static final String TABLE_NAME = "role";
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
 }

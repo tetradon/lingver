@@ -13,7 +13,7 @@ public class User extends AbstractEntity {
     public static final String TABLE_NAME = "user";
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
     private String email;

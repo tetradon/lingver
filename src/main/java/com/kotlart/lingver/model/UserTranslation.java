@@ -14,7 +14,7 @@ public class UserTranslation extends AbstractEntity {
     public static final String TABLE_NAME = "user_translation";
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Timestamp insertDate;
     private String description;
