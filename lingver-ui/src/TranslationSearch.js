@@ -1,7 +1,5 @@
 import React, {Component} from 'react';
-import {Button, Container, Input, InputGroup, ListGroup, ListGroupItem} from 'reactstrap';
-import LingverNavbar from './LingverNavbar';
-
+import {Button, Input, InputGroup, ListGroup, ListGroupItem} from 'reactstrap';
 
 class TranslationSearch extends Component {
     constructor(props) {
@@ -45,14 +43,12 @@ class TranslationSearch extends Component {
 
         return (
             <div>
-                <LingverNavbar/>
-                <Container fluid>
+                <h2>Add new word</h2>
                     <InputGroup>
                         <Input type="text" value={this.state.userSearch}
                                onChange={this.handleChange}/>
                     </InputGroup>
                     <ListGroup>{translationList}</ListGroup>
-                </Container>
             </div>
         );
     }

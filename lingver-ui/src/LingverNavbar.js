@@ -24,7 +24,7 @@ export default class LingverNavbar extends Component {
                 <Nav className="ml-auto" navbar>
                     <NavItem>
                         <NavLink tag={Link}
-                                 to="/search">Search</NavLink>
+                                 to="/dictionary" replace>Dictionary</NavLink>
                     </NavItem>
                     <NavItem>
                         <NavLink href="#">Logout</NavLink>
