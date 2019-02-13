@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/translation")
+@RequestMapping("api/translation")
 public class TranslationController {
     private final TranslationService translationService;
 
