@@ -8,6 +8,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/*
+    RestAuthenticationEntryPoint is used for overriding standard
+    Spring Security authentication entry point which returns html login page
+ */
 @Component
 public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override

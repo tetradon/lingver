@@ -1,5 +1,6 @@
 package com.kotlart.lingver.config.security;
 
+import com.kotlart.lingver.service.LingverUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 
 @Configuration
@@ -16,21 +18,19 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final RestAuthenticationEntryPoint entryPoint;
-
-    private final RestAuthenticationSuccessHandler authenticationSuccessHandler;
+    private final LingverUserDetailsService userDetailsService;
+    //private final RestAuthenticationSuccessHandler authenticationSuccessHandler;
 
     @Autowired
-    public SecurityConfig(RestAuthenticationEntryPoint entryPoint, RestAuthenticationSuccessHandler authenticationSuccessHandler) {
+    public SecurityConfig(RestAuthenticationEntryPoint entryPoint, LingverUserDetailsService userDetailsService) {//, RestAuthenticationSuccessHandler authenticationSuccessHandler) {
         this.entryPoint = entryPoint;
-        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.userDetailsService = userDetailsService;
+        //this.authenticationSuccessHandler = authenticationSuccessHandler;
     }
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin").password(encoder().encode("adminPass")).roles("ADMIN")
-                .and()
-                .withUser("user").password(encoder().encode("userPass")).roles("USER");
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
     }
 
     @Bean
@@ -41,6 +41,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public SimpleUrlAuthenticationFailureHandler failureHandler(){
         return new SimpleUrlAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setTargetUrlParameter("/user");
+        return successHandler;
     }
 
     @Override
@@ -55,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/admin/**").hasRole("ADMIN")
                 .and()
                 .formLogin()
-                .successHandler(authenticationSuccessHandler)
+                .successHandler(successHandler())
                 .failureHandler(failureHandler())
                 .and()
                 .logout();
