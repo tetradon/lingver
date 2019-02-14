@@ -14,7 +14,11 @@ public class UserController {
 
     @GetMapping
     String user(Principal principal) {
-        LingverUserDetails activeUser = (LingverUserDetails) ((Authentication) principal).getPrincipal();
-        return activeUser.getUsername() + " " + activeUser.getAuthorities() + " " + activeUser.getPassword();
+        if (principal != null) {
+            LingverUserDetails activeUser = (LingverUserDetails) ((Authentication) principal).getPrincipal();
+            return activeUser.getUsername() + " " + activeUser.getAuthorities() + " " + activeUser.getPassword();
+        } else {
+            return "no active user";
+        }
     }
 }

@@ -10,22 +10,22 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    private final String TARGET_URL = "/user";
 
     private final RestAuthenticationEntryPoint entryPoint;
     private final LingverUserDetailsService userDetailsService;
-    //private final RestAuthenticationSuccessHandler authenticationSuccessHandler;
+
 
     @Autowired
-    public SecurityConfig(RestAuthenticationEntryPoint entryPoint, LingverUserDetailsService userDetailsService) {//, RestAuthenticationSuccessHandler authenticationSuccessHandler) {
+    public SecurityConfig(RestAuthenticationEntryPoint entryPoint, LingverUserDetailsService userDetailsService) {
         this.entryPoint = entryPoint;
         this.userDetailsService = userDetailsService;
-        //this.authenticationSuccessHandler = authenticationSuccessHandler;
     }
 
     @Override
@@ -39,15 +39,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public SimpleUrlAuthenticationFailureHandler failureHandler(){
+    public SimpleUrlAuthenticationFailureHandler failureHandler() {
         return new SimpleUrlAuthenticationFailureHandler();
     }
 
     @Bean
-    public SavedRequestAwareAuthenticationSuccessHandler successHandler() {
-        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
-        successHandler.setTargetUrlParameter("/user");
-        return successHandler;
+    public SimpleUrlAuthenticationSuccessHandler successHandler() {
+        return new SimpleUrlAuthenticationSuccessHandler(TARGET_URL);
     }
 
     @Override
@@ -65,6 +63,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .successHandler(successHandler())
                 .failureHandler(failureHandler())
                 .and()
-                .logout();
+                .logout().logoutSuccessUrl(TARGET_URL);
     }
 }
