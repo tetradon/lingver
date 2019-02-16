@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final String TARGET_URL = "/user";
+    private final String TARGET_URL = "/profile";
 
     private final RestAuthenticationEntryPoint entryPoint;
     private final LingverUserDetailsService userDetailsService;

@@ -1,9 +1,9 @@
 package com.kotlart.lingver.service;
 
+import com.kotlart.lingver.model.Profile;
 import com.kotlart.lingver.model.Role;
-import com.kotlart.lingver.model.User;
+import com.kotlart.lingver.respository.ProfileRepository;
 import com.kotlart.lingver.respository.RoleRepository;
-import com.kotlart.lingver.respository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -19,12 +19,12 @@ import java.util.List;
 @Service
 public class LingverUserDetailsService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final ProfileRepository profileRepository;
     private final RoleRepository roleRepository;
 
     @Autowired
-    public LingverUserDetailsService(UserRepository userRepository, RoleRepository roleRepository) {
-        this.userRepository = userRepository;
+    public LingverUserDetailsService(ProfileRepository profileRepository, RoleRepository roleRepository) {
+        this.profileRepository = profileRepository;
         this.roleRepository = roleRepository;
     }
 
@@ -34,24 +34,25 @@ public class LingverUserDetailsService implements UserDetailsService {
         if (StringUtils.isEmpty(username)) {
             throw new UsernameNotFoundException("name is empty");
         }
-        return userRepository.findByUsername(username);
+        return profileRepository.findByUsername(username);
 
     }
 
     @PostConstruct
     public void addUser() {
-        List<Role> authorities = new ArrayList<>();
-        final Role role = roleRepository.findByAuthority("USER");
-        authorities.add(role);
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        final User user = User.builder()
-                .username("user1")
-                .password(encoder.encode("pass"))
-                .authorities(authorities)
-                .accountNonLocked(true)
-                .enabled(true)
-                .build();
-        userRepository.save(user);
+        if (profileRepository.findByUsername("user") == null) {
+            List<Role> authorities = new ArrayList<>();
+            final Role role = roleRepository.findByAuthority("USER");
+            authorities.add(role);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            final Profile user = Profile.builder()
+                    .username("user")
+                    .password(encoder.encode("pass"))
+                    .authorities(authorities)
+                    .enabled(true)
+                    .build();
+            profileRepository.save(user);
+        }
     }
 
 }

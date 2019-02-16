@@ -7,11 +7,11 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 @Entity
-@Table(name = UserTranslation.TABLE_NAME)
+@Table(name = ProfileTranslation.TABLE_NAME)
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class UserTranslation extends AbstractEntity {
-    public static final String TABLE_NAME = "user_translation";
+public class ProfileTranslation extends AbstractEntity {
+    public static final String TABLE_NAME = "profile_translation";
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +25,6 @@ public class UserTranslation extends AbstractEntity {
     private Translation translation;
 
     @ManyToOne
-    @JoinColumn(name = User.TABLE_NAME + FK_SUFFIX)
-    private User user;
+    @JoinColumn(name = Profile.TABLE_NAME + FK_SUFFIX)
+    private Profile profile;
 }

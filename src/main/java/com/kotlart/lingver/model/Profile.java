@@ -1,36 +1,21 @@
 package com.kotlart.lingver.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = User.TABLE_NAME)
+@Table(name = Profile.TABLE_NAME)
 @Entity
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-public class User extends AbstractEntity implements UserDetails {
-    public static final String TABLE_NAME = "user_detail";
+public class Profile extends AbstractEntity implements UserDetails {
+    public static final String TABLE_NAME = "profile";
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,7 +25,7 @@ public class User extends AbstractEntity implements UserDetails {
     private String firstName;
     private String lastName;
     private String password;
-    private boolean accountNonLocked;
+    private boolean locked;
     private boolean enabled;
 
     @Temporal(TemporalType.DATE)
@@ -49,9 +34,9 @@ public class User extends AbstractEntity implements UserDetails {
     @Temporal(TemporalType.DATE)
     private Date credentialExpirationDate;
 
-    @ManyToMany(cascade = CascadeType.PERSIST)
-    @JoinTable(name = "user_role",
-            joinColumns = {@JoinColumn(name = "user_fk")},
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "profile_role",
+            joinColumns = {@JoinColumn(name = "profile_fk")},
             inverseJoinColumns = {@JoinColumn(name = "role_fk")}
     )
     private List<Role> authorities;
@@ -59,6 +44,11 @@ public class User extends AbstractEntity implements UserDetails {
     @Override
     public boolean isAccountNonExpired() {
         return accountExpirationDate == null || accountExpirationDate.after(new Date());
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return !locked;
     }
 
     @Override
