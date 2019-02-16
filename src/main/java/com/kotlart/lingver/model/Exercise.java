@@ -3,7 +3,13 @@ package com.kotlart.lingver.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 
 @Entity
 @Table(name = Exercise.TABLE_NAME)
@@ -11,6 +17,7 @@ import javax.persistence.*;
 @EqualsAndHashCode(callSuper = false)
 public class Exercise extends AbstractEntity {
     public static final String TABLE_NAME = "exercise";
+
     @Id
     @Column(name = TABLE_NAME + FK_SUFFIX)
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -16,7 +16,7 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final String TARGET_URL = "/profile";
+    private final String PROFILE_URL = "/profile";
 
     private final RestAuthenticationEntryPoint entryPoint;
     private final LingverUserDetailsService userDetailsService;
@@ -45,7 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public SimpleUrlAuthenticationSuccessHandler successHandler() {
-        return new SimpleUrlAuthenticationSuccessHandler(TARGET_URL);
+        return new SimpleUrlAuthenticationSuccessHandler(PROFILE_URL);
     }
 
     @Override
@@ -56,13 +56,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(entryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**").authenticated()
-                .antMatchers("/api/admin/**").hasRole("ADMIN")
+                .antMatchers(PROFILE_URL).permitAll()
+                .anyRequest().authenticated()
                 .and()
                 .formLogin()
                 .successHandler(successHandler())
                 .failureHandler(failureHandler())
                 .and()
-                .logout().logoutSuccessUrl(TARGET_URL);
+                .logout().logoutSuccessUrl(PROFILE_URL);
     }
 }

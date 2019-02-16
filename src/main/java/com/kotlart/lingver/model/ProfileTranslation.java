@@ -3,8 +3,17 @@ package com.kotlart.lingver.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.*;
-import java.sql.Timestamp;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 @Entity
 @Table(name = ProfileTranslation.TABLE_NAME)
@@ -12,11 +21,15 @@ import java.sql.Timestamp;
 @EqualsAndHashCode(callSuper = false)
 public class ProfileTranslation extends AbstractEntity {
     public static final String TABLE_NAME = "profile_translation";
+
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Timestamp insertDate;
+
+    @Temporal(TemporalType.DATE)
+    private Date insertDate;
+
     private String description;
     private String example;
 

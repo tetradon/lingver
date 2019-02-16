@@ -18,6 +18,9 @@ import javax.persistence.Table;
 @EqualsAndHashCode(callSuper = false)
 public class Role extends AbstractEntity implements GrantedAuthority {
     public static final String TABLE_NAME = "role";
+    public static final String USER = "USER";
+    public static final String ADMIN = "ADMIN";
+
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,4 +28,6 @@ public class Role extends AbstractEntity implements GrantedAuthority {
 
     @Column(name = "name")
     private String authority;
+
+
 }

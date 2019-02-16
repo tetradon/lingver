@@ -42,7 +42,7 @@ public class LingverUserDetailsService implements UserDetailsService {
     public void addUser() {
         if (profileRepository.findByUsername("user") == null) {
             List<Role> authorities = new ArrayList<>();
-            final Role role = roleRepository.findByAuthority("USER");
+            final Role role = roleRepository.findByAuthority(Role.USER);
             authorities.add(role);
             BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
             final Profile user = Profile.builder()
