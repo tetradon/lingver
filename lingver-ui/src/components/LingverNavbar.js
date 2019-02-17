@@ -27,7 +27,8 @@ export default class LingverNavbar extends Component {
                                  to="/dictionary" replace>Dictionary</NavLink>
                     </NavItem>
                     <NavItem>
-                        <NavLink href="#">Logout</NavLink>
+                        <NavLink tag={Link}
+                                 to="/login">Login</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>

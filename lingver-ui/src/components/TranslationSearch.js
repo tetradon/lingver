@@ -22,7 +22,7 @@ class TranslationSearch extends Component {
             userSearch: event.target.value,
             typing: false,
             typingTimeout: setTimeout(() => {
-                fetch(`/translation?word=${this.state.userSearch}`)
+                fetch(`api/translation?word=${this.state.userSearch}`)
                     .then(response => response.json())
                     .then(data => this.setState({translations: data}));
             }, 300)

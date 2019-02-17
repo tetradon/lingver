@@ -15,7 +15,7 @@ public class LingverApplication implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedOrigins("*"); //TODO move to configuration
+        registry.addMapping("/**").allowedOrigins("*").allowedMethods("GET", "POST", "DELETE", "UPDATE", "OPTIONS"); //TODO move to configuration
     }
 
     @Bean
