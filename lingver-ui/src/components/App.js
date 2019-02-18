@@ -4,22 +4,13 @@ import Home from './Home';
 import {Route, Switch} from 'react-router-dom';
 import Dictionary from './Dictionary';
 import LingverNavbar from "./LingverNavbar";
-import {Cookies, withCookies} from 'react-cookie';
 import Login from "./Login";
 import {Container} from "reactstrap";
 
 
 class App extends Component {
-    constructor(props) {
-        super(props);
-        const {cookies} = props;
-        this.state = {
-            sessionCookie: cookies.get('JSESSIONID')
-        };
-    }
 
     componentDidMount() {
-        console.log(this.state.sessionCookie);
 
         /* axios.interceptors.response.use(function (response) {
              return response;
@@ -51,4 +42,4 @@ class App extends Component {
     }
 }
 
-export default withCookies(App);
+export default App;
