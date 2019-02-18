@@ -2,13 +2,18 @@ import React, {Component} from 'react';
 import axios from "axios";
 
 import {Button, Input, InputGroup, InputGroupAddon, InputGroupText} from "reactstrap";
+import {userService} from "../service/userService";
 
 class Login extends Component {
     constructor(props) {
         super(props);
+        userService.logout();
         this.state = {
             username: '',
             password: '',
+            submitted: false,
+            loading: false,
+            error: ''
         };
         this.login = this.login.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -32,17 +37,26 @@ class Login extends Component {
         this.setState({password: event.target.value});
     }
 
-    login() {
-        let bodyFormData = new FormData();
-        bodyFormData.set('username', this.state.username);
-        bodyFormData.set('password', this.state.password);
-        axios.post('/login', bodyFormData)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error.response);
-            });
+    login(e) {
+        e.preventDefault();
+
+        this.setState({submitted: true});
+
+
+        // stop here if form is invalid
+        if (!(this.state.username && this.state.password)) {
+            return;
+        }
+        this.setState({loading: true});
+
+        userService.login(this.state.username, this.state.password)
+            .then(
+                user => {
+                    const {from} = this.props.location.state || {from: {pathname: "/"}};
+                    this.props.history.push(from);
+                },
+                error => this.setState({error, loading: false})
+            );
     }
 
     render() {

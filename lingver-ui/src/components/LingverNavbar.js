@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import {userService} from "../service/userService";
 
 
 export default class LingverNavbar extends Component {
@@ -29,6 +30,10 @@ export default class LingverNavbar extends Component {
                     <NavItem>
                         <NavLink tag={Link}
                                  to="/login">Login</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink tag={Link} onClick={userService.logout}
+                                 to="/login">Logout</NavLink>
                     </NavItem>
                 </Nav>
             </Collapse>

@@ -6,6 +6,7 @@ import Dictionary from './Dictionary';
 import LingverNavbar from "./LingverNavbar";
 import Login from "./Login";
 import {Container} from "reactstrap";
+import {ProtectedRoute} from "./ProtectedRoute";
 
 
 class App extends Component {
@@ -33,7 +34,7 @@ class App extends Component {
                     <Container>
                         <Switch>
                             <Route exact path='/' component={Home}/>
-                            <Route path='/dictionary' component={Dictionary}/>
+                            <ProtectedRoute path='/dictionary' component={Dictionary}/>
                             <Route path='/login' component={Login}/>
                         </Switch>
                     </Container>
