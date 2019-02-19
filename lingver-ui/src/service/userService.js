@@ -20,7 +20,7 @@ function login(username, password) {
 }
 
 function logout() {
-    fetch("/logout", {method: "POST"});
+    axios.post("/logout");
     localStorage.removeItem('user');
 }
 
