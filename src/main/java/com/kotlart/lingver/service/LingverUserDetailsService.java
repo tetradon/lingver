@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
@@ -30,12 +29,11 @@ public class LingverUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-
-        if (StringUtils.isEmpty(username)) {
+        final Profile user = profileRepository.findByUsername(username);
+        if (user == null) {
             throw new UsernameNotFoundException("name is empty");
         }
-        return profileRepository.findByUsername(username);
-
+        return user;
     }
 
     @PostConstruct

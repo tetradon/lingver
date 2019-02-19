@@ -1,16 +1,15 @@
 import React, {Component} from "react";
 import {Col, Container, Row} from "reactstrap";
 import TranslationSearch from "./TranslationSearch";
-import axios from 'axios';
 
 class Dictionary extends Component {
 
     componentDidMount() {
-        axios.get(`api`)
-            .then(res => {
-                const response = res.data;
-                console.log(response);
-            })
+        /*  axios.get(`api`)
+              .then(res => {
+                  const response = res.data;
+                  console.log(response);
+              })*/
     }
 
     render() {

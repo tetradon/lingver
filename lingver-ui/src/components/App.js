@@ -33,7 +33,7 @@ class App extends Component {
                     <LingverNavbar/>
                     <Container>
                         <Switch>
-                            <Route exact path='/' component={Home}/>
+                            <ProtectedRoute exact path='/' component={Home}/>
                             <ProtectedRoute path='/dictionary' component={Dictionary}/>
                             <Route path='/login' component={Login}/>
                         </Switch>

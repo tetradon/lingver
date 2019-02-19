@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import axios from "axios";
-
+import {withRouter} from "react-router-dom";
 import {Button, Input, InputGroup, InputGroupAddon, InputGroupText} from "reactstrap";
 import {userService} from "../service/userService";
 
@@ -21,12 +20,12 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        axios.get('/profile')
-            .then(function (response) {
-                console.log(response);
-            }).catch(function (res) {
-            console.log(res.response);
-        })
+        /* axios.get('/profile')
+             .then(function (response) {
+                 console.log(response);
+             }).catch(function (res) {
+             console.log(res.response);
+         })*/
     }
 
     handleUsernameChange(event) {
@@ -37,27 +36,24 @@ class Login extends Component {
         this.setState({password: event.target.value});
     }
 
-    login(e) {
-        e.preventDefault();
-
+    login() {
         this.setState({submitted: true});
 
-
-        // stop here if form is invalid
         if (!(this.state.username && this.state.password)) {
             return;
         }
         this.setState({loading: true});
 
         userService.login(this.state.username, this.state.password)
-            .then(
-                user => {
-                    const {from} = this.props.location.state || {from: {pathname: "/"}};
-                    this.props.history.push(from);
-                },
-                error => this.setState({error, loading: false})
-            );
+            .then(response => {
+                const {from} = this.props.location.state || {from: {pathname: "/"}};
+                this.props.history.push(from);
+            })
+            .catch(error => {
+                alert("WRONG CREDENTIALS!");
+            });
     }
+
 
     render() {
         return (
@@ -84,4 +80,4 @@ class Login extends Component {
     }
 }
 
-export default Login;
+export default withRouter(Login);

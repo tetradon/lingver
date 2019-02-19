@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.session.SessionManagementFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -48,15 +49,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new SimpleUrlAuthenticationSuccessHandler(PROFILE_URL);
     }
 
+    @Bean
+    CorsFilter corsFilter() {
+        return new CorsFilter();
+    }
+
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .addFilterBefore(corsFilter(), SessionManagementFilter.class)
                 .exceptionHandling()
                 .authenticationEntryPoint(entryPoint)
                 .and()
                 .authorizeRequests()
-                .antMatchers(PROFILE_URL).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
