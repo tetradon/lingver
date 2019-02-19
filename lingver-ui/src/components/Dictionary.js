@@ -4,14 +4,6 @@ import TranslationSearch from "./TranslationSearch";
 
 class Dictionary extends Component {
 
-    componentDidMount() {
-        /*  axios.get(`api`)
-              .then(res => {
-                  const response = res.data;
-                  console.log(response);
-              })*/
-    }
-
     render() {
         return (
             <div>

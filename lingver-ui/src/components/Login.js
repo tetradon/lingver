@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {withRouter} from "react-router-dom";
 import {Button, Input, InputGroup, InputGroupAddon, InputGroupText} from "reactstrap";
 import {userService} from "../service/userService";
 
@@ -19,15 +18,6 @@ class Login extends Component {
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
     }
 
-    componentDidMount() {
-        /* axios.get('/profile')
-             .then(function (response) {
-                 console.log(response);
-             }).catch(function (res) {
-             console.log(res.response);
-         })*/
-    }
-
     handleUsernameChange(event) {
         this.setState({username: event.target.value});
     }
@@ -45,15 +35,14 @@ class Login extends Component {
         this.setState({loading: true});
 
         userService.login(this.state.username, this.state.password)
-            .then(response => {
+            .then(() => {
                 const {from} = this.props.location.state || {from: {pathname: "/"}};
                 this.props.history.push(from);
             })
-            .catch(error => {
+            .catch(() => {
                 alert("WRONG CREDENTIALS!");
             });
     }
-
 
     render() {
         return (
@@ -80,4 +69,4 @@ class Login extends Component {
     }
 }
 
-export default withRouter(Login);
+export default Login;

@@ -11,22 +11,6 @@ import {ProtectedRoute} from "./ProtectedRoute";
 
 class App extends Component {
 
-    componentDidMount() {
-
-        /* axios.interceptors.response.use(function (response) {
-             return response;
-         }, function (error) {
-
-             if (error.status === 401) {
-
-             }
-             console.log("REDIRECT");
-             return <Redirect to='/' />
-             //return Promise.reject(error);
-         });*/
-
-    }
-
     render() {
         return (
                 <div>
