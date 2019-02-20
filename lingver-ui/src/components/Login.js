@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {userService} from "../service/userService";
 import {Button, FormControl, Grid, Input, InputLabel, Paper, Typography, withStyles} from "@material-ui/core"
+import AlertSnackbar from "./AlertSnackbar";
 
 const styles = theme => ({
     paper: {
@@ -28,7 +29,7 @@ class Login extends Component {
             password: '',
             submitted: false,
             loading: false,
-            error: ''
+            error: false
         };
         this.login = this.login.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -44,6 +45,7 @@ class Login extends Component {
     }
 
     login() {
+        this.setState({error: false})
         this.setState({submitted: true});
 
         if (!(this.state.username && this.state.password)) {
@@ -57,41 +59,44 @@ class Login extends Component {
                 this.props.history.push(from);
             })
             .catch(() => {
-                alert("WRONG CREDENTIALS!");
+                this.setState({error: true});
             });
     }
 
     render() {
         const {classes} = this.props;
         return (
-            <Grid container justify="center">
-                <Grid item xs={3}>
-                    <Paper className={classes.paper}>
-                        <Typography component="h1" variant="h5">
-                            Login
-                        </Typography>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel>Username</InputLabel>
-                            <Input className={classes.input} value={this.state.username}
-                                   onChange={this.handleUsernameChange} autoFocus/>
-                        </FormControl>
-                        <FormControl margin="normal" required fullWidth>
-                            <InputLabel>Password</InputLabel>
-                            <Input className={classes.input} type="password" value={this.state.password}
-                                   onChange={this.handlePasswordChange}/>
-                        </FormControl>
-                        <Button className={classes.submit}
-                                onClick={this.login}
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                color="primary"
-                        >
-                            Sign in
-                        </Button>
-                    </Paper>
+            <div>
+                {this.state.error === true ? <AlertSnackbar/> : null}
+                <Grid container justify="center">
+                    <Grid item xs={3}>
+                        <Paper className={classes.paper}>
+                            <Typography component="h1" variant="h5">
+                                Login
+                            </Typography>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel>Username</InputLabel>
+                                <Input className={classes.input} value={this.state.username}
+                                       onChange={this.handleUsernameChange} autoFocus/>
+                            </FormControl>
+                            <FormControl margin="normal" required fullWidth>
+                                <InputLabel>Password</InputLabel>
+                                <Input className={classes.input} type="password" value={this.state.password}
+                                       onChange={this.handlePasswordChange}/>
+                            </FormControl>
+                            <Button className={classes.submit}
+                                    onClick={this.login}
+                                    type="submit"
+                                    fullWidth
+                                    variant="contained"
+                                    color="primary"
+                            >
+                                Sign in
+                            </Button>
+                        </Paper>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </div>
         )
 
     }
