@@ -46,26 +46,6 @@ class Login extends Component {
     }
 
     render() {
-        /* return (
-           {  <div style={{width: '50%'}}>
-                 <h2>Login</h2>
-                 <br/>
-                 <InputGroup>
-                     <InputGroupAddon addonType="prepend">
-                         <InputGroupText>Username</InputGroupText>
-                     </InputGroupAddon>
-                     <Input type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
-                 </InputGroup>
-                 <br/>
-                 <InputGroup>
-                     <InputGroupAddon addonType="prepend">
-                         <InputGroupText>Password</InputGroupText>
-                     </InputGroupAddon>
-                     <Input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
-                 </InputGroup>
-                 <br/>
-                 <Button onClick={this.login}>Login</Button>
-             </div>})*/
         return (
             <Grid container justify="center">
                 <Grid item xs={6}>
