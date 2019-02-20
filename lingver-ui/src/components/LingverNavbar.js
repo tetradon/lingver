@@ -1,37 +1,58 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {userService} from "../service/userService";
+import {AppBar, Button, Toolbar, Typography, withStyles} from '@material-ui/core';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-
-export default class LingverNavbar extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {isOpen: false};
-        this.toggle = this.toggle.bind(this);
+const styles = {
+    grow: {
+        flexGrow: 1,
+    },
+    link: {
+        textDecoration: 'none',
+        color: 'white'
+    },
+    appBar: {
+        marginBottom: '2em'
     }
+};
 
-    toggle() {
-        this.setState({
-            isOpen: !this.state.isOpen
-        });
-    }
-
+class LingverNavbar extends Component {
     render() {
-        return <AppBar position="static">
+        return <AppBar position="static" style={styles.appBar}>
             <Toolbar>
-                <Typography component={Link} to="/" variant="headline" color="inherit">
+                <Typography
+                    component={Link}
+                    to="/"
+                    style={styles.link}
+                    variant="headline"
+                    color="inherit"
+                >
                     Lingver
                 </Typography>
-                <Button color="inherit" component={Link} to="/dictionary">Dictionary</Button>
-                <Button color="inherit" component={Link} to="/login">Login</Button>
-                <Button color="inherit" component={Link} to="/login" onClick={() => {
-                    userService.logout()
-                }}>Logout</Button>
+                <div style={styles.grow}/>
+                {
+                    userService.getUser() && (
+                        <Button component={Link}
+                                to="/dictionary"
+                                color="inherit"
+                                style={styles.link}
+                        >
+                            Dictionary
+                        </Button>
+                    )
+                }
+                <Button
+                    color="inherit"
+                    style={styles.link}
+                    component={Link}
+                    to="/login"
+                    onClick={userService.logout}
+                >
+                    {userService.getUser() ? 'Logout' : 'Login'}
+                </Button>
             </Toolbar>
         </AppBar>;
     }
 }
+
+export default withStyles(styles)(LingverNavbar)

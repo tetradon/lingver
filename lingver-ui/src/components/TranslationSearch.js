@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Button, Input, InputGroup, ListGroup, ListGroupItem} from 'reactstrap';
+import {Button, Input, List, ListItem, Typography, withStyles} from '@material-ui/core';
 
+const styles = {};
 
 class TranslationSearch extends Component {
     constructor(props) {
@@ -36,23 +37,21 @@ class TranslationSearch extends Component {
 
         const translationList = translations.map(word => {
             return (
-                <ListGroupItem key={word.id}>
-                    {word.value} <Button className="float-right" size="sm" color="primary">+</Button>
-                </ListGroupItem>
+                <ListItem key={word.id}>
+                    {word.value} <Button>+</Button>
+                </ListItem>
             )
         });
 
         return (
             <div>
-                <h2>Add new word</h2>
-                    <InputGroup>
-                        <Input type="text" value={this.state.userSearch}
-                               onChange={this.handleChange}/>
-                    </InputGroup>
-                    <ListGroup>{translationList}</ListGroup>
+                <Typography variant={"h3"}>Add new word</Typography>
+                <Input type="text" value={this.state.userSearch} fullWidth
+                       onChange={this.handleChange}/>
+                <List>{translationList}</List>
             </div>
         );
     }
 }
 
-export default TranslationSearch;
+export default withStyles(styles)(TranslationSearch);

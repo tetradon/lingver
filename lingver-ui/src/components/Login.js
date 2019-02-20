@@ -1,7 +1,23 @@
 import React, {Component} from 'react';
 import {userService} from "../service/userService";
-import {Box, Button, FormControl, Grid, Input, InputLabel, Paper, Typography} from "@material-ui/core"
+import {Button, FormControl, Grid, Input, InputLabel, Paper, Typography, withStyles} from "@material-ui/core"
 
+const styles = theme => ({
+    paper: {
+        marginTop: theme.spacing.unit * 8,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+    },
+    submit: {
+        marginTop: theme.spacing.unit * 3,
+        padding: `${theme.spacing.unit * 2}px`,
+    },
+    input: {
+        paddingLeft: `${theme.spacing.unit}px`,
+    }
+});
 
 class Login extends Component {
     constructor(props) {
@@ -46,27 +62,30 @@ class Login extends Component {
     }
 
     render() {
+        const {classes} = this.props;
         return (
             <Grid container justify="center">
-                <Grid item xs={6}>
-                    <Paper>
+                <Grid item xs={3}>
+                    <Paper className={classes.paper}>
                         <Typography component="h1" variant="h5">
                             Login
                         </Typography>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel>Username</InputLabel>
-                            <Input value={this.state.username} onChange={this.handleUsernameChange} autoFocus/>
+                            <Input className={classes.input} value={this.state.username}
+                                   onChange={this.handleUsernameChange} autoFocus/>
                         </FormControl>
                         <FormControl margin="normal" required fullWidth>
                             <InputLabel>Password</InputLabel>
-                            <Input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+                            <Input className={classes.input} type="password" value={this.state.password}
+                                   onChange={this.handlePasswordChange}/>
                         </FormControl>
-                        <Button
-                            onClick={this.login}
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
+                        <Button className={classes.submit}
+                                onClick={this.login}
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
                         >
                             Sign in
                         </Button>
@@ -78,5 +97,4 @@ class Login extends Component {
     }
 }
 
-
-export default Login;
+export default withStyles(styles)(Login);

@@ -1,19 +1,19 @@
 import React, {Component} from "react";
-import {Col, Container, Row} from "reactstrap";
 import TranslationSearch from "./TranslationSearch";
+import {Grid, Typography} from '@material-ui/core';
 
 class Dictionary extends Component {
 
     render() {
         return (
-            <div>
-                <Container>
-                    <Row>
-                        <Col md="8"><h1>My dictionary</h1></Col>
-                        <Col md="4"> <TranslationSearch/> </Col>
-                    </Row>
-                </Container>
-            </div>
+            <Grid container justify="center">
+                <Grid item xs={4}>
+                    <Typography variant={"h3"}>My dictionary</Typography>
+                </Grid>
+                <Grid item xs={2}>
+                    <TranslationSearch/>
+                </Grid>
+            </Grid>
         );
     }
 }
