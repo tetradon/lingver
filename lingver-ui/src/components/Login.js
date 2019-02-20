@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import {Button, Input, InputGroup, InputGroupAddon, InputGroupText} from "reactstrap";
 import {userService} from "../service/userService";
+import {Box, Button, FormControl, Grid, Input, InputLabel, Paper, Typography} from "@material-ui/core"
+
 
 class Login extends Component {
     constructor(props) {
@@ -45,28 +46,57 @@ class Login extends Component {
     }
 
     render() {
+        /* return (
+           {  <div style={{width: '50%'}}>
+                 <h2>Login</h2>
+                 <br/>
+                 <InputGroup>
+                     <InputGroupAddon addonType="prepend">
+                         <InputGroupText>Username</InputGroupText>
+                     </InputGroupAddon>
+                     <Input type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
+                 </InputGroup>
+                 <br/>
+                 <InputGroup>
+                     <InputGroupAddon addonType="prepend">
+                         <InputGroupText>Password</InputGroupText>
+                     </InputGroupAddon>
+                     <Input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+                 </InputGroup>
+                 <br/>
+                 <Button onClick={this.login}>Login</Button>
+             </div>})*/
         return (
-            <div style={{width: '50%'}}>
-                <h2>Login</h2>
-                <br/>
-                <InputGroup>
-                    <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Username</InputGroupText>
-                    </InputGroupAddon>
-                    <Input type="text" value={this.state.username} onChange={this.handleUsernameChange}/>
-                </InputGroup>
-                <br/>
-                <InputGroup>
-                    <InputGroupAddon addonType="prepend">
-                        <InputGroupText>Password</InputGroupText>
-                    </InputGroupAddon>
-                    <Input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
-                </InputGroup>
-                <br/>
-                <Button onClick={this.login}>Login</Button>
-            </div>
+            <Grid container justify="center">
+                <Grid item xs={6}>
+                    <Paper>
+                        <Typography component="h1" variant="h5">
+                            Login
+                        </Typography>
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel>Username</InputLabel>
+                            <Input value={this.state.username} onChange={this.handleUsernameChange} autoFocus/>
+                        </FormControl>
+                        <FormControl margin="normal" required fullWidth>
+                            <InputLabel>Password</InputLabel>
+                            <Input type="password" value={this.state.password} onChange={this.handlePasswordChange}/>
+                        </FormControl>
+                        <Button
+                            onClick={this.login}
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                        >
+                            Sign in
+                        </Button>
+                    </Paper>
+                </Grid>
+            </Grid>
         )
+
     }
 }
+
 
 export default Login;

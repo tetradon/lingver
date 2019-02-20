@@ -1,8 +1,11 @@
 import React, {Component} from 'react';
-import {Collapse, Nav, Navbar, NavbarBrand, NavbarToggler, NavItem, NavLink} from 'reactstrap';
 import {Link} from 'react-router-dom';
 import {userService} from "../service/userService";
 
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
 
 export default class LingverNavbar extends Component {
     constructor(props) {
@@ -18,25 +21,17 @@ export default class LingverNavbar extends Component {
     }
 
     render() {
-        return <Navbar color="dark" dark expand="md">
-            <NavbarBrand tag={Link} to="/">Home</NavbarBrand>
-            <NavbarToggler onClick={this.toggle}/>
-            <Collapse isOpen={this.state.isOpen} navbar>
-                <Nav className="ml-auto" navbar>
-                    <NavItem>
-                        <NavLink tag={Link}
-                                 to="/dictionary" replace>Dictionary</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink tag={Link}
-                                 to="/login">Login</NavLink>
-                    </NavItem>
-                    <NavItem>
-                        <NavLink tag={Link} onClick={userService.logout}
-                                 to="/login">Logout</NavLink>
-                    </NavItem>
-                </Nav>
-            </Collapse>
-        </Navbar>;
+        return <AppBar position="static">
+            <Toolbar>
+                <Typography component={Link} to="/" variant="headline" color="inherit">
+                    Lingver
+                </Typography>
+                <Button color="inherit" component={Link} to="/dictionary">Dictionary</Button>
+                <Button color="inherit" component={Link} to="/login">Login</Button>
+                <Button color="inherit" component={Link} to="/login" onClick={() => {
+                    userService.logout()
+                }}>Logout</Button>
+            </Toolbar>
+        </AppBar>;
     }
 }

@@ -9,7 +9,6 @@ function login(username, password) {
     let bodyFormData = new FormData();
     bodyFormData.set('username', username);
     bodyFormData.set('password', password);
-
     return axios.post('/login', bodyFormData, {withCredentials: true})
         .then(response => {
             localStorage.setItem('user', JSON.stringify(response.data));
