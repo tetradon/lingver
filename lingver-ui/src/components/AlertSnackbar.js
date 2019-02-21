@@ -6,7 +6,6 @@ class AlertSnackbar extends React.Component {
         open: true,
         vertical: 'top',
         horizontal: 'center',
-        message: 'Wrong credentials'
     };
 
     handleClose = () => {
@@ -18,13 +17,14 @@ class AlertSnackbar extends React.Component {
         return (
             <div>
                 <Snackbar
+                    style={{marginTop: '4em'}}
                     anchorOrigin={{vertical, horizontal}}
                     open={open}
                     onClose={this.handleClose}
                     ContentProps={{
                         'aria-describedby': 'message-id',
                     }}
-                    message={<span id="message-id">Wrong Credentials!</span>}
+                    message={<span id="message-id">{this.props.message}</span>}
                 />
             </div>
         );

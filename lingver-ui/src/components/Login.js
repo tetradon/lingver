@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {userService} from "../service/userService";
 import {Button, FormControl, Grid, Input, InputLabel, Paper, Typography, withStyles} from "@material-ui/core"
 import AlertSnackbar from "./AlertSnackbar";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
     paper: {
@@ -9,15 +10,19 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: `${theme.spacing.unit * 2}px ${theme.spacing.unit * 3}px ${theme.spacing.unit * 3}px`,
+        padding: theme.spacing.unit * 3,
+        paddingTop: theme.spacing.unit * 2
     },
     submit: {
         marginTop: theme.spacing.unit * 3,
-        padding: `${theme.spacing.unit * 2}px`,
+        padding: theme.spacing.unit * 2,
     },
     input: {
-        paddingLeft: `${theme.spacing.unit}px`,
-    }
+        paddingLeft: theme.spacing.unit,
+    },
+    margin: {
+        margin: theme.spacing.unit,
+    },
 });
 
 class Login extends Component {
@@ -27,9 +32,9 @@ class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            submitted: false,
             loading: false,
-            error: false
+            error: false,
+            errorMessage: ''
         };
         this.login = this.login.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
@@ -45,21 +50,14 @@ class Login extends Component {
     }
 
     login() {
-        this.setState({error: false})
-        this.setState({submitted: true});
-
-        if (!(this.state.username && this.state.password)) {
-            return;
-        }
-        this.setState({loading: true});
-
+        this.setState({error: false});
         userService.login(this.state.username, this.state.password)
             .then(() => {
                 const {from} = this.props.location.state || {from: {pathname: "/"}};
                 this.props.history.push(from);
             })
             .catch(() => {
-                this.setState({error: true});
+                this.setState({errorMessage: 'Wrong Credentials!', error: true});
             });
     }
 
@@ -67,11 +65,11 @@ class Login extends Component {
         const {classes} = this.props;
         return (
             <div>
-                {this.state.error === true ? <AlertSnackbar/> : null}
+                {this.state.error === true ? <AlertSnackbar message={this.state.errorMessage}/> : null}
                 <Grid container justify="center">
-                    <Grid item xs={3}>
+                    <Grid item lg={3} md={5} s={6} xs={8}>
                         <Paper className={classes.paper}>
-                            <Typography component="h1" variant="h5">
+                            <Typography variant="h2">
                                 Login
                             </Typography>
                             <FormControl margin="normal" required fullWidth>
@@ -93,12 +91,18 @@ class Login extends Component {
                             >
                                 Sign in
                             </Button>
+                            <Typography variant="caption" className={classes.margin}>
+                                Do not have an account?
+                            </Typography>
+                            <Button component={Link} to={'/register'} fullWidth variant="outlined" size="small"
+                                    color="primary">
+                                Sign Up
+                            </Button>
                         </Paper>
                     </Grid>
                 </Grid>
             </div>
         )
-
     }
 }
 

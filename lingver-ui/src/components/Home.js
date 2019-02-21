@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import './App.css';
 import {Button, Card, CardActions, CardContent, Grid, Typography} from "@material-ui/core";
 
 class Home extends Component {
@@ -34,7 +33,6 @@ class Home extends Component {
                 </Grid>
             </Grid>
         );
-
 
     }
 }
