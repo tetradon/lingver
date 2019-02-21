@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {Button, Grid, Paper, TextField, Typography, withStyles} from "@material-ui/core"
 import AlertSnackbar from "./AlertSnackbar";
+import {registrationService} from "../service/registrationService"
 
 const styles = theme => ({
     paper: {
@@ -19,12 +20,29 @@ class Registration extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            username: '',
-            password: '',
+            user: {
+                username: '',
+                password: '',
+                email: '',
+                firstName: '',
+                lastName: '',
+            },
             loading: false,
             error: false,
             errorMessage: ''
         };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(evt) {
+        console.log([evt.target.name] + " " + evt.target.value);
+        this.setState({user: {...this.state.user, [evt.target.name]: evt.target.value}});
+        console.log(this.state);
+    }
+
+    handleSubmit(evt) {
+        registrationService.register(this.state.user)
     }
 
     render() {
@@ -41,43 +59,49 @@ class Registration extends Component {
                             <Grid className={classes.marginTop5} container spacing={32}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        required
+                                        onChange={this.handleChange}
                                         label="Username"
+                                        name='username'
                                         fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        required
+                                        onChange={this.handleChange}
                                         label="Email"
+                                        name="email"
                                         fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        required
+                                        onChange={this.handleChange}
                                         label="First name"
+                                        name="firstName"
                                         fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        required
+                                        onChange={this.handleChange}
                                         label="Last Name"
+                                        name="lastName"
                                         fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        required
+                                        onChange={this.handleChange}
                                         label="Password"
+                                        name="password"
                                         fullWidth
                                     />
                                 </Grid>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
-                                        required
+                                        onChange={this.handleChange}
                                         label="Repeat password"
+                                        name="repeatPassword"
                                         fullWidth
                                     />
                                 </Grid>
@@ -88,6 +112,7 @@ class Registration extends Component {
                                             fullWidth
                                             variant="contained"
                                             color="primary"
+                                            onClick={this.handleSubmit}
                                     >
                                         Submit
                                     </Button>

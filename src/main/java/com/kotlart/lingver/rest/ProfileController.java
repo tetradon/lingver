@@ -2,7 +2,7 @@ package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.Profile;
 import com.kotlart.lingver.rest.dto.MessageDto;
-import com.kotlart.lingver.rest.dto.UserDto;
+import com.kotlart.lingver.rest.dto.ProfileDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,8 +25,8 @@ public class ProfileController {
         ResponseEntity response;
         if (authentication != null) {
             Profile activeUser = (Profile) authentication.getPrincipal();
-            UserDto userDto = modelMapper.map(activeUser, UserDto.class);
-            response = ResponseEntity.ok(userDto);
+            ProfileDto profileDto = modelMapper.map(activeUser, ProfileDto.class);
+            response = ResponseEntity.ok(profileDto);
         } else {
             response = ResponseEntity.ok(new MessageDto("no active user"));
         }
