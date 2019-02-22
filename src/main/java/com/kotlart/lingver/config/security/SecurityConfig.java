@@ -1,6 +1,6 @@
 package com.kotlart.lingver.config.security;
 
-import com.kotlart.lingver.service.LingverUserDetailsService;
+import com.kotlart.lingver.service.impl.ProfileServiceBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
@@ -22,23 +21,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final String PROFILE_URL = "/profile";
 
     private final RestAuthenticationEntryPoint entryPoint;
-    private final LingverUserDetailsService userDetailsService;
+    private final ProfileServiceBean userDetailsService;
+    private final BCryptPasswordEncoder encoder;
 
 
     @Autowired
-    public SecurityConfig(RestAuthenticationEntryPoint entryPoint, LingverUserDetailsService userDetailsService) {
+    public SecurityConfig(RestAuthenticationEntryPoint entryPoint,
+                          ProfileServiceBean userDetailsService,
+                          BCryptPasswordEncoder encoder) {
         this.entryPoint = entryPoint;
         this.userDetailsService = userDetailsService;
+        this.encoder = encoder;
     }
 
     @Override
     protected void configure(final AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(encoder());
-    }
-
-    @Bean
-    public PasswordEncoder encoder() {
-        return new BCryptPasswordEncoder();
+        auth.userDetailsService(userDetailsService).passwordEncoder(encoder);
     }
 
     @Bean
@@ -52,7 +50,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    CorsFilter corsFilter() {
+    public CorsFilter corsFilter() {
         return new CorsFilter();
     }
 

@@ -3,6 +3,7 @@ import {userService} from "../service/userService";
 import {Button, FormControl, Grid, Input, InputLabel, Paper, Typography, withStyles} from "@material-ui/core"
 import AlertSnackbar from "./AlertSnackbar";
 import {Link} from "react-router-dom";
+import {withSnackbar} from "notistack";
 
 const styles = theme => ({
     paper: {
@@ -57,7 +58,9 @@ class Login extends Component {
                 this.props.history.push(from);
             })
             .catch(() => {
-                this.setState({errorMessage: 'Wrong Credentials!', error: true});
+                this.props.enqueueSnackbar("Wrong credentials!", {
+                    variant: 'warning'
+                });
             });
     }
 
@@ -106,4 +109,4 @@ class Login extends Component {
     }
 }
 
-export default withStyles(styles)(Login);
+export default withStyles(styles)(withSnackbar(Login));

@@ -20,6 +20,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -37,11 +38,16 @@ public class Profile extends AbstractEntity implements UserDetails {
     @Column(name = TABLE_NAME + PK_SUFFIX)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotBlank
     private String username;
+    @NotBlank
     private String email;
+    @NotBlank
+    private String password;
     private String firstName;
     private String lastName;
-    private String password;
+
     private boolean locked;
     private boolean enabled;
 

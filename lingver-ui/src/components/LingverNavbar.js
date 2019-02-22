@@ -31,7 +31,7 @@ class LingverNavbar extends Component {
                 </Typography>
                 <div style={styles.grow}/>
                 {
-                    userService.getUser() && (
+                    userService.getActiveUser() && (
                         <Button component={Link}
                                 to="/dictionary"
                                 color="inherit"
@@ -48,7 +48,7 @@ class LingverNavbar extends Component {
                     to="/login"
                     onClick={userService.logout}
                 >
-                    {userService.getUser() ? 'Logout' : 'Login'}
+                    {userService.getActiveUser() ? 'Logout' : 'Login'}
                 </Button>
             </Toolbar>
         </AppBar>;

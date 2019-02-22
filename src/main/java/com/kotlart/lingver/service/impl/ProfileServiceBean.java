@@ -1,9 +1,10 @@
-package com.kotlart.lingver.service;
+package com.kotlart.lingver.service.impl;
 
 import com.kotlart.lingver.model.Profile;
 import com.kotlart.lingver.model.Role;
 import com.kotlart.lingver.respository.ProfileRepository;
 import com.kotlart.lingver.respository.RoleRepository;
+import com.kotlart.lingver.service.ProfileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -11,20 +12,23 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Collections;
 
 @Service
-public class LingverUserDetailsService implements UserDetailsService {
+public class ProfileServiceBean implements UserDetailsService, ProfileService {
 
     private final ProfileRepository profileRepository;
+
     private final RoleRepository roleRepository;
 
+    private final BCryptPasswordEncoder encoder;
+
     @Autowired
-    public LingverUserDetailsService(ProfileRepository profileRepository, RoleRepository roleRepository) {
+    public ProfileServiceBean(ProfileRepository profileRepository, RoleRepository roleRepository, BCryptPasswordEncoder encoder) {
         this.profileRepository = profileRepository;
         this.roleRepository = roleRepository;
+        this.encoder = encoder;
     }
 
     @Override
@@ -36,21 +40,12 @@ public class LingverUserDetailsService implements UserDetailsService {
         return user;
     }
 
-    @PostConstruct
-    public void addUser() {
-        if (profileRepository.findByUsername("user") == null) {
-            List<Role> authorities = new ArrayList<>();
-            final Role role = roleRepository.findByAuthority(Role.USER);
-            authorities.add(role);
-            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-            final Profile user = Profile.builder()
-                    .username("user")
-                    .password(encoder.encode("pass"))
-                    .authorities(authorities)
-                    .enabled(true)
-                    .build();
-            profileRepository.save(user);
-        }
+    @Override
+    public Profile createProfile(Profile profile) {
+        profile.setEnabled(true);
+        profile.setPassword(encoder.encode(profile.getPassword()));
+        Role role = roleRepository.findByAuthority(Role.USER);
+        profile.setAuthorities(new ArrayList<>(Collections.singletonList(role)));
+        return profileRepository.save(profile);
     }
-
 }

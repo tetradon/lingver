@@ -16,8 +16,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("profile")
 public class ProfileController {
 
+    private final ModelMapper modelMapper;
+
     @Autowired
-    private ModelMapper modelMapper;
+    public ProfileController(ModelMapper modelMapper) {
+        this.modelMapper = modelMapper;
+    }
 
     @GetMapping
     ResponseEntity user(Authentication authentication) {
