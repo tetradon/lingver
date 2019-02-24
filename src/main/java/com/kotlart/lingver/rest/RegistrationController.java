@@ -3,7 +3,7 @@ package com.kotlart.lingver.rest;
 import com.kotlart.lingver.model.Profile;
 import com.kotlart.lingver.rest.dto.NewProfileDto;
 import com.kotlart.lingver.rest.dto.ProfileDto;
-import com.kotlart.lingver.rest.util.ValidationUtil;
+import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +33,7 @@ public class RegistrationController {
     @PostMapping
     ResponseEntity register(@Valid @RequestBody NewProfileDto newProfileDto, BindingResult result) {
         if (result.hasErrors()) {
-            return ValidationUtil.badRequest(result.getFieldErrors());
+            return ResponseUtil.badRequest(result.getFieldErrors());
         }
         Profile profile = modelMapper.map(newProfileDto, Profile.class);
         final Profile persistedProfile = profileService.createProfile(profile);

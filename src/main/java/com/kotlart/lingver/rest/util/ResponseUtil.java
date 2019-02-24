@@ -7,7 +7,7 @@ import org.springframework.validation.FieldError;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValidationUtil {
+public class ResponseUtil {
     public static ResponseEntity badRequest(List<FieldError> errors) {
         List<MessageDto> violations = new ArrayList<>();
 
