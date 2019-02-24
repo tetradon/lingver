@@ -1,13 +1,22 @@
 import React, {Component} from 'react';
 import {userService} from "../service/userService";
-import {Button, FormControl, Grid, Input, InputLabel, Paper, Typography, withStyles} from "@material-ui/core"
-import AlertSnackbar from "./AlertSnackbar";
+import {
+    Button,
+    FormControl,
+    Grid,
+    Input,
+    InputLabel,
+    LinearProgress,
+    Paper,
+    Typography,
+    withStyles
+} from "@material-ui/core"
 import {Link} from "react-router-dom";
 import {withSnackbar} from "notistack";
 
 const styles = theme => ({
     paper: {
-        marginTop: theme.spacing.unit * 8,
+        marginTop: '5%',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -51,26 +60,31 @@ class Login extends Component {
     }
 
     login() {
-        this.setState({error: false});
+        this.setState({loading: true});
         userService.login(this.state.username, this.state.password)
-            .then(() => {
+            .then((user) => {
+                this.props.enqueueSnackbar(`Welcome, ${user.username}`, {
+                    variant: 'info'
+                });
                 const {from} = this.props.location.state || {from: {pathname: "/"}};
                 this.props.history.push(from);
             })
-            .catch(() => {
+            .catch((error) => {
+                console.log(error.response);
                 this.props.enqueueSnackbar("Wrong credentials!", {
                     variant: 'warning'
                 });
-            });
+            }).finally(() => {
+            this.setState({loading: false});
+        });
     }
 
     render() {
         const {classes} = this.props;
         return (
             <div>
-                {this.state.error === true ? <AlertSnackbar message={this.state.errorMessage}/> : null}
                 <Grid container justify="center">
-                    <Grid item lg={3} md={5} s={6} xs={8}>
+                    <Grid item lg={3} md={5} s={8} xs={10}>
                         <Paper className={classes.paper}>
                             <Typography variant="h2">
                                 Login
@@ -94,6 +108,7 @@ class Login extends Component {
                             >
                                 Sign in
                             </Button>
+
                             <Typography variant="caption" className={classes.margin}>
                                 Do not have an account?
                             </Typography>
@@ -102,6 +117,7 @@ class Login extends Component {
                                 Sign Up
                             </Button>
                         </Paper>
+                        <LinearProgress hidden={!this.state.loading}/>
                     </Grid>
                 </Grid>
             </div>

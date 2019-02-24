@@ -1,17 +1,11 @@
 import React, {Component} from 'react';
-import {Button, Grid, Paper, TextField, Typography, withStyles} from "@material-ui/core"
-import AlertSnackbar from "./AlertSnackbar";
+import {Button, Grid, LinearProgress, Paper, TextField, Typography, withStyles} from "@material-ui/core"
 import {registrationService} from "../service/registrationService"
 import {withSnackbar} from 'notistack';
-import LinearProgress from "@material-ui/core/LinearProgress";
 
 const styles = theme => ({
     paper: {
         padding: theme.spacing.unit * 3,
-    },
-    submit: {
-        marginTop: theme.spacing.unit * 3,
-        padding: theme.spacing.unit * 2,
     },
     marginTop5: {
         marginTop: '5%'
@@ -46,6 +40,9 @@ class Registration extends Component {
         this.setState({loading: true});
         registrationService.register(this.state.user)
             .then(() => {
+                this.props.enqueueSnackbar("Now you can sign in with your credentials", {
+                    variant: 'info'
+                });
                 this.props.history.push("/");
             })
             .catch((error) => {
@@ -75,15 +72,13 @@ class Registration extends Component {
         const {classes} = this.props;
         return (
             <div>
-                <LinearProgress hidden={!this.state.loading} variant="query"/>
-                {this.state.error === true ? <AlertSnackbar message={this.state.errorMessage}/> : null}
                 <Grid container justify="center">
                     <Grid item xs={10} md={8} lg={6}>
                         <Paper className={classes.paper}>
                             <Typography variant="h2" align={"center"}>
-                                Registration
+                                Sign up
                             </Typography>
-                            <Grid className={classes.marginTop5} container spacing={32}>
+                            <Grid container className={classes.marginTop5} spacing={32}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         onChange={this.handleUserChange}
@@ -141,9 +136,9 @@ class Registration extends Component {
                                 </Grid>
                                 <Grid item xs={8} md={10}/>
                                 <Grid item xs={4} md={2}>
-                                    <Button className={classes.submit}
+                                    <Button
+                                        fullWidth
                                             type="submit"
-                                            fullWidth
                                             variant="contained"
                                             color="primary"
                                             onClick={this.handleSubmit}
@@ -156,6 +151,7 @@ class Registration extends Component {
                                 </Grid>
                             </Grid>
                         </Paper>
+                        <LinearProgress hidden={!this.state.loading}/>
                     </Grid>
                 </Grid>
             </div>
