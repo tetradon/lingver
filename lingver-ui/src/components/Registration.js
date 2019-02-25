@@ -28,7 +28,7 @@ class Registration extends Component {
         };
         this.handleUserChange = this.handleUserChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this)
+        this.handleRepeatPasswordChange = this.handleRepeatPasswordChange.bind(this);
         this.isValid = this.isValid.bind(this);
     }
 
@@ -138,13 +138,14 @@ class Registration extends Component {
                                 <Grid item xs={4} md={2}>
                                     <Button
                                         fullWidth
-                                            type="submit"
-                                            variant="contained"
-                                            color="primary"
-                                            onClick={this.handleSubmit}
-                                            disabled={
-                                                !this.isValid()
-                                            }
+                                        type="submit"
+                                        variant="contained"
+                                        color="primary"
+                                        size="large"
+                                        onClick={this.handleSubmit}
+                                        disabled={
+                                            !this.isValid()
+                                        }
                                     >
                                         Submit
                                     </Button>
