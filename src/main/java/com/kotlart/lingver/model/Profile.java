@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.List;
 
@@ -62,6 +63,7 @@ public class Profile extends AbstractEntity implements UserDetails {
             joinColumns = {@JoinColumn(name = "profile_fk")},
             inverseJoinColumns = {@JoinColumn(name = "role_fk")}
     )
+    @NotEmpty
     private List<Role> authorities;
 
     @Override

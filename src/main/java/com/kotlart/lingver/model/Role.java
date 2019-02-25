@@ -1,7 +1,9 @@
 package com.kotlart.lingver.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
@@ -16,6 +18,8 @@ import javax.persistence.Table;
 @Table(name = Role.TABLE_NAME)
 @Data
 @EqualsAndHashCode(callSuper = false)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Role extends AbstractEntity implements GrantedAuthority {
     public static final String TABLE_NAME = "role";
     public static final String USER = "USER";
