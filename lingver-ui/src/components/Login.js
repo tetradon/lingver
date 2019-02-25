@@ -66,8 +66,7 @@ class Login extends Component {
                 this.props.enqueueSnackbar(`Welcome, ${user.username}`, {
                     variant: 'info'
                 });
-                const {from} = this.props.location.state || {from: {pathname: "/"}};
-                this.props.history.push(from);
+                this.props.history.push("/");
             })
             .catch((error) => {
                 console.log(error.response);
