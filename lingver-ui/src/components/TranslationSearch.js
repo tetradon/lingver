@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Input, List, ListItem, Typography, withStyles} from '@material-ui/core';
+import {translationService} from "../service/translationService";
 
 const styles = {};
 
@@ -13,6 +14,7 @@ class TranslationSearch extends Component {
             typingTimeout: 0
         };
         this.handleChange = this.handleChange.bind(this);
+        this.saveTranslation = this.saveTranslation.bind(this);
     }
 
     handleChange(event) {
@@ -24,21 +26,25 @@ class TranslationSearch extends Component {
             userSearch: event.target.value,
             typing: false,
             typingTimeout: setTimeout(() => {
-                fetch(`api/translation?word=${this.state.userSearch}`)
-                    .then(response => response.json())
-                    .then(data => this.setState({translations: data}));
+                translationService.searchTranslationsByWord(this.state.userSearch)
+                    .then(
+                        data => this.setState({translations: data}))
             }, 300)
         });
+    }
+
+    saveTranslation(translation) {
+        translationService.saveTranslationToProfile(translation);
     }
 
 
     render() {
         const {translations} = this.state;
 
-        const translationList = translations.map(word => {
+        const translationList = translations.map(translation => {
             return (
-                <ListItem key={word.id}>
-                    {word.value} <Button>+</Button>
+                <ListItem key={translation.id}>
+                    {translation.value} <Button onClick={() => this.saveTranslation(translation)}>+</Button>
                 </ListItem>
             )
         });
