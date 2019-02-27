@@ -11,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class ProfileTranslationServiceBean implements ProfileTranslationService {
@@ -26,13 +27,19 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public ProfileTranslation saveTranslationToCurrentProfileDictionary(Translation translation) {
-        final Translation translatioEntity = translationRepository.findById(translation.getId()).orElse(null);
+    public ProfileTranslation addTranslationToCurrentProfile(Long translationId) {
+        final Translation translationEntity = translationRepository.findById(translationId).orElse(null);
         Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ProfileTranslation profileTranslation = new ProfileTranslation();
         profileTranslation.setProfile(activeUser);
-        profileTranslation.setTranslation(translation);
+        profileTranslation.setTranslation(translationEntity);
         profileTranslation.setInsertDate(new Date());
         return profileTranslationRepository.save(profileTranslation);
+    }
+
+    @Override
+    public List<ProfileTranslation> getTranslationsOfCurrentProfile() {
+        Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return profileTranslationRepository.findAllByProfileId(activeUser.getId());
     }
 }

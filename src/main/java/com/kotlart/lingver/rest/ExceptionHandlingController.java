@@ -31,7 +31,8 @@ public class ExceptionHandlingController extends ResponseEntityExceptionHandler 
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity serverError(DataIntegrityViolationException ex) throws DataIntegrityViolationException {
+    public ResponseEntity serverError(Exception ex) throws DataIntegrityViolationException {
+        ex.printStackTrace();
         final MessageDto response = new MessageDto("something went wrong");
         return ResponseEntity.status(500).body(Collections.singletonList(response));
     }

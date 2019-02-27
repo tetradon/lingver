@@ -11,7 +11,7 @@ class TranslationSearch extends Component {
             translations: [],
             userSearch: '',
             typing: false,
-            typingTimeout: 0
+            typingTimeout: 0,
         };
         this.handleChange = this.handleChange.bind(this);
         this.saveTranslation = this.saveTranslation.bind(this);
@@ -34,7 +34,7 @@ class TranslationSearch extends Component {
     }
 
     saveTranslation(translation) {
-        translationService.saveTranslationToProfile(translation);
+        translationService.addTranslation(translation);
     }
 
 

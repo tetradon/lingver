@@ -1,5 +1,6 @@
 package com.kotlart.lingver.model;
 
+import com.sun.istack.internal.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -35,9 +36,11 @@ public class ProfileTranslation extends AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = Translation.TABLE_NAME + FK_SUFFIX)
+    @NotNull
     private Translation translation;
 
     @ManyToOne
     @JoinColumn(name = Profile.TABLE_NAME + FK_SUFFIX)
+    @NotNull
     private Profile profile;
 }

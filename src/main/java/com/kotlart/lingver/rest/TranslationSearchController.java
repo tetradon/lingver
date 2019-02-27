@@ -1,7 +1,7 @@
 package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.rest.dto.TranslationDto;
+import com.kotlart.lingver.rest.dto.ValueDto;
 import com.kotlart.lingver.service.TranslationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +29,9 @@ public class TranslationSearchController {
     @GetMapping
     ResponseEntity getTranslations(@RequestParam("word") String wordToSearch) {
         final List<Translation> foundTranslations = translationService.findByWordValue(wordToSearch);
-        final List<TranslationDto> convertedDtos = foundTranslations
+        final List<ValueDto> convertedDtos = foundTranslations
                 .stream()
-                .map(word -> modelMapper.map(word, TranslationDto.class))
+                .map(word -> modelMapper.map(word, ValueDto.class))
                 .collect(Collectors.toList());
         return ResponseEntity.ok().body(convertedDtos);
     }

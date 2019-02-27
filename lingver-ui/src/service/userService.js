@@ -3,7 +3,8 @@ import axios from 'axios'
 export const userService = {
     login,
     logout,
-    getActiveUser
+    getActiveUser,
+    updateActiveUser
 };
 
 function login(username, password) {
@@ -26,5 +27,15 @@ function logout() {
 
 function getActiveUser() {
     return localStorage.getItem('activeUser');
+}
+
+function updateActiveUser() {
+    localStorage.removeItem('activeUser');
+    return axios.get('/profile')
+        .then(response => {
+            localStorage.setItem('activeUser', JSON.stringify(response.data));
+        }).catch(error => {
+            localStorage.removeItem('activeUser');
+        });
 }
 

@@ -1,13 +1,11 @@
 package com.kotlart.lingver.model;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +33,6 @@ public class Word extends AbstractEntity {
     private Date insertDate;
     private String insertedBy;
 
-    @OneToMany(mappedBy = Word.TABLE_NAME, fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JsonManagedReference
+    @OneToMany(mappedBy = Word.TABLE_NAME, cascade = CascadeType.ALL)
     private List<Translation> translations;
 }

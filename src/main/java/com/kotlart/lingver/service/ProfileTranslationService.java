@@ -1,8 +1,11 @@
 package com.kotlart.lingver.service;
 
 import com.kotlart.lingver.model.ProfileTranslation;
-import com.kotlart.lingver.model.Translation;
+
+import java.util.List;
 
 public interface ProfileTranslationService {
-    ProfileTranslation saveTranslationToCurrentProfileDictionary(Translation translation);
+    ProfileTranslation addTranslationToCurrentProfile(Long translationId);
+
+    List<ProfileTranslation> getTranslationsOfCurrentProfile();
 }
