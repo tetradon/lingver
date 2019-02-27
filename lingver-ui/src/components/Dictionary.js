@@ -8,23 +8,26 @@ class Dictionary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            translationList: []
+            translationList: [],
+            totalElements: 0
         };
+        this.reloadData = this.reloadData.bind(this);
     }
 
-    componentDidMount() {
-        translationService.getTranslations()
+    reloadData(params) {
+        translationService.getTranslations(params)
             .then((response) => {
-                this.setState({translationList: response})
+                this.setState({translationList: response.data});
+                this.setState({totalElements: response.headers.total});
             });
     }
 
     render() {
-
         return (
             <Grid container justify="center" spacing={40}>
                 <Grid item xs={5}>
-                    <TranslationList translations={this.state.translationList}/>
+                    <TranslationList onQueryParamsChange={this.reloadData} totalElements={this.state.totalElements}
+                                     translations={this.state.translationList}/>
                 </Grid>
                 <Grid item xs={5}>
                     <TranslationSearch/>

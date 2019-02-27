@@ -1,12 +1,17 @@
 package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.ProfileTranslation;
+import com.kotlart.lingver.rest.dto.PageDto;
 import com.kotlart.lingver.rest.dto.ProfileTranslationDto;
 import com.kotlart.lingver.rest.dto.ValueDto;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,10 +38,14 @@ public class ProfileTranslationController {
     }
 
     @GetMapping
-    ResponseEntity getProfileTransaltions() {
-        final List<ProfileTranslation> profileTranslations = profileTranslationService.getTranslationsOfCurrentProfile();
+    ResponseEntity getProfileTranslations(PageDto pageDto) {
+        Pageable pageable =
+                PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by(pageDto.getSortDirection(), pageDto.getSortField()));
+        final Page<ProfileTranslation> translationsPage = profileTranslationService.getTranslationsOfCurrentProfile(pageable);
+        final List<ProfileTranslation> profileTranslations = translationsPage.getContent();
+        final long totalElements = translationsPage.getTotalElements();
         final List<ProfileTranslationDto> translationDtos = profileTranslations.stream().map(tr -> modelMapper.map(tr, ProfileTranslationDto.class)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(translationDtos);
+        return ResponseEntity.ok().header("total", String.valueOf(totalElements)).body(translationDtos);
     }
 
     @PostMapping

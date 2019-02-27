@@ -6,6 +6,7 @@ import java.util.Date;
 
 @Data
 public class ProfileTranslationDto {
+    private Long id;
     private TranslationDto translation;
     private Date insertDate;
     private String example;

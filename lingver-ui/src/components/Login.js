@@ -38,7 +38,6 @@ const styles = theme => ({
 class Login extends Component {
     constructor(props) {
         super(props);
-        userService.logout();
         this.state = {
             username: '',
             password: '',
@@ -73,9 +72,8 @@ class Login extends Component {
                 this.props.enqueueSnackbar("Wrong credentials!", {
                     variant: 'warning'
                 });
-            }).finally(() => {
-            this.setState({loading: false});
-        });
+            })
+
     }
 
     render() {

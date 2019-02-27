@@ -1,11 +1,11 @@
 package com.kotlart.lingver.service;
 
 import com.kotlart.lingver.model.ProfileTranslation;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ProfileTranslationService {
     ProfileTranslation addTranslationToCurrentProfile(Long translationId);
 
-    List<ProfileTranslation> getTranslationsOfCurrentProfile();
+    Page<ProfileTranslation> getTranslationsOfCurrentProfile(Pageable pageable);
 }

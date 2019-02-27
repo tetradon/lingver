@@ -7,11 +7,12 @@ import com.kotlart.lingver.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.respository.TranslationRepository;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
-import java.util.List;
 
 @Service
 public class ProfileTranslationServiceBean implements ProfileTranslationService {
@@ -38,8 +39,8 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public List<ProfileTranslation> getTranslationsOfCurrentProfile() {
+    public Page<ProfileTranslation> getTranslationsOfCurrentProfile(Pageable pageable) {
         Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return profileTranslationRepository.findAllByProfileId(activeUser.getId());
+        return profileTranslationRepository.findAllByProfileId(activeUser.getId(), pageable);
     }
 }
