@@ -25,23 +25,17 @@ class TranslationList extends Component {
             page: 0,
             size: 10
         };
-
-        this.handleChangeRowsPerPage = this.handleChangeRowsPerPage.bind(this);
-        this.handleChangePage = this.handleChangePage.bind(this);
-
     }
 
     componentDidMount() {
         this.props.onQueryParamsChange(this.state);
     }
 
-    handleChangeSort(field) {
+    handleChangeSort = (field) => {
         let sortDirection = 'desc';
-
         if (this.state.sortField === field && this.state.sortDirection === 'desc') {
             sortDirection = 'asc';
         }
-        console.log(this.state.sortField);
         this.setState({
             sortDirection: sortDirection,
             sortField: field
@@ -52,7 +46,7 @@ class TranslationList extends Component {
         this.setState({page: page}, () => this.props.onQueryParamsChange(this.state));
     };
 
-    handleChangeRowsPerPage(event) {
+    handleChangeRowsPerPage = (event) => {
         this.setState({size: event.target.value}, () => this.props.onQueryParamsChange(this.state));
     };
 
@@ -86,8 +80,7 @@ class TranslationList extends Component {
                     <TableBody>{
                         translations.map(row => {
                             return (
-                                <TableRow key={row.id}
-                                >
+                                <TableRow key={row.id}>
                                     <TableCell component="th" scope="row" padding="none">
                                         {row.translation.word.value}
                                     </TableCell>
@@ -99,7 +92,7 @@ class TranslationList extends Component {
                     </TableBody>
                 </Table>
                 <TablePagination
-                    rowsPerPageOptions={[5, 10, 25]}
+                    rowsPerPageOptions={[5, 10, 20, 30]}
                     component="div"
                     count={parseInt(this.props.totalElements)}
                     rowsPerPage={parseInt(this.state.size)}
