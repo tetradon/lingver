@@ -4,7 +4,7 @@ export const userService = {
     login,
     logout,
     getActiveUser,
-    updateActiveUser
+    removeUserFromStorage
 };
 
 function login(username, password) {
@@ -22,20 +22,14 @@ function login(username, password) {
 
 function logout() {
     axios.post("/logout");
-    localStorage.removeItem('activeUser');
+    removeUserFromStorage();
 }
 
 function getActiveUser() {
     return localStorage.getItem('activeUser');
 }
 
-function updateActiveUser() {
-    localStorage.removeItem('activeUser');
-    return axios.get('/profile')
-        .then(response => {
-            localStorage.setItem('activeUser', JSON.stringify(response.data));
-        }).catch(error => {
-            localStorage.removeItem('activeUser');
-        });
+function removeUserFromStorage() {
+    return localStorage.removeItem('activeUser');
 }
 

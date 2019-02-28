@@ -1,8 +1,20 @@
 import React, {Component} from 'react';
-import {Button, Input, List, ListItem, Typography, withStyles} from '@material-ui/core';
+import {Input, List, ListItem, Typography, withStyles} from '@material-ui/core';
 import {translationService} from "../service/translationService";
+import {withSnackbar} from "notistack";
+import Fab from "@material-ui/core/Fab";
+import Divider from "@material-ui/core/Divider";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import AddIcon from '@material-ui/icons/Add';
 
-const styles = {};
+const styles = {
+    fab: {
+        marginRight: '5px'
+    },
+    userNewTranslation: {
+        paddingBottom: '10px'
+    }
+};
 
 class TranslationSearch extends Component {
     constructor(props) {
@@ -10,14 +22,13 @@ class TranslationSearch extends Component {
         this.state = {
             translations: [],
             userSearch: '',
+            userNewTranslation: '',
             typing: false,
             typingTimeout: 0,
         };
-        this.handleChange = this.handleChange.bind(this);
-        this.saveTranslation = this.saveTranslation.bind(this);
     }
 
-    handleChange(event) {
+    handleSearchChange = (event) => {
         if (this.state.typingTimeout) {
             clearTimeout(this.state.typingTimeout);
         }
@@ -31,21 +42,55 @@ class TranslationSearch extends Component {
                         data => this.setState({translations: data}))
             }, 300)
         });
-    }
+    };
 
-    saveTranslation(translation) {
-        translationService.addTranslation(translation);
-    }
+    handleUserNewTranslationChange = (event) => {
+        this.setState({userNewTranslation: event.target.value});
+    };
+
+    saveNewTranslation = () => {
+        const newTranslation = {
+            word: this.state.userSearch,
+            translation: this.state.userNewTranslation
+        };
+
+        translationService.saveNewTranslation(newTranslation)
+            .then(() => {
+                this.setState({userNewTranslation: '', userSearch: '', translations: []});
+                this.props.onNewWord();
+            });
+    };
+
+    addTranslation = (translation) => {
+        translationService.addTranslation(translation)
+            .then(() => {
+                this.props.onNewWord();
+                this.setState({userSearch: '', translations: []});
+            })
+            .catch((error) => {
+                error.response.data.forEach((error) => {
+                    this.props.enqueueSnackbar(error.message);
+                });
+            });
+    };
 
 
     render() {
         const {translations} = this.state;
+        const {classes} = this.props;
 
         const translationList = translations.map(translation => {
             return (
-                <ListItem key={translation.id}>
-                    {translation.value} <Button onClick={() => this.saveTranslation(translation)}>+</Button>
-                </ListItem>
+                <React.Fragment>
+                    <ListItem key={translation.id}>
+                        <Fab size="small"
+                             color="primary"
+                             className={classes.fab}
+                             onClick={() => this.addTranslation(translation)}><AddIcon/></Fab>
+                        {translation.value}
+                    </ListItem>
+                    <Divider variant={"middle"}/>
+                </React.Fragment>
             )
         });
 
@@ -53,11 +98,31 @@ class TranslationSearch extends Component {
             <div>
                 <Typography variant={"h3"}>Add new word</Typography>
                 <Input type="text" value={this.state.userSearch} fullWidth
-                       onChange={this.handleChange}/>
-                <List>{translationList}</List>
+                       onChange={this.handleSearchChange}/>
+                <List>{translationList}
+                    <ListItem hidden={!this.state.userSearch}>
+                        <Input
+                            value={this.state.userNewTranslation}
+                            onChange={this.handleUserNewTranslationChange}
+                            fullWidth
+                            className={classes.userNewTranslation}
+                            startAdornment={
+                                <InputAdornment position="start">
+                                    <Fab size="small"
+                                         color="primary"
+                                         className={classes.fab}
+                                         onClick={this.saveNewTranslation}
+                                    > <AddIcon/>
+                                    </Fab>
+                                </InputAdornment>
+                            }
+                        >
+                        </Input>
+                    </ListItem>
+                </List>
             </div>
         );
     }
 }
 
-export default withStyles(styles)(TranslationSearch);
+export default withStyles(styles)(withSnackbar(TranslationSearch));

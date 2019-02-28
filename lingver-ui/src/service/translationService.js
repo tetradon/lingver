@@ -4,15 +4,11 @@ export const translationService = {
     addTranslation,
     searchTranslationsByWord,
     getTranslations,
+    saveNewTranslation
 };
 
 function addTranslation(translation) {
-    return axios.post('/profile/translations', translation)
-        .then(response => {
-            return response.data;
-        }).catch(error => {
-            return Promise.reject(error);
-        });
+    return axios.post('/profile/translations', translation);
 }
 
 function searchTranslationsByWord(word) {
@@ -33,6 +29,10 @@ function getTranslations(params) {
             sortDirection: params.sortDirection.toUpperCase()
         }
     });
+}
+
+function saveNewTranslation(translation) {
+    return axios.post('/translations', translation);
 }
 
 

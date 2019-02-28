@@ -7,6 +7,7 @@ import TableBody from "@material-ui/core/TableBody";
 import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Tooltip from "@material-ui/core/Tooltip";
 import TablePagination from "@material-ui/core/TablePagination";
+import {withSnackbar} from "notistack";
 
 const styles = {};
 
@@ -20,34 +21,23 @@ class TranslationList extends Component {
                 {displayName: 'Translation', path: 'translation.value'},
                 {displayName: 'Insert Date', path: 'insertDate'}
             ],
-            sortField: 'id',
-            sortDirection: 'asc',
-            page: 0,
-            size: 10
         };
-    }
-
-    componentDidMount() {
-        this.props.onQueryParamsChange(this.state);
     }
 
     handleChangeSort = (field) => {
         let sortDirection = 'desc';
-        if (this.state.sortField === field && this.state.sortDirection === 'desc') {
+        if (this.props.params.sortField === field && this.props.params.sortDirection === 'desc') {
             sortDirection = 'asc';
         }
-        this.setState({
-            sortDirection: sortDirection,
-            sortField: field
-        }, () => this.props.onQueryParamsChange(this.state));
+        this.props.onQueryParamsChange({sortDirection: sortDirection, sortField: field});
     };
 
     handleChangePage = (event, page) => {
-        this.setState({page: page}, () => this.props.onQueryParamsChange(this.state));
+        this.props.onQueryParamsChange({page: page});
     };
 
     handleChangeRowsPerPage = (event) => {
-        this.setState({size: event.target.value}, () => this.props.onQueryParamsChange(this.state));
+        this.props.onQueryParamsChange({size: event.target.value});
     };
 
     render() {
@@ -59,15 +49,14 @@ class TranslationList extends Component {
                         <TableRow>
                             {this.state.titles.map(
                                 title => (
-                                    <TableCell key={title}
-                                    >
+                                    <TableCell key={title.displayName}>
                                         <Tooltip
                                             title="Sort"
                                             enterDelay={300}
                                         >
                                             <TableSortLabel
-                                                active={this.state.sortField === title.path}
-                                                direction={this.state.sortDirection}
+                                                active={this.props.params.sortField === title.path}
+                                                direction={this.props.params.sortDirection}
                                                 onClick={() => this.handleChangeSort(title.path)}
                                             >
                                                 {title.displayName}
@@ -95,8 +84,8 @@ class TranslationList extends Component {
                     rowsPerPageOptions={[5, 10, 20, 30]}
                     component="div"
                     count={parseInt(this.props.totalElements)}
-                    rowsPerPage={parseInt(this.state.size)}
-                    page={parseInt(this.state.page)}
+                    rowsPerPage={parseInt(this.props.params.size)}
+                    page={parseInt(this.props.params.page)}
                     backIconButtonProps={{
                         'aria-label': 'Previous Page',
                     }}
@@ -111,4 +100,4 @@ class TranslationList extends Component {
     }
 }
 
-export default withStyles(styles)(TranslationList);
+export default withStyles(styles)(withSnackbar(TranslationList));

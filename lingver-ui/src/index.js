@@ -8,7 +8,10 @@ import {BrowserRouter} from "react-router-dom";
 import {SnackbarProvider} from "notistack";
 
 ReactDOM.render(
-    <SnackbarProvider maxSnack={3}>
+    <SnackbarProvider maxSnack={3} anchorOrigin={{
+        vertical: 'bottom',
+        horizontal: 'right',
+    }}>
         <BrowserRouter>
             <App/>
         </BrowserRouter>

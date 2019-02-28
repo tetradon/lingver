@@ -62,18 +62,13 @@ class Login extends Component {
         this.setState({loading: true});
         userService.login(this.state.username, this.state.password)
             .then((user) => {
-                this.props.enqueueSnackbar(`Welcome, ${user.username}`, {
-                    variant: 'info'
-                });
+                this.props.enqueueSnackbar(`Welcome, ${user.username}`);
                 this.props.history.push("/");
             })
-            .catch((error) => {
-                console.log(error.response);
-                this.props.enqueueSnackbar("Wrong credentials!", {
-                    variant: 'warning'
-                });
+            .catch(() => {
+                this.props.enqueueSnackbar("Wrong credentials!");
+                this.setState({loading: false})
             })
-
     }
 
     render() {

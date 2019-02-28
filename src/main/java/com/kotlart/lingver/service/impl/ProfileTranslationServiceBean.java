@@ -28,7 +28,7 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public ProfileTranslation addTranslationToCurrentProfile(Long translationId) {
+    public ProfileTranslation saveTranslationToCurrentProfile(Long translationId) {
         final Translation translationEntity = translationRepository.findById(translationId).orElse(null);
         Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ProfileTranslation profileTranslation = new ProfileTranslation();

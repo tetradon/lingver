@@ -28,7 +28,7 @@ public class Translation extends AbstractEntity {
     private String value;
     private String insertedBy;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
 
     @ManyToOne

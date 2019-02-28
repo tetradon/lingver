@@ -47,9 +47,7 @@ class Registration extends Component {
             })
             .catch((error) => {
                 error.response.data.forEach((error) => {
-                    this.props.enqueueSnackbar(error.message, {
-                        variant: 'warning'
-                    });
+                    this.props.enqueueSnackbar(error.message);
                 });
             }).finally(() => {
             this.setState({loading: false});

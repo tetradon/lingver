@@ -1,18 +1,29 @@
 import React, {Component} from 'react';
 import Home from './Home';
-import {Redirect, Route, Switch} from 'react-router-dom';
+import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import Dictionary from './Dictionary';
 import LingverNavbar from "./LingverNavbar";
 import Login from "./Login";
 import {ProtectedRoute} from "./ProtectedRoute";
 import Register from "./Registration";
 import NotFound from "./NotFound";
-import {userService} from "../service/userService";
-
+import axios from "axios";
+import {userService} from '../service/userService'
 
 class App extends Component {
-    componentWillMount() {
-        userService.updateActiveUser();
+    constructor(props) {
+        super(props);
+        axios.interceptors.response.use(
+            response => {
+                return response
+            },
+            error => {
+                if (error.response.status === 401) {
+                    userService.removeUserFromStorage();
+                    this.props.history.push('/login');
+                }
+                return Promise.reject(error);
+            });
     }
 
     render() {
@@ -32,4 +43,4 @@ class App extends Component {
     }
 }
 
-export default App;
+export default withRouter(App);

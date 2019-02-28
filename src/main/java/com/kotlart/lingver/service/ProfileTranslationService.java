@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ProfileTranslationService {
-    ProfileTranslation addTranslationToCurrentProfile(Long translationId);
+    ProfileTranslation saveTranslationToCurrentProfile(Long translationId);
 
     Page<ProfileTranslation> getTranslationsOfCurrentProfile(Pageable pageable);
 }

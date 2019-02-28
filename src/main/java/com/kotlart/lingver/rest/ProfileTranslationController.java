@@ -53,9 +53,7 @@ public class ProfileTranslationController {
         if (result.hasErrors()) {
             return ResponseUtil.badRequest(result.getFieldErrors());
         }
-        profileTranslationService.addTranslationToCurrentProfile(translationDto.getId());
-        return ResponseEntity.ok().body(modelMapper.map(translationDto, ValueDto.class));
+        final ProfileTranslation profileTranslation = profileTranslationService.saveTranslationToCurrentProfile(translationDto.getId());
+        return ResponseEntity.ok().body(modelMapper.map(profileTranslation, ProfileTranslationDto.class));
     }
-
-
 }
