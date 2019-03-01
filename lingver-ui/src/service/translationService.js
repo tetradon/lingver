@@ -32,7 +32,12 @@ function getTranslations(params) {
 }
 
 function saveNewTranslation(translation) {
-    return axios.post('/translations', translation);
+    return axios.post('/translations', translation)
+        .then(response => {
+            addTranslation(response.data)
+        }).catch(error => {
+            return Promise.reject(error);
+        });
 }
 
 

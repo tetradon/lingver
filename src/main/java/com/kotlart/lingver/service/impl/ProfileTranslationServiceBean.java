@@ -12,8 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-
 @Service
 public class ProfileTranslationServiceBean implements ProfileTranslationService {
 
@@ -34,7 +32,6 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
         ProfileTranslation profileTranslation = new ProfileTranslation();
         profileTranslation.setProfile(activeUser);
         profileTranslation.setTranslation(translationEntity);
-        profileTranslation.setInsertDate(new Date());
         return profileTranslationRepository.save(profileTranslation);
     }
 

@@ -10,6 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,4 +36,10 @@ public class Word extends AbstractEntity {
 
     @OneToMany(mappedBy = Word.TABLE_NAME, cascade = CascadeType.ALL)
     private List<Translation> translations;
+
+    @PrePersist
+    private void fillInsertInfo() {
+        setInsertedBy("LINGVER");
+        setInsertDate(new Date());
+    }
 }

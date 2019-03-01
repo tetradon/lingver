@@ -10,6 +10,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -34,4 +35,11 @@ public class Translation extends AbstractEntity {
     @ManyToOne
     @JoinColumn(name = Word.TABLE_NAME + FK_SUFFIX)
     private Word word;
+
+    @PrePersist
+    private void fillInsertInfo() {
+        setInsertedBy("LINGVER");
+        setInsertDate(new Date());
+    }
+
 }

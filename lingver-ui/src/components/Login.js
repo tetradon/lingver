@@ -100,7 +100,6 @@ class Login extends Component {
                             >
                                 Sign in
                             </Button>
-
                             <Typography variant="caption" className={classes.margin}>
                                 Do not have an account?
                             </Typography>

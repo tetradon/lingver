@@ -56,9 +56,13 @@ class TranslationSearch extends Component {
 
         translationService.saveNewTranslation(newTranslation)
             .then(() => {
-                this.setState({userNewTranslation: '', userSearch: '', translations: []});
                 this.props.onNewWord();
+                this.setState({userNewTranslation: '', userSearch: '', translations: []});
+            }).catch((error) => {
+            error.response.data.forEach((error) => {
+                this.props.enqueueSnackbar(error.message);
             });
+        });
     };
 
     addTranslation = (translation) => {
@@ -81,8 +85,8 @@ class TranslationSearch extends Component {
 
         const translationList = translations.map(translation => {
             return (
-                <React.Fragment>
-                    <ListItem key={translation.id}>
+                <React.Fragment key={translation.id}>
+                    <ListItem>
                         <Fab size="small"
                              color="primary"
                              className={classes.fab}
@@ -100,11 +104,12 @@ class TranslationSearch extends Component {
                 <Input type="text" value={this.state.userSearch} fullWidth
                        onChange={this.handleSearchChange}/>
                 <List>{translationList}
-                    <ListItem hidden={!this.state.userSearch}>
+                    <ListItem key={this.state.userSearch} hidden={!this.state.userSearch}>
                         <Input
                             value={this.state.userNewTranslation}
                             onChange={this.handleUserNewTranslationChange}
                             fullWidth
+                            placeholder="Your variant"
                             className={classes.userNewTranslation}
                             startAdornment={
                                 <InputAdornment position="start">

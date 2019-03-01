@@ -40,9 +40,7 @@ class Registration extends Component {
         this.setState({loading: true});
         registrationService.register(this.state.user)
             .then(() => {
-                this.props.enqueueSnackbar("Now you can sign in with your credentials", {
-                    variant: 'info'
-                });
+                this.props.enqueueSnackbar("Now you can sign in with your credentials");
                 this.props.history.push("/");
             })
             .catch((error) => {

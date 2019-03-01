@@ -8,14 +8,42 @@ import TableSortLabel from "@material-ui/core/TableSortLabel";
 import Tooltip from "@material-ui/core/Tooltip";
 import TablePagination from "@material-ui/core/TablePagination";
 import {withSnackbar} from "notistack";
+import Paper from "@material-ui/core/Paper";
+import Checkbox from "@material-ui/core/Checkbox";
+import Toolbar from "@material-ui/core/Toolbar";
+import Typography from "@material-ui/core/Typography";
+import IconButton from "@material-ui/core/IconButton";
+import DeleteIcon from '@material-ui/icons/Delete';
+import {lighten} from '@material-ui/core/styles/colorManipulator';
+import classNames from 'classnames';
 
-const styles = {};
+const styles = theme => ({
+    root: {
+        paddingRight: theme.spacing.unit,
+    },
+    highlight:
+        theme.palette.type === 'light'
+            ? {
+                color: theme.palette.primary.main,
+                backgroundColor: lighten(theme.palette.primary.light, 0.85),
+            }
+            : {
+                color: theme.palette.text.primary,
+                backgroundColor: theme.palette.primary.dark,
+            },
+    spacer: {
+        flex: '1 1 100%',
+    },
+    title: {
+        flex: '0 0 auto',
+    },
+});
 
 class TranslationList extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
+            selected: [],
             titles: [
                 {displayName: 'Word', path: 'translation.word.value'},
                 {displayName: 'Translation', path: 'translation.value'},
@@ -40,13 +68,77 @@ class TranslationList extends Component {
         this.props.onQueryParamsChange({size: event.target.value});
     };
 
+    handleSelectAllClick = event => {
+        if (event.target.checked) {
+            this.setState({selected: this.props.translations.map(n => n.id)});
+            return;
+        }
+        this.setState({selected: []});
+    };
+
+    handleClick = (event, id) => {
+        const {selected} = this.state;
+        const selectedIndex = selected.indexOf(id);
+        let newSelected = [];
+
+        if (selectedIndex === -1) {
+            newSelected = newSelected.concat(selected, id);
+        } else if (selectedIndex === 0) {
+            newSelected = newSelected.concat(selected.slice(1));
+        } else if (selectedIndex === selected.length - 1) {
+            newSelected = newSelected.concat(selected.slice(0, -1));
+        } else if (selectedIndex > 0) {
+            newSelected = newSelected.concat(
+                selected.slice(0, selectedIndex),
+                selected.slice(selectedIndex + 1),
+            );
+        }
+
+        this.setState({selected: newSelected});
+    };
+
+    isSelected = id => this.state.selected.indexOf(id) !== -1;
+
     render() {
-        const {translations} = this.props;
+        const {translations, classes} = this.props;
         return (
-            <React.Fragment>
+            <Paper className={classes.root}>
+                <Toolbar
+                    className={classNames(classes.root, {
+                        [classes.highlight]: this.state.selected.length > 0,
+                    })}
+                >
+                    <div className={classes.title}>
+                        {this.state.selected.length > 0 ? (
+                            <Typography color="inherit" variant="subtitle1">
+                                {this.state.selected.length} selected
+                            </Typography>
+                        ) : (
+                            <Typography variant="h6" id="tableTitle">
+                                Your translations
+                            </Typography>
+                        )}
+                    </div>
+                    <div className={classes.spacer}/>
+                    <div className={classes.actions}>
+                        {this.state.selected.length > 0 ? (
+                            <Tooltip title="Delete">
+                                <IconButton aria-label="Delete">
+                                    <DeleteIcon/>
+                                </IconButton>
+                            </Tooltip>
+                        ) : null}
+                    </div>
+                </Toolbar>
                 <Table>
                     <TableHead>
                         <TableRow>
+                            <Checkbox
+                                indeterminate={this.state.selected.length > 0 && this.state.selected.length < this.props.translations.length}
+                                checked={this.state.selected.length === this.props.translations.length}
+                                onChange={this.handleSelectAllClick}
+                                color="primary"
+                            />
                             {this.state.titles.map(
                                 title => (
                                     <TableCell key={title.displayName}>
@@ -68,8 +160,19 @@ class TranslationList extends Component {
                     </TableHead>
                     <TableBody>{
                         translations.map(row => {
+                            const isSelected = this.isSelected(row.id);
                             return (
-                                <TableRow key={row.id}>
+                                <TableRow
+                                    key={row.id}
+                                    hover
+                                    onClick={event => this.handleClick(event, row.id)}
+                                    role="checkbox"
+                                    aria-checked={isSelected}
+                                    tabIndex={-1}
+                                    selected={isSelected}>
+                                    <TableCell>
+                                        <Checkbox color="primary" checked={isSelected}/>
+                                    </TableCell>
                                     <TableCell component="th" scope="row" padding="none">
                                         {row.translation.word.value}
                                     </TableCell>
@@ -95,7 +198,7 @@ class TranslationList extends Component {
                     onChangePage={this.handleChangePage}
                     onChangeRowsPerPage={this.handleChangeRowsPerPage}
                 />
-            </React.Fragment>
+            </Paper>
         );
     }
 }

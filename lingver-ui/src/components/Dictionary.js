@@ -8,7 +8,7 @@ class Dictionary extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            translationList: [],
+            translations: [],
             totalElements: 0,
             params: {
                 sortField: 'insertDate',
@@ -28,7 +28,7 @@ class Dictionary extends Component {
         this.setState({isLoading: true});
         translationService.getTranslations(this.state.params)
             .then((response) => {
-                this.setState({translationList: response.data});
+                this.setState({translations: response.data});
                 this.setState({totalElements: response.headers.total});
             })
             .finally(() => {
@@ -43,6 +43,7 @@ class Dictionary extends Component {
         });
     };
 
+
     render() {
         return (
             <Grid container
@@ -51,8 +52,9 @@ class Dictionary extends Component {
                 <Grid item xs={5}>
                     <TranslationList onQueryParamsChange={this.updateParams}
                                      params={this.state.params}
+                                     selected={this.state.selected}
                                      totalElements={this.state.totalElements}
-                                     translations={this.state.translationList}/>
+                                     translations={this.state.translations}/>
                     <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>
                 </Grid>
                 <Grid item xs={5}>
