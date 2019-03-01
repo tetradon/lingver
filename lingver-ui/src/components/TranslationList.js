@@ -69,15 +69,17 @@ class TranslationList extends Component {
     };
 
     handleSelectAllClick = event => {
+        this.setState({selected: this.state.selected.filter((e) => !this.props.translations.map(t => t.id).includes(e))});
         if (event.target.checked) {
-            this.setState({selected: this.props.translations.map(n => n.id)});
-            return;
+            this.setState({selected: this.state.selected.concat(this.props.translations.map(n => n.id))});
         }
-        this.setState({selected: []});
+
     };
 
     handleClick = (event, id) => {
+
         const {selected} = this.state;
+
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
@@ -94,7 +96,9 @@ class TranslationList extends Component {
             );
         }
 
-        this.setState({selected: newSelected});
+        this.setState({selected: newSelected}, () => {
+            console.log(this.state.selected);
+        });
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
@@ -133,12 +137,19 @@ class TranslationList extends Component {
                 <Table>
                     <TableHead>
                         <TableRow>
-                            <Checkbox
-                                indeterminate={this.state.selected.length > 0 && this.state.selected.length < this.props.translations.length}
-                                checked={this.state.selected.length === this.props.translations.length}
-                                onChange={this.handleSelectAllClick}
-                                color="primary"
-                            />
+                            <TableCell>
+                                <Checkbox
+                                    checked={
+                                        this.state.selected.length !== 0 &&
+                                        this.props.translations.map(t => t.id)
+                                            .every((e) => {
+                                                return this.state.selected.includes(e);
+                                            })
+                                    }
+                                    onChange={this.handleSelectAllClick}
+                                    color="primary"
+                                />
+                            </TableCell>
                             {this.state.titles.map(
                                 title => (
                                     <TableCell key={title.displayName}>
