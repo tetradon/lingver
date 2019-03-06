@@ -37,6 +37,10 @@ class Dictionary extends Component {
             );
     };
 
+    remove = (ids) => {
+        translationService.removeTranslations(ids).then(() => this.reload());
+    };
+
     updateParams = (newParams) => {
         this.setState({params: Object.assign(this.state.params, newParams)}, () => {
             this.reload();
@@ -49,15 +53,16 @@ class Dictionary extends Component {
             <Grid container
                   justify="center"
                   spacing={40}>
-                <Grid item xs={5}>
+                <Grid item md={10} lg={5}>
                     <TranslationList onQueryParamsChange={this.updateParams}
+                                     onRemove={this.remove}
                                      params={this.state.params}
                                      selected={this.state.selected}
                                      totalElements={this.state.totalElements}
                                      translations={this.state.translations}/>
                     <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>
                 </Grid>
-                <Grid item xs={5}>
+                <Grid item md={10} lg={5}>
                     <Grid container justify="center">
                         <TranslationSearch onNewWord={this.reload}/>
                     </Grid>

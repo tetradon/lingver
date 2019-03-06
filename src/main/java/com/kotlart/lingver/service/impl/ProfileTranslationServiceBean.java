@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ProfileTranslationServiceBean implements ProfileTranslationService {
 
@@ -26,7 +28,7 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public ProfileTranslation saveTranslationToCurrentProfile(Long translationId) {
+    public ProfileTranslation addTranslationToActiveProfile(Long translationId) {
         final Translation translationEntity = translationRepository.findById(translationId).orElse(null);
         Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ProfileTranslation profileTranslation = new ProfileTranslation();
@@ -36,8 +38,13 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public Page<ProfileTranslation> getTranslationsOfCurrentProfile(Pageable pageable) {
+    public Page<ProfileTranslation> getTranslationsOfActiveProfile(Pageable pageable) {
         Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return profileTranslationRepository.findAllByProfileId(activeUser.getId(), pageable);
+    }
+
+    @Override
+    public int removeTranslationsFromActiveProfile(List<Long> ids) {
+        return profileTranslationRepository.deleteAllByIds(ids);
     }
 }

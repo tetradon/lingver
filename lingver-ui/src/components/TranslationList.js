@@ -17,6 +17,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import {lighten} from '@material-ui/core/styles/colorManipulator';
 import classNames from 'classnames';
 
+
 const styles = theme => ({
     root: {
         paddingRight: theme.spacing.unit,
@@ -86,7 +87,6 @@ class TranslationList extends Component {
     };
 
     handleClick = (event, id) => {
-
         const {selected} = this.state;
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
@@ -104,7 +104,11 @@ class TranslationList extends Component {
             );
         }
         this.setState({selected: newSelected});
+    };
 
+    handleDeleteClick = () => {
+        this.props.onRemove(this.state.selected);
+        this.setState({selected: []});
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
@@ -134,7 +138,8 @@ class TranslationList extends Component {
                         {this.state.selected.length > 0 ? (
                             <Tooltip title="Delete">
                                 <IconButton aria-label="Delete">
-                                    <DeleteIcon/>
+                                    <DeleteIcon
+                                        onClick={this.handleDeleteClick}/>
                                 </IconButton>
                             </Tooltip>
                         ) : null}

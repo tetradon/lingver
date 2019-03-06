@@ -4,8 +4,13 @@ import com.kotlart.lingver.model.ProfileTranslation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-public interface ProfileTranslationService {
-    ProfileTranslation saveTranslationToCurrentProfile(Long translationId);
+import java.util.List;
 
-    Page<ProfileTranslation> getTranslationsOfCurrentProfile(Pageable pageable);
+
+public interface ProfileTranslationService {
+    ProfileTranslation addTranslationToActiveProfile(Long translationId);
+
+    Page<ProfileTranslation> getTranslationsOfActiveProfile(Pageable pageable);
+
+    int removeTranslationsFromActiveProfile(List<Long> id);
 }

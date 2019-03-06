@@ -6,15 +6,19 @@ import Fab from "@material-ui/core/Fab";
 import Divider from "@material-ui/core/Divider";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AddIcon from '@material-ui/icons/Add';
+import Paper from "@material-ui/core/Paper";
 
-const styles = {
+const styles = theme => ({
     fab: {
         marginRight: '5px'
     },
     userNewTranslation: {
         paddingBottom: '10px'
-    }
-};
+    },
+    root: {
+        padding: theme.spacing.unit * 4
+    },
+});
 
 class TranslationSearch extends Component {
     constructor(props) {
@@ -99,7 +103,7 @@ class TranslationSearch extends Component {
         });
 
         return (
-            <div>
+            <Paper className={classes.root}>
                 <Typography variant={"h3"}>Add new word</Typography>
                 <Input type="text" value={this.state.userSearch} fullWidth
                        onChange={this.handleSearchChange}/>
@@ -125,7 +129,7 @@ class TranslationSearch extends Component {
                         </Input>
                     </ListItem>
                 </List>
-            </div>
+            </Paper>
         );
     }
 }

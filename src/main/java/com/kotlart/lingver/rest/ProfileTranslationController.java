@@ -1,6 +1,7 @@
 package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.ProfileTranslation;
+import com.kotlart.lingver.rest.dto.IdListDto;
 import com.kotlart.lingver.rest.dto.PageDto;
 import com.kotlart.lingver.rest.dto.ProfileTranslationDto;
 import com.kotlart.lingver.rest.dto.ValueDto;
@@ -14,6 +15,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +43,7 @@ public class ProfileTranslationController {
     ResponseEntity getProfileTranslations(PageDto pageDto) {
         Pageable pageable =
                 PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by(pageDto.getSortDirection(), pageDto.getSortField()));
-        final Page<ProfileTranslation> translationsPage = profileTranslationService.getTranslationsOfCurrentProfile(pageable);
+        final Page<ProfileTranslation> translationsPage = profileTranslationService.getTranslationsOfActiveProfile(pageable);
         final List<ProfileTranslation> profileTranslations = translationsPage.getContent();
         final long totalElements = translationsPage.getTotalElements();
         final List<ProfileTranslationDto> translationDtos = profileTranslations.stream().map(tr -> modelMapper.map(tr, ProfileTranslationDto.class)).collect(Collectors.toList());
@@ -53,7 +55,13 @@ public class ProfileTranslationController {
         if (result.hasErrors()) {
             return ResponseUtil.badRequest(result.getFieldErrors());
         }
-        final ProfileTranslation profileTranslation = profileTranslationService.saveTranslationToCurrentProfile(translationDto.getId());
+        final ProfileTranslation profileTranslation = profileTranslationService.addTranslationToActiveProfile(translationDto.getId());
         return ResponseEntity.ok().body(modelMapper.map(profileTranslation, ProfileTranslationDto.class));
+    }
+
+    @DeleteMapping
+    ResponseEntity removeTranslationsFromProfile(@RequestBody IdListDto dto) {
+        final int removed = profileTranslationService.removeTranslationsFromActiveProfile(dto.getIds());
+        return ResponseEntity.ok().body(removed);
     }
 }

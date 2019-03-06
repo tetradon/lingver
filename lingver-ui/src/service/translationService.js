@@ -4,7 +4,8 @@ export const translationService = {
     addTranslation,
     searchTranslationsByWord,
     getTranslations,
-    saveNewTranslation
+    saveNewTranslation,
+    removeTranslations
 };
 
 function addTranslation(translation) {
@@ -39,5 +40,11 @@ function saveNewTranslation(translation) {
             return Promise.reject(error);
         });
 }
+
+
+function removeTranslations(ids) {
+    return axios.delete('/profile/translations', {data: {ids: ids}});
+}
+
 
 
