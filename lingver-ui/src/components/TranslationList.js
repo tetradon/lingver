@@ -69,17 +69,25 @@ class TranslationList extends Component {
     };
 
     handleSelectAllClick = event => {
-        this.setState({selected: this.state.selected.filter((e) => !this.props.translations.map(t => t.id).includes(e))});
+        const {selected} = this.state;
+        const {translations} = this.props;
         if (event.target.checked) {
-            this.setState({selected: this.state.selected.concat(this.props.translations.map(n => n.id))});
+            //filter ids that already were selected
+            let translationsToAdd = translations.map(translation => translation.id)
+                .filter(id => !selected.includes(id));
+            this.setState({selected: selected.concat(translationsToAdd)});
+        } else {
+            //remove current page translations ids from selected
+            this.setState({
+                selected: selected.filter(selectedId => !translations
+                    .map(translation => translation.id).includes(selectedId))
+            });
         }
-
     };
 
     handleClick = (event, id) => {
 
         const {selected} = this.state;
-
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
 
@@ -95,10 +103,8 @@ class TranslationList extends Component {
                 selected.slice(selectedIndex + 1),
             );
         }
+        this.setState({selected: newSelected});
 
-        this.setState({selected: newSelected}, () => {
-            console.log(this.state.selected);
-        });
     };
 
     isSelected = id => this.state.selected.indexOf(id) !== -1;
