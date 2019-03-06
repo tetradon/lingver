@@ -29,15 +29,20 @@ public class TranslationServiceBean implements TranslationService {
 
     @Override
     public Translation createTranslationForWord(String translation, String word) {
-        Word foundWord = wordRepository.findByValue(word);
+        Word foundWord = wordRepository.findByValue(word.trim());
         if (foundWord == null) {
             Word newWord = new Word();
             newWord.setValue(word);
             foundWord = wordRepository.save(newWord);
         }
         Translation newTranslation = new Translation();
-        newTranslation.setValue(translation);
+        newTranslation.setValue(translation.trim());
         newTranslation.setWord(foundWord);
         return translationRepository.save(newTranslation);
+    }
+
+    @Override
+    public int countRatingForTranslation(Long translationId) {
+        return translationRepository.countTranslationRating(translationId);
     }
 }

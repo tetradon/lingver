@@ -53,7 +53,7 @@ class Dictionary extends Component {
             <Grid container
                   justify="center"
                   spacing={40}>
-                <Grid item md={10} lg={5}>
+                <Grid item xs={10} lg={7}>
                     <TranslationList onQueryParamsChange={this.updateParams}
                                      onRemove={this.remove}
                                      params={this.state.params}
@@ -62,10 +62,8 @@ class Dictionary extends Component {
                                      translations={this.state.translations}/>
                     <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>
                 </Grid>
-                <Grid item md={10} lg={5}>
-                    <Grid container justify="center">
-                        <TranslationSearch onNewWord={this.reload}/>
-                    </Grid>
+                <Grid item xs={10} lg={3}>
+                    <TranslationSearch onNewWord={this.reload}/>
                 </Grid>
             </Grid>
         );

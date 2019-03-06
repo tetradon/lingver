@@ -1,10 +1,11 @@
 package com.kotlart.lingver.rest.dto;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class TranslationDto {
-    private Long id;
-    private String value;
+@EqualsAndHashCode(callSuper = false)
+public class TranslationDto extends ValueDto {
     private ValueDto word;
+    private int rating;
 }

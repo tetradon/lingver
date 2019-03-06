@@ -38,6 +38,7 @@ const styles = theme => ({
     title: {
         flex: '0 0 auto',
     },
+
 });
 
 class TranslationList extends Component {
@@ -86,7 +87,7 @@ class TranslationList extends Component {
         }
     };
 
-    handleClick = (event, id) => {
+    handleCheckboxClick = (event, id) => {
         const {selected} = this.state;
         const selectedIndex = selected.indexOf(id);
         let newSelected = [];
@@ -128,8 +129,8 @@ class TranslationList extends Component {
                                 {this.state.selected.length} selected
                             </Typography>
                         ) : (
-                            <Typography variant="h6" id="tableTitle">
-                                Your translations
+                            <Typography variant="h5" id="tableTitle">
+                                Your words
                             </Typography>
                         )}
                     </div>
@@ -137,15 +138,15 @@ class TranslationList extends Component {
                     <div className={classes.actions}>
                         {this.state.selected.length > 0 ? (
                             <Tooltip title="Delete">
-                                <IconButton aria-label="Delete">
-                                    <DeleteIcon
-                                        onClick={this.handleDeleteClick}/>
+                                <IconButton aria-label="Delete"
+                                            onClick={this.handleDeleteClick}>
+                                    <DeleteIcon/>
                                 </IconButton>
                             </Tooltip>
                         ) : null}
                     </div>
                 </Toolbar>
-                <Table>
+                <Table padding={"dense"}>
                     <TableHead>
                         <TableRow>
                             <TableCell>
@@ -178,6 +179,7 @@ class TranslationList extends Component {
                                         </Tooltip>
                                     </TableCell>
                                 ))}
+
                         </TableRow>
                     </TableHead>
                     <TableBody>{
@@ -186,16 +188,13 @@ class TranslationList extends Component {
                             return (
                                 <TableRow
                                     key={row.id}
-                                    hover
-                                    onClick={event => this.handleClick(event, row.id)}
-                                    role="checkbox"
-                                    aria-checked={isSelected}
-                                    tabIndex={-1}
                                     selected={isSelected}>
                                     <TableCell>
-                                        <Checkbox color="primary" checked={isSelected}/>
+                                        <Checkbox color="primary"
+                                                  onClick={event => this.handleCheckboxClick(event, row.id)}
+                                                  checked={isSelected}/>
                                     </TableCell>
-                                    <TableCell component="th" scope="row" padding="none">
+                                    <TableCell>
                                         {row.translation.word.value}
                                     </TableCell>
                                     <TableCell>{row.translation.value}</TableCell>

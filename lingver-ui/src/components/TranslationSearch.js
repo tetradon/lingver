@@ -7,6 +7,7 @@ import Divider from "@material-ui/core/Divider";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AddIcon from '@material-ui/icons/Add';
 import Paper from "@material-ui/core/Paper";
+import Badge from "@material-ui/core/Badge";
 
 const styles = theme => ({
     fab: {
@@ -17,6 +18,9 @@ const styles = theme => ({
     },
     root: {
         padding: theme.spacing.unit * 4
+    },
+    padding: {
+        padding: `0 ${theme.spacing.unit * 2}px`,
     },
 });
 
@@ -95,7 +99,9 @@ class TranslationSearch extends Component {
                              color="primary"
                              className={classes.fab}
                              onClick={() => this.addTranslation(translation)}><AddIcon/></Fab>
-                        {translation.value}
+                        <Badge badgeContent={translation.rating} color="primary">
+                            <Typography className={classes.padding}>{translation.value}</Typography>
+                        </Badge>
                     </ListItem>
                     <Divider variant={"middle"}/>
                 </React.Fragment>
@@ -104,7 +110,7 @@ class TranslationSearch extends Component {
 
         return (
             <Paper className={classes.root}>
-                <Typography variant={"h3"}>Add new word</Typography>
+                <Typography variant={"h5"}>Add new word</Typography>
                 <Input type="text" value={this.state.userSearch} fullWidth
                        onChange={this.handleSearchChange}/>
                 <List>{translationList}
