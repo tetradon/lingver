@@ -1,13 +1,12 @@
 package com.kotlart.lingver.service;
 
 import com.kotlart.lingver.model.Translation;
+import com.kotlart.lingver.service.dto.RatingTranslationDto;
 
 import java.util.List;
 
 public interface TranslationService {
-    List<Translation> findByWordValue(String word);
+    List<RatingTranslationDto> findByWordValue(String word);
 
     Translation createTranslationForWord(String translation, String word);
-
-    int countRatingForTranslation(Long translation);
 }

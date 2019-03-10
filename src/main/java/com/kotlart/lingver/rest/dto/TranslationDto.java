@@ -7,5 +7,4 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class TranslationDto extends ValueDto {
     private ValueDto word;
-    private int rating;
 }

@@ -2,9 +2,10 @@ package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.Translation;
 import com.kotlart.lingver.rest.dto.NewTranslationDto;
-import com.kotlart.lingver.rest.dto.TranslationDto;
+import com.kotlart.lingver.rest.dto.ValueDto;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.TranslationService;
+import com.kotlart.lingver.service.dto.RatingTranslationDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -34,15 +34,8 @@ public class TranslationController {
 
     @GetMapping
     ResponseEntity getTranslations(@RequestParam("word") String wordToSearch) {
-        final List<Translation> foundTranslations = translationService.findByWordValue(wordToSearch);
-        final List<TranslationDto> convertedDtos = new ArrayList<>();
-        foundTranslations.forEach(translation -> {
-            final TranslationDto dto = modelMapper.map(translation, TranslationDto.class);
-            dto.setRating(translationService.countRatingForTranslation(dto.getId()));
-            convertedDtos.add(dto);
-        });
-
-        return ResponseEntity.ok().body(convertedDtos);
+        final List<RatingTranslationDto> foundTranslations = translationService.findByWordValue(wordToSearch);
+        return ResponseEntity.ok().body(foundTranslations);
     }
 
     @PostMapping
@@ -51,6 +44,6 @@ public class TranslationController {
             return ResponseUtil.badRequest(bindingResult.getFieldErrors());
         }
         Translation translation = translationService.createTranslationForWord(newTranslationDto.getTranslation(), newTranslationDto.getWord());
-        return ResponseEntity.ok().body(modelMapper.map(translation, TranslationDto.class));
+        return ResponseEntity.ok().body(modelMapper.map(translation, ValueDto.class));
     }
 }

@@ -1,4 +1,4 @@
-package com.kotlart.lingver.respository;
+package com.kotlart.lingver.service.respository;
 
 import com.kotlart.lingver.model.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;

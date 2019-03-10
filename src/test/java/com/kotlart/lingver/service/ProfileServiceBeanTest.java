@@ -2,9 +2,9 @@ package com.kotlart.lingver.service;
 
 import com.kotlart.lingver.model.Profile;
 import com.kotlart.lingver.model.Role;
-import com.kotlart.lingver.respository.ProfileRepository;
-import com.kotlart.lingver.respository.RoleRepository;
 import com.kotlart.lingver.service.impl.ProfileServiceBean;
+import com.kotlart.lingver.service.respository.ProfileRepository;
+import com.kotlart.lingver.service.respository.RoleRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;

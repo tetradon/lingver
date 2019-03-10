@@ -2,9 +2,9 @@ package com.kotlart.lingver.service.impl;
 
 import com.kotlart.lingver.model.Profile;
 import com.kotlart.lingver.model.Role;
-import com.kotlart.lingver.respository.ProfileRepository;
-import com.kotlart.lingver.respository.RoleRepository;
 import com.kotlart.lingver.service.ProfileService;
+import com.kotlart.lingver.service.respository.ProfileRepository;
+import com.kotlart.lingver.service.respository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
