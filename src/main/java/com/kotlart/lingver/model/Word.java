@@ -1,7 +1,10 @@
 package com.kotlart.lingver.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +23,9 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = Word.TABLE_NAME)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class Word extends AbstractEntity {
     public static final String TABLE_NAME = "word";

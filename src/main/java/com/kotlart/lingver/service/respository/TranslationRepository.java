@@ -1,7 +1,7 @@
 package com.kotlart.lingver.service.respository;
 
 import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.service.dto.RatingTranslationDto;
+import com.kotlart.lingver.service.projection.TranslationRatingProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,5 +15,5 @@ public interface TranslationRepository extends JpaRepository<Translation, Long> 
             "group by translation.translation_pk, translation.value " +
             "order by rating desc",
             nativeQuery = true)
-    List<RatingTranslationDto> findByWordValueIgnoreCase(String word);
+    List<TranslationRatingProjection> findByWordValueIgnoreCase(String word);
 }

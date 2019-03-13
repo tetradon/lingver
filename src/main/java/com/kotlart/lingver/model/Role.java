@@ -1,6 +1,7 @@
 package com.kotlart.lingver.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ import javax.persistence.Table;
 @Table(name = Role.TABLE_NAME)
 @Data
 @EqualsAndHashCode(callSuper = false)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role extends AbstractEntity implements GrantedAuthority {

@@ -5,7 +5,7 @@ import com.kotlart.lingver.rest.dto.NewTranslationDto;
 import com.kotlart.lingver.rest.dto.ValueDto;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.TranslationService;
-import com.kotlart.lingver.service.dto.RatingTranslationDto;
+import com.kotlart.lingver.service.projection.TranslationRatingProjection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +34,7 @@ public class TranslationController {
 
     @GetMapping
     ResponseEntity getTranslations(@RequestParam("word") String wordToSearch) {
-        final List<RatingTranslationDto> foundTranslations = translationService.findByWordValue(wordToSearch);
+        final List<TranslationRatingProjection> foundTranslations = translationService.findByWordValue(wordToSearch);
         return ResponseEntity.ok().body(foundTranslations);
     }
 

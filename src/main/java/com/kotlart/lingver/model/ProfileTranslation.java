@@ -1,7 +1,10 @@
 package com.kotlart.lingver.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +23,9 @@ import java.util.Date;
 @Entity
 @Table(name = ProfileTranslation.TABLE_NAME)
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
 public class ProfileTranslation extends AbstractEntity {
     public static final String TABLE_NAME = "profile_translation";

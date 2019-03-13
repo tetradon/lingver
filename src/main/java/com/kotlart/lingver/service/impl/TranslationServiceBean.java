@@ -3,7 +3,7 @@ package com.kotlart.lingver.service.impl;
 import com.kotlart.lingver.model.Translation;
 import com.kotlart.lingver.model.Word;
 import com.kotlart.lingver.service.TranslationService;
-import com.kotlart.lingver.service.dto.RatingTranslationDto;
+import com.kotlart.lingver.service.projection.TranslationRatingProjection;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.service.respository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class TranslationServiceBean implements TranslationService {
     }
 
     @Override
-    public List<RatingTranslationDto> findByWordValue(String word) {
+    public List<TranslationRatingProjection> findByWordValue(String word) {
         return translationRepository.findByWordValueIgnoreCase(word);
     }
 
