@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import TranslationSearch from "./TranslationSearch";
 import {Grid, LinearProgress} from '@material-ui/core';
 import {translationService} from "../service/translationService";
-import TranslationList from "./TranslationList";
+import TranslationList from "./TranslationTable";
 
 class Dictionary extends Component {
     constructor(props) {
