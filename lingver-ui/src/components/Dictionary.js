@@ -1,8 +1,22 @@
 import React, {Component} from "react";
 import TranslationSearch from "./TranslationSearch";
-import {Grid, LinearProgress} from '@material-ui/core';
+import {Grid, LinearProgress, Typography} from '@material-ui/core';
 import {translationService} from "../service/translationService";
-import TranslationList from "./TranslationTable";
+import TranslationTable from "./TranslationTable";
+import Paper from "@material-ui/core/Paper";
+import MoodBadIcon from '@material-ui/icons/SentimentVeryDissatisfied';
+import withStyles from "@material-ui/core/styles/withStyles";
+
+
+const styles = theme => ({
+    noWordsMessage: {
+        padding: theme.spacing.unit * 5,
+        width: '50%',
+        margin: 'auto'
+    },
+
+});
+
 
 class Dictionary extends Component {
     constructor(props) {
@@ -50,17 +64,28 @@ class Dictionary extends Component {
 
 
     render() {
+        const {classes} = this.props;
         return (
             <Grid container
                   justify="center"
                   spacing={40}>
                 <Grid item xs={10} lg={7}>
-                    <TranslationList onQueryParamsChange={this.updateParams}
-                                     onRemove={this.remove}
-                                     params={this.state.params}
-                                     selected={this.state.selected}
-                                     totalElements={this.state.translationIds.length}
-                                     translations={this.state.translations}/>
+                    {this.state.translationIds.length === 0
+                        ?
+                        <Paper className={classes.noWordsMessage}>
+
+                            <Typography variant={"h5"}><MoodBadIcon fontSize={"large"}/> You haven't added any words yet
+                            </Typography>
+                            <Typography align={"right"} variant={"h5"}>Do it now!</Typography>
+                        </Paper>
+                        :
+                        <TranslationTable onQueryParamsChange={this.updateParams}
+                                          onRemove={this.remove}
+                                          params={this.state.params}
+                                          selected={this.state.selected}
+                                          totalElements={this.state.translationIds.length}
+                                          translations={this.state.translations}/>}
+
                     <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>
                 </Grid>
                 <Grid item xs={10} lg={3}>
@@ -75,4 +100,4 @@ class Dictionary extends Component {
     }
 }
 
-export default Dictionary;
+export default withStyles(styles)(Dictionary);
