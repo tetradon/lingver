@@ -8,8 +8,9 @@ class Dictionary extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            dialogIsOpen: false,
             translations: [],
-            totalElements: 0,
+            translationIds: [],
             params: {
                 sortField: 'insertDate',
                 sortDirection: 'desc',
@@ -28,8 +29,8 @@ class Dictionary extends Component {
         this.setState({isLoading: true});
         translationService.getTranslations(this.state.params)
             .then((response) => {
-                this.setState({translations: response.data});
-                this.setState({totalElements: response.headers.total});
+                this.setState({translations: response.data.translations});
+                this.setState({translationIds: response.data.allTranslationIds});
             })
             .finally(() => {
                     this.setState({isLoading: false})
@@ -58,12 +59,16 @@ class Dictionary extends Component {
                                      onRemove={this.remove}
                                      params={this.state.params}
                                      selected={this.state.selected}
-                                     totalElements={this.state.totalElements}
+                                     totalElements={this.state.translationIds.length}
                                      translations={this.state.translations}/>
                     <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>
                 </Grid>
                 <Grid item xs={10} lg={3}>
-                    <TranslationSearch onNewWord={this.reload}/>
+                    <TranslationSearch
+                        onNewWord={this.reload}
+                        translationIds={this.state.translationIds}
+                        onRemove={this.remove}
+                    />
                 </Grid>
             </Grid>
         );

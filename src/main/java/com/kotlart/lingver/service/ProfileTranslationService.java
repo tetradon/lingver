@@ -13,4 +13,6 @@ public interface ProfileTranslationService {
     Page<ProfileTranslation> getTranslationsOfActiveProfile(Pageable pageable);
 
     int removeTranslationsFromActiveProfile(List<Long> id);
+
+    List<Long> findAllTranslationIdsOfActiveProfile();
 }

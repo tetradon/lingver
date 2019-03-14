@@ -1,6 +1,7 @@
 package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.ProfileTranslation;
+import com.kotlart.lingver.rest.dto.AggregatedProfileTranslationsDto;
 import com.kotlart.lingver.rest.dto.IdListDto;
 import com.kotlart.lingver.rest.dto.PageDto;
 import com.kotlart.lingver.rest.dto.ProfileTranslationDto;
@@ -9,7 +10,6 @@ import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -41,13 +41,25 @@ public class ProfileTranslationController {
 
     @GetMapping
     ResponseEntity getProfileTranslations(PageDto pageDto) {
-        Pageable pageable =
-                PageRequest.of(pageDto.getPage(), pageDto.getSize(), Sort.by(pageDto.getSortDirection(), pageDto.getSortField()));
-        final Page<ProfileTranslation> translationsPage = profileTranslationService.getTranslationsOfActiveProfile(pageable);
-        final List<ProfileTranslation> profileTranslations = translationsPage.getContent();
-        final long totalElements = translationsPage.getTotalElements();
-        final List<ProfileTranslationDto> translationDtos = profileTranslations.stream().map(tr -> modelMapper.map(tr, ProfileTranslationDto.class)).collect(Collectors.toList());
-        return ResponseEntity.ok().header("total", String.valueOf(totalElements)).body(translationDtos);
+        Pageable pageable = PageRequest.of(
+                pageDto.getPage(),
+                pageDto.getSize(),
+                Sort.by(pageDto.getSortDirection(), pageDto.getSortField()));
+        final List<ProfileTranslation> paginatedTranslations = profileTranslationService
+                .getTranslationsOfActiveProfile(pageable).getContent();
+
+        final List<ProfileTranslationDto> paginatedTranslationDtos = paginatedTranslations
+                .stream()
+                .map(tr -> modelMapper.map(tr, ProfileTranslationDto.class))
+                .collect(Collectors.toList());
+
+        final List<Long> allAddedTranslationIds = profileTranslationService.findAllTranslationIdsOfActiveProfile();
+        final AggregatedProfileTranslationsDto responseDto =
+                AggregatedProfileTranslationsDto.builder()
+                        .translations(paginatedTranslationDtos)
+                        .allTranslationIds(allAddedTranslationIds)
+                        .build();
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @PostMapping

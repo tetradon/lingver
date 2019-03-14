@@ -47,4 +47,10 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     public int removeTranslationsFromActiveProfile(List<Long> ids) {
         return profileTranslationRepository.deleteAllByIds(ids);
     }
+
+    @Override
+    public List<Long> findAllTranslationIdsOfActiveProfile() {
+        Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return profileTranslationRepository.findAllTranslationIdsByProfileId(activeUser.getId());
+    }
 }

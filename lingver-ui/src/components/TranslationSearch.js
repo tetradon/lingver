@@ -6,6 +6,7 @@ import Fab from "@material-ui/core/Fab";
 import Divider from "@material-ui/core/Divider";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import AddIcon from '@material-ui/icons/Add';
+import DoneIcon from '@material-ui/icons/Done';
 import Paper from "@material-ui/core/Paper";
 import Badge from "@material-ui/core/Badge";
 
@@ -89,16 +90,25 @@ class TranslationSearch extends Component {
 
     render() {
         const {translations} = this.state;
-        const {classes} = this.props;
+        const {classes, translationIds} = this.props;
 
         const translationList = translations.map(translation => {
             return (
                 <React.Fragment key={translation.id}>
                     <ListItem>
-                        <Fab size="small"
-                             color="primary"
-                             className={classes.fab}
-                             onClick={() => this.addTranslation(translation)}><AddIcon/></Fab>
+                        {!translationIds.includes(translation.id)
+                            ?
+                            <Fab size="small"
+                                 color="primary"
+                                 className={classes.fab}
+                                 onClick={() => this.addTranslation(translation)}><AddIcon/></Fab>
+                            :
+                            <Fab size="small"
+                                 color="primary"
+                                 disabled
+                                 className={classes.fab}
+                            ><DoneIcon/></Fab>
+                        }
                         <Badge badgeContent={translation.rating} color="primary">
                             <Typography className={classes.padding}>{translation.value}</Typography>
                         </Badge>
