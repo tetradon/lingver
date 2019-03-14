@@ -70,7 +70,7 @@ class Dictionary extends Component {
                   justify="center"
                   spacing={40}>
                 <Grid item xs={10} lg={7}>
-                    {this.state.translationIds.length === 0
+                    {this.state.translationIds.length === 0 && !this.state.isLoading
                         ?
                         <Paper className={classes.noWordsMessage}>
 

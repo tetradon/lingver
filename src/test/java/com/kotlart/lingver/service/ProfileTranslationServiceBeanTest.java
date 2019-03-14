@@ -66,7 +66,6 @@ public class ProfileTranslationServiceBeanTest {
         Word word = entityManager.persist(Word.builder().value(WORD_VALUE).build());
         Translation translation = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
         entityManager.persist(ProfileTranslation.builder().profile(profile).translation(translation).build());
-
         final Page<ProfileTranslation> translationsOfActiveProfile = sut.getTranslationsOfActiveProfile(Pageable.unpaged());
         Assert.assertEquals(1, translationsOfActiveProfile.getTotalElements());
         Assert.assertEquals(translation, translationsOfActiveProfile.getContent().get(0).getTranslation());
