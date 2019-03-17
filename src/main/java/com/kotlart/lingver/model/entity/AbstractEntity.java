@@ -1,4 +1,4 @@
-package com.kotlart.lingver.model;
+package com.kotlart.lingver.model.entity;
 
 
 public abstract class AbstractEntity {

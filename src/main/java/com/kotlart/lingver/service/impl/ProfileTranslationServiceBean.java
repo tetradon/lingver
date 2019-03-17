@@ -1,9 +1,9 @@
 package com.kotlart.lingver.service.impl;
 
-import com.kotlart.lingver.model.Profile;
-import com.kotlart.lingver.model.ProfileTranslation;
-import com.kotlart.lingver.model.QueryParameter;
-import com.kotlart.lingver.model.Translation;
+import com.kotlart.lingver.model.QueryParameters;
+import com.kotlart.lingver.model.entity.Profile;
+import com.kotlart.lingver.model.entity.ProfileTranslation;
+import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
@@ -41,16 +41,16 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public Page<ProfileTranslation> getTranslationsOfActiveProfile(QueryParameter queryParameter) {
+    public Page<ProfileTranslation> getTranslationsOfActiveProfile(QueryParameters queryParameters) {
         Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Pageable pageable = PageRequest.of(
-                queryParameter.getPage(),
-                queryParameter.getSize(),
-                Sort.by(queryParameter.getSortDirection(), queryParameter.getSortField()));
+                queryParameters.getPage(),
+                queryParameters.getSize(),
+                Sort.by(queryParameters.getSortDirection(), queryParameters.getSortField()));
         return profileTranslationRepository
                 .findAllByProfileIdAndByWordValueOrTranslationValue(
                         activeUser.getId(),
-                        queryParameter.getSearch(),
+                        queryParameters.getSearch(),
                         pageable);
     }
 

@@ -1,4 +1,4 @@
-package com.kotlart.lingver.rest.dto;
+package com.kotlart.lingver.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

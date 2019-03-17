@@ -1,12 +1,12 @@
 package com.kotlart.lingver.service;
 
-import com.kotlart.lingver.model.Profile;
-import com.kotlart.lingver.model.ProfileTranslation;
-import com.kotlart.lingver.model.Role;
-import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.model.Word;
+import com.kotlart.lingver.model.entity.Profile;
+import com.kotlart.lingver.model.entity.ProfileTranslation;
+import com.kotlart.lingver.model.entity.Role;
+import com.kotlart.lingver.model.entity.Translation;
+import com.kotlart.lingver.model.entity.Word;
+import com.kotlart.lingver.model.projection.TranslationRatingProjection;
 import com.kotlart.lingver.service.impl.TranslationServiceBean;
-import com.kotlart.lingver.service.projection.TranslationRatingProjection;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.service.respository.WordRepository;
 import org.junit.Assert;

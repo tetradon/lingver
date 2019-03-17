@@ -1,11 +1,11 @@
 package com.kotlart.lingver.service;
 
-import com.kotlart.lingver.model.Profile;
-import com.kotlart.lingver.model.ProfileTranslation;
-import com.kotlart.lingver.model.QueryParameter;
-import com.kotlart.lingver.model.Role;
-import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.model.Word;
+import com.kotlart.lingver.model.QueryParameters;
+import com.kotlart.lingver.model.entity.Profile;
+import com.kotlart.lingver.model.entity.ProfileTranslation;
+import com.kotlart.lingver.model.entity.Role;
+import com.kotlart.lingver.model.entity.Translation;
+import com.kotlart.lingver.model.entity.Word;
 import com.kotlart.lingver.service.impl.ProfileTranslationServiceBean;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
@@ -30,7 +30,7 @@ import java.util.Collections;
 public class ProfileTranslationServiceBeanTest {
     private final String WORD_VALUE = "test";
     private final String TRANSLATION_VALUE = "тест";
-    private final QueryParameter QUERY_PARAMETERS = new QueryParameter();
+    private final QueryParameters QUERY_PARAMETERS = new QueryParameters();
 
     @Autowired
     private TestEntityManager entityManager;

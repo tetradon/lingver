@@ -1,7 +1,7 @@
 package com.kotlart.lingver.service;
 
-import com.kotlart.lingver.model.Profile;
-import com.kotlart.lingver.model.Role;
+import com.kotlart.lingver.model.entity.Profile;
+import com.kotlart.lingver.model.entity.Role;
 import com.kotlart.lingver.service.impl.ProfileServiceBean;
 import com.kotlart.lingver.service.respository.ProfileRepository;
 import com.kotlart.lingver.service.respository.RoleRepository;

@@ -1,11 +1,11 @@
 package com.kotlart.lingver.rest;
 
-import com.kotlart.lingver.model.ProfileTranslation;
-import com.kotlart.lingver.model.QueryParameter;
-import com.kotlart.lingver.rest.dto.AggregatedProfileTranslationsDto;
-import com.kotlart.lingver.rest.dto.IdListDto;
-import com.kotlart.lingver.rest.dto.ProfileTranslationDto;
-import com.kotlart.lingver.rest.dto.ValueDto;
+import com.kotlart.lingver.model.QueryParameters;
+import com.kotlart.lingver.model.dto.AggregatedProfileTranslationsDto;
+import com.kotlart.lingver.model.dto.IdListDto;
+import com.kotlart.lingver.model.dto.ProfileTranslationDto;
+import com.kotlart.lingver.model.dto.ValueDto;
+import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import org.modelmapper.ModelMapper;
@@ -38,9 +38,9 @@ public class ProfileTranslationController {
     }
 
     @GetMapping
-    ResponseEntity getProfileTranslations(QueryParameter queryParameter) {
+    ResponseEntity getProfileTranslations(QueryParameters queryParameters) {
         final Page<ProfileTranslation> translationsPage = profileTranslationService
-                .getTranslationsOfActiveProfile(queryParameter);
+                .getTranslationsOfActiveProfile(queryParameters);
         final List<ProfileTranslation> paginatedTranslations = translationsPage.getContent();
         final long totalFound = translationsPage.getTotalElements();
 

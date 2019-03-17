@@ -1,6 +1,6 @@
 package com.kotlart.lingver.rest;
 
-import com.kotlart.lingver.rest.dto.MessageDto;
+import com.kotlart.lingver.model.dto.MessageDto;
 import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,4 +1,4 @@
-package com.kotlart.lingver.model;
+package com.kotlart.lingver.model.entity;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

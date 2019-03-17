@@ -1,6 +1,6 @@
-package com.kotlart.lingver.rest.dto;
+package com.kotlart.lingver.model.dto;
 
-import com.kotlart.lingver.model.Role;
+import com.kotlart.lingver.model.entity.Role;
 import lombok.Data;
 
 import java.util.List;

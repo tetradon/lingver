@@ -1,7 +1,7 @@
 package com.kotlart.lingver.service;
 
-import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.service.projection.TranslationRatingProjection;
+import com.kotlart.lingver.model.entity.Translation;
+import com.kotlart.lingver.model.projection.TranslationRatingProjection;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.kotlart.lingver.rest.dto;
+package com.kotlart.lingver.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

@@ -1,9 +1,9 @@
 package com.kotlart.lingver.service.impl;
 
-import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.model.Word;
+import com.kotlart.lingver.model.entity.Translation;
+import com.kotlart.lingver.model.entity.Word;
+import com.kotlart.lingver.model.projection.TranslationRatingProjection;
 import com.kotlart.lingver.service.TranslationService;
-import com.kotlart.lingver.service.projection.TranslationRatingProjection;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.service.respository.WordRepository;
 import org.springframework.beans.factory.annotation.Autowired;

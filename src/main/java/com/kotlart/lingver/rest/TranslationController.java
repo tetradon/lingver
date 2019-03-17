@@ -1,11 +1,11 @@
 package com.kotlart.lingver.rest;
 
-import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.rest.dto.NewTranslationDto;
-import com.kotlart.lingver.rest.dto.ValueDto;
+import com.kotlart.lingver.model.dto.NewTranslationDto;
+import com.kotlart.lingver.model.dto.ValueDto;
+import com.kotlart.lingver.model.entity.Translation;
+import com.kotlart.lingver.model.projection.TranslationRatingProjection;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.TranslationService;
-import com.kotlart.lingver.service.projection.TranslationRatingProjection;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

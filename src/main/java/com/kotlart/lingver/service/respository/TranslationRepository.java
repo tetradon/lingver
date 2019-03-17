@@ -1,7 +1,7 @@
 package com.kotlart.lingver.service.respository;
 
-import com.kotlart.lingver.model.Translation;
-import com.kotlart.lingver.service.projection.TranslationRatingProjection;
+import com.kotlart.lingver.model.entity.Translation;
+import com.kotlart.lingver.model.projection.TranslationRatingProjection;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
