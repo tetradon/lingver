@@ -2,6 +2,7 @@ package com.kotlart.lingver.service;
 
 import com.kotlart.lingver.model.Profile;
 import com.kotlart.lingver.model.ProfileTranslation;
+import com.kotlart.lingver.model.QueryParameter;
 import com.kotlart.lingver.model.Role;
 import com.kotlart.lingver.model.Translation;
 import com.kotlart.lingver.model.Word;
@@ -17,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -30,6 +30,7 @@ import java.util.Collections;
 public class ProfileTranslationServiceBeanTest {
     private final String WORD_VALUE = "test";
     private final String TRANSLATION_VALUE = "тест";
+    private final QueryParameter QUERY_PARAMETERS = new QueryParameter();
 
     @Autowired
     private TestEntityManager entityManager;
@@ -61,12 +62,13 @@ public class ProfileTranslationServiceBeanTest {
 
     @Test
     public void test_getTranslationsOfActiveProfile_unpaged() {
-        Assert.assertEquals(0, sut.getTranslationsOfActiveProfile(Pageable.unpaged()).getTotalElements());
+
+        Assert.assertEquals(0, sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS).getTotalElements());
 
         Word word = entityManager.persist(Word.builder().value(WORD_VALUE).build());
         Translation translation = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
         entityManager.persist(ProfileTranslation.builder().profile(profile).translation(translation).build());
-        final Page<ProfileTranslation> translationsOfActiveProfile = sut.getTranslationsOfActiveProfile(Pageable.unpaged());
+        final Page<ProfileTranslation> translationsOfActiveProfile = sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS);
         Assert.assertEquals(1, translationsOfActiveProfile.getTotalElements());
         Assert.assertEquals(translation, translationsOfActiveProfile.getContent().get(0).getTranslation());
     }
@@ -77,9 +79,9 @@ public class ProfileTranslationServiceBeanTest {
         Translation translation = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
 
         final ProfileTranslation profileTranslation = entityManager.persist(ProfileTranslation.builder().profile(profile).translation(translation).build());
-        Assert.assertEquals(1, sut.getTranslationsOfActiveProfile(Pageable.unpaged()).getTotalElements());
+        Assert.assertEquals(1, sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS).getTotalElements());
         Assert.assertEquals(1, sut.removeTranslationsFromActiveProfile(Collections.singletonList(profileTranslation.getId())));
-        Assert.assertEquals(0, sut.getTranslationsOfActiveProfile(Pageable.unpaged()).getTotalElements());
+        Assert.assertEquals(0, sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS).getTotalElements());
     }
 
     @Test

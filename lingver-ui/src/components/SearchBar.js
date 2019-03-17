@@ -3,6 +3,7 @@ import {fade} from "@material-ui/core/styles/colorManipulator";
 import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
 import InputBase from "@material-ui/core/InputBase";
+import * as PropTypes from "prop-types";
 
 const styles = theme => ({
     search: {
@@ -52,7 +53,15 @@ const styles = theme => ({
 class SearchBar extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            search: ''
+        }
     }
+
+    handleSearchChange = (event) => {
+        this.setState({search: event.target.value});
+        this.props.onQueryParamsChange({search: event.target.value});
+    };
 
     render() {
         const {classes} = this.props;
@@ -62,6 +71,8 @@ class SearchBar extends React.Component {
                     <SearchIcon/>
                 </div>
                 <InputBase
+                    value={this.state.search}
+                    onChange={this.handleSearchChange}
                     placeholder="Search…"
                     classes={{
                         root: classes.inputRoot,
@@ -73,4 +84,7 @@ class SearchBar extends React.Component {
     }
 }
 
+SearchBar.propTypes = {
+    onQueryParamsChange: PropTypes.func
+};
 export default withStyles(styles)(SearchBar);

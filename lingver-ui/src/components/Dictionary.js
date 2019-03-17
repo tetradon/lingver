@@ -25,11 +25,13 @@ class Dictionary extends Component {
             dialogIsOpen: false,
             translations: [],
             translationIds: [],
+            total: 0,
             params: {
                 sortField: 'insertDate',
                 sortDirection: 'desc',
                 page: 0,
-                size: 10
+                size: 10,
+                search: ''
             },
             isLoading: false
         };
@@ -44,6 +46,7 @@ class Dictionary extends Component {
         translationService.getTranslations(this.state.params)
             .then((response) => {
                 this.setState({translations: response.data.translations});
+                this.setState({total: response.data.total});
                 this.setState({translationIds: response.data.allTranslationIds});
             })
             .finally(() => {
@@ -73,7 +76,6 @@ class Dictionary extends Component {
                     {this.state.translationIds.length === 0 && !this.state.isLoading
                         ?
                         <Paper className={classes.noWordsMessage}>
-
                             <Typography variant={"h5"}><MoodBadIcon fontSize={"large"}/> You haven't added any words yet
                             </Typography>
                             <Typography align={"right"} variant={"h5"}>Do it now!</Typography>
@@ -83,7 +85,7 @@ class Dictionary extends Component {
                                           onRemove={this.remove}
                                           params={this.state.params}
                                           selected={this.state.selected}
-                                          totalElements={this.state.translationIds.length}
+                                          totalElements={this.state.total}
                                           translations={this.state.translations}/>}
 
                     <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>

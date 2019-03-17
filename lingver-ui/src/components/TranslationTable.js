@@ -190,18 +190,18 @@ class TranslationTable extends Component {
                         })}
                     >
                         <div className={classes.title}>
-                            {this.state.selected.length > 0 ? (
+                            {this.state.selected.length > 0 ?
                                 <Typography color="inherit" variant="subtitle1">
                                     {this.state.selected.length} selected
                                 </Typography>
-                            ) : (
+                                :
                                 <Typography variant="h5" id="tableTitle">
                                     Your words
                                 </Typography>
-                            )}
+                            }
                         </div>
                         <div className={classes.spacer}/>
-                        <SearchBar/>
+                        <SearchBar onQueryParamsChange={this.props.onQueryParamsChange}/>
                         <div className={classes.actions}>
                             {this.state.selected.length > 0 ? (
                                 <Tooltip title="Delete">

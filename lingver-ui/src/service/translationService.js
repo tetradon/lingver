@@ -27,7 +27,8 @@ function getTranslations(params) {
             size: params.size,
             page: params.page,
             sortField: params.sortField,
-            sortDirection: params.sortDirection.toUpperCase()
+            sortDirection: params.sortDirection.toUpperCase(),
+            search: params.search
         }
     });
 }

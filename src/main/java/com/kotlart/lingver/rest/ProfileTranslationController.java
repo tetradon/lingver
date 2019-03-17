@@ -1,18 +1,16 @@
 package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.ProfileTranslation;
+import com.kotlart.lingver.model.QueryParameter;
 import com.kotlart.lingver.rest.dto.AggregatedProfileTranslationsDto;
 import com.kotlart.lingver.rest.dto.IdListDto;
-import com.kotlart.lingver.rest.dto.PageDto;
 import com.kotlart.lingver.rest.dto.ProfileTranslationDto;
 import com.kotlart.lingver.rest.dto.ValueDto;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,13 +38,11 @@ public class ProfileTranslationController {
     }
 
     @GetMapping
-    ResponseEntity getProfileTranslations(PageDto pageDto) {
-        Pageable pageable = PageRequest.of(
-                pageDto.getPage(),
-                pageDto.getSize(),
-                Sort.by(pageDto.getSortDirection(), pageDto.getSortField()));
-        final List<ProfileTranslation> paginatedTranslations = profileTranslationService
-                .getTranslationsOfActiveProfile(pageable).getContent();
+    ResponseEntity getProfileTranslations(QueryParameter queryParameter) {
+        final Page<ProfileTranslation> translationsPage = profileTranslationService
+                .getTranslationsOfActiveProfile(queryParameter);
+        final List<ProfileTranslation> paginatedTranslations = translationsPage.getContent();
+        final long totalFound = translationsPage.getTotalElements();
 
         final List<ProfileTranslationDto> paginatedTranslationDtos = paginatedTranslations
                 .stream()
@@ -58,12 +54,13 @@ public class ProfileTranslationController {
                 AggregatedProfileTranslationsDto.builder()
                         .translations(paginatedTranslationDtos)
                         .allTranslationIds(allAddedTranslationIds)
+                        .total(totalFound)
                         .build();
         return ResponseEntity.ok().body(responseDto);
     }
 
     @PostMapping
-    ResponseEntity addTransaltionToProfile(@Valid @RequestBody ValueDto translationDto, BindingResult result) {
+    ResponseEntity addTranslationToProfile(@Valid @RequestBody ValueDto translationDto, BindingResult result) {
         if (result.hasErrors()) {
             return ResponseUtil.badRequest(result.getFieldErrors());
         }

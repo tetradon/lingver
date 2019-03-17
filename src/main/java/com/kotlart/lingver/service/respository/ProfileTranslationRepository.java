@@ -11,13 +11,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface ProfileTranslationRepository extends PagingAndSortingRepository<ProfileTranslation, Long> {
-    @Query(value = "select pt from ProfileTranslation pt "
-                   + "join fetch pt.translation translation "
-                   + "join fetch translation.word "
-                   + "join fetch pt.profile profile "
-                   + "where profile.id = ?1",
-            countQuery = "select count(pt) from ProfileTranslation pt where pt.profile.id = ?1")
-    Page<ProfileTranslation> findAllByProfileId(Long id, Pageable pageable);
+    @Query(
+            value = "select pt from ProfileTranslation pt "
+                    + "join fetch pt.translation translation "
+                    + "join fetch translation.word word "
+                    + "join fetch pt.profile profile "
+                    + "where profile.id = ?1 "
+                    + "and (translation.value like ?2% or word.value like ?2%)",
+            countQuery = "select count(pt) from ProfileTranslation pt "
+                    + "join pt.translation translation "
+                    + "join translation.word word "
+                    + "where pt.profile.id = ?1 and "
+                    + "(translation.value like ?2% or word.value like ?2%)")
+    Page<ProfileTranslation> findAllByProfileIdAndByWordValueOrTranslationValue(Long id, String search, Pageable pageable);
 
     @Transactional
     @Modifying

@@ -14,4 +14,5 @@ import java.util.List;
 public class AggregatedProfileTranslationsDto {
     List<ProfileTranslationDto> translations;
     List<Long> allTranslationIds;
+    long total;
 }
