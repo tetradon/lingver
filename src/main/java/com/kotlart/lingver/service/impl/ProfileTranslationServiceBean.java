@@ -5,9 +5,11 @@ import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.service.ProfileTranslationService;
+import com.kotlart.lingver.service.exception.util.ExceptionConverterUtil;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +38,12 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
         ProfileTranslation profileTranslation = new ProfileTranslation();
         profileTranslation.setProfile(profile);
         profileTranslation.setTranslation(translationEntity);
-        return profileTranslationRepository.save(profileTranslation);
+        try {
+            return profileTranslationRepository.save(profileTranslation);
+        } catch (DataIntegrityViolationException exception) {
+            ExceptionConverterUtil.handlePersistException(exception);
+        }
+        return null;
     }
 
     @Override

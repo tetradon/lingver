@@ -3,9 +3,11 @@ package com.kotlart.lingver.service.impl;
 import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.Role;
 import com.kotlart.lingver.service.ProfileService;
+import com.kotlart.lingver.service.exception.util.ExceptionConverterUtil;
 import com.kotlart.lingver.service.respository.ProfileRepository;
 import com.kotlart.lingver.service.respository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -46,6 +48,11 @@ public class ProfileServiceBean implements UserDetailsService, ProfileService {
         profile.setPassword(encoder.encode(profile.getPassword()));
         Role role = roleRepository.findByAuthority(Role.USER);
         profile.setAuthorities(new ArrayList<>(Collections.singletonList(role)));
-        return profileRepository.save(profile);
+        try {
+            return profileRepository.save(profile);
+        } catch (DataIntegrityViolationException exception) {
+            ExceptionConverterUtil.handlePersistException(exception);
+        }
+        return null;
     }
 }
