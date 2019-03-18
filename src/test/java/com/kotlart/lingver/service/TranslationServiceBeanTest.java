@@ -7,6 +7,8 @@ import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
 import com.kotlart.lingver.model.projection.TranslationRatingProjection;
 import com.kotlart.lingver.service.impl.TranslationServiceBean;
+import com.kotlart.lingver.service.respository.ProfileRepository;
+import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.service.respository.WordRepository;
 import org.junit.Assert;
@@ -15,7 +17,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collections;
@@ -30,13 +31,16 @@ public class TranslationServiceBeanTest {
     private final String TRANSLATION_VALUE_2 = "испытание";
 
     @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
     private TranslationRepository translationRepository;
 
     @Autowired
     private WordRepository wordRepository;
+
+    @Autowired
+    private ProfileTranslationRepository profileTranslationRepository;
+
+    @Autowired
+    private ProfileRepository profileRepository;
 
     private TranslationServiceBean sut;
 
@@ -47,15 +51,15 @@ public class TranslationServiceBeanTest {
 
     @Test
     public void test_findByWordValue() {
-        final Word word = entityManager.persist(Word.builder().value(WORD_VALUE).build());
-        final Translation translation1 = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE_1).word(word).build());
-        final Translation translation2 = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE_2).word(word).build());
+        final Word word = wordRepository.save(Word.builder().value(WORD_VALUE).build());
+        final Translation translation1 = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE_1).word(word).build());
+        final Translation translation2 = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE_2).word(word).build());
 
-        final Role role = entityManager.persist(Role.builder().authority(Role.USER).build());
-        final Profile profile = entityManager.persist(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
+        final Role role = Role.builder().authority(Role.USER).build();
+        final Profile profile = profileRepository.save(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
 
         //Saving translation1 to profile, so translation1 rating will be equals to 1
-        entityManager.persist(ProfileTranslation
+        profileTranslationRepository.save(ProfileTranslation
                 .builder()
                 .profile(profile)
                 .translation(translation1)

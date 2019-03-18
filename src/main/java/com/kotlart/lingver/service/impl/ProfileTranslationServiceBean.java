@@ -31,36 +31,34 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public ProfileTranslation addTranslationToActiveProfile(Long translationId) {
+    public ProfileTranslation addTranslationToProfile(Long translationId, Profile profile) {
         final Translation translationEntity = translationRepository.findById(translationId).orElse(null);
-        Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         ProfileTranslation profileTranslation = new ProfileTranslation();
-        profileTranslation.setProfile(activeUser);
+        profileTranslation.setProfile(profile);
         profileTranslation.setTranslation(translationEntity);
         return profileTranslationRepository.save(profileTranslation);
     }
 
     @Override
-    public Page<ProfileTranslation> getTranslationsOfActiveProfile(QueryParameters queryParameters) {
-        Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public Page<ProfileTranslation> getTranslationsOfProfile(QueryParameters queryParameters, Profile profile) {
         Pageable pageable = PageRequest.of(
                 queryParameters.getPage(),
                 queryParameters.getSize(),
                 Sort.by(queryParameters.getSortDirection(), queryParameters.getSortField()));
         return profileTranslationRepository
                 .findAllByProfileIdAndByWordValueOrTranslationValue(
-                        activeUser.getId(),
+                        profile.getId(),
                         queryParameters.getSearch(),
                         pageable);
     }
 
     @Override
-    public int removeTranslationsFromActiveProfile(List<Long> ids) {
+    public int removeTranslationsFromProfile(List<Long> ids, Profile profile) {
         return profileTranslationRepository.deleteAllByIds(ids);
     }
 
     @Override
-    public List<Long> findAllTranslationIdsOfActiveProfile() {
+    public List<Long> findAllTranslationIdsOfProfile(Profile profile) {
         Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return profileTranslationRepository.findAllTranslationIdsByProfileId(activeUser.getId());
     }

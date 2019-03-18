@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -58,7 +59,7 @@ public class Profile extends AbstractEntity implements UserDetails {
     @Temporal(TemporalType.DATE)
     private Date credentialExpirationDate;
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinTable(name = "profile_role",
             joinColumns = {@JoinColumn(name = "profile_fk")},
             inverseJoinColumns = {@JoinColumn(name = "role_fk")}

@@ -11,7 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,9 +19,6 @@ import java.util.Collections;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class ProfileServiceBeanTest {
-
-    @Autowired
-    private TestEntityManager entityManager;
 
     @Autowired
     private ProfileRepository profileRepository;
@@ -35,15 +31,19 @@ public class ProfileServiceBeanTest {
     @Before
     public void before() {
         sut = new ProfileServiceBean(profileRepository, roleRepository, new BCryptPasswordEncoder());
-        roleRepository.save(new Role(1L, Role.USER));
+        roleRepository.save(Role.builder().authority(Role.USER).build());
     }
 
     @Test
     public void test_createProfile() {
         String rawPassword = "password";
-        Profile profile = Profile.builder().username("test").email("test").password(rawPassword).build();
+        Profile profile = Profile.builder()
+                .username("test")
+                .email("test")
+                .password(rawPassword)
+                .build();
         Profile persisted = sut.createProfile(profile);
-        Profile found = entityManager.find(Profile.class, persisted.getId());
+        Profile found = profileRepository.findById(persisted.getId()).orElse(null);
 
         Assert.assertEquals(found.getUsername(), profile.getUsername());
         Assert.assertEquals(found.getEmail(), profile.getEmail());
@@ -60,11 +60,10 @@ public class ProfileServiceBeanTest {
                 .username(usernameOfProfileToLoad)
                 .email("test")
                 .password("test")
-                .authorities(Collections.singletonList(new Role(1L, Role.USER)))
+                .authorities(Collections.singletonList(Role.builder().authority(Role.USER).build()))
                 .build();
-        entityManager.persist(profile);
+        profileRepository.save(profile);
 
         Assert.assertNotNull(sut.loadUserByUsername(usernameOfProfileToLoad));
-
     }
 }

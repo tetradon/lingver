@@ -7,20 +7,17 @@ import com.kotlart.lingver.model.entity.Role;
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
 import com.kotlart.lingver.service.impl.ProfileTranslationServiceBean;
+import com.kotlart.lingver.service.respository.ProfileRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
+import com.kotlart.lingver.service.respository.WordRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Collections;
@@ -33,13 +30,16 @@ public class ProfileTranslationServiceBeanTest {
     private final QueryParameters QUERY_PARAMETERS = new QueryParameters();
 
     @Autowired
-    private TestEntityManager entityManager;
-
-    @Autowired
     private ProfileTranslationRepository profileTranslationRepository;
 
     @Autowired
     private TranslationRepository translationRepository;
+
+    @Autowired
+    private WordRepository wordRepository;
+
+    @Autowired
+    private ProfileRepository profileRepository;
 
     private ProfileTranslationServiceBean sut;
 
@@ -47,48 +47,40 @@ public class ProfileTranslationServiceBeanTest {
 
     @Before
     public void before() {
-
-        final Role role = entityManager.persist(Role.builder().authority(Role.USER).build());
-        profile = entityManager.persist(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
-
-        Authentication authentication = Mockito.mock(Authentication.class);
-        SecurityContext securityContext = Mockito.mock(SecurityContext.class);
-        Mockito.when(securityContext.getAuthentication()).thenReturn(authentication);
-        Mockito.when(securityContext.getAuthentication().getPrincipal()).thenReturn(profile);
-        SecurityContextHolder.setContext(securityContext);
-
+        final Role role = Role.builder().authority(Role.USER).build();
+        profile = profileRepository.save(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
         sut = new ProfileTranslationServiceBean(profileTranslationRepository, translationRepository);
     }
 
     @Test
     public void test_getTranslationsOfActiveProfile_unpaged() {
+        Assert.assertEquals(0, sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile).getTotalElements());
 
-        Assert.assertEquals(0, sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS).getTotalElements());
+        Word word = wordRepository.save(Word.builder().value(WORD_VALUE).build());
+        Translation translation = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
+        profileTranslationRepository.save(ProfileTranslation.builder().profile(profile).translation(translation).build());
 
-        Word word = entityManager.persist(Word.builder().value(WORD_VALUE).build());
-        Translation translation = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
-        entityManager.persist(ProfileTranslation.builder().profile(profile).translation(translation).build());
-        final Page<ProfileTranslation> translationsOfActiveProfile = sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS);
+        final Page<ProfileTranslation> translationsOfActiveProfile = sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile);
         Assert.assertEquals(1, translationsOfActiveProfile.getTotalElements());
         Assert.assertEquals(translation, translationsOfActiveProfile.getContent().get(0).getTranslation());
     }
 
     @Test
     public void test_removeTranslationsFromActiveProfile() {
-        Word word = entityManager.persist(Word.builder().value(WORD_VALUE).build());
-        Translation translation = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
+        Word word = wordRepository.save(Word.builder().value(WORD_VALUE).build());
+        Translation translation = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
 
-        final ProfileTranslation profileTranslation = entityManager.persist(ProfileTranslation.builder().profile(profile).translation(translation).build());
-        Assert.assertEquals(1, sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS).getTotalElements());
-        Assert.assertEquals(1, sut.removeTranslationsFromActiveProfile(Collections.singletonList(profileTranslation.getId())));
-        Assert.assertEquals(0, sut.getTranslationsOfActiveProfile(QUERY_PARAMETERS).getTotalElements());
+        final ProfileTranslation profileTranslation = profileTranslationRepository.save(ProfileTranslation.builder().profile(profile).translation(translation).build());
+        Assert.assertEquals(1, sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile).getTotalElements());
+        Assert.assertEquals(1, sut.removeTranslationsFromProfile(Collections.singletonList(profileTranslation.getId()), profile));
+        Assert.assertEquals(0, sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile).getTotalElements());
     }
 
     @Test
     public void test_addTranslationToActiveProfile() {
-        Word word = entityManager.persist(Word.builder().value(WORD_VALUE).build());
-        Translation translation = entityManager.persist(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
-        final ProfileTranslation profileTranslation = sut.addTranslationToActiveProfile(translation.getId());
+        Word word = wordRepository.save(Word.builder().value(WORD_VALUE).build());
+        Translation translation = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
+        final ProfileTranslation profileTranslation = sut.addTranslationToProfile(translation.getId(), profile);
         Assert.assertNotNull(profileTranslation);
         Assert.assertNotNull(profileTranslation.getProfile());
         Assert.assertNotNull(profileTranslation.getTranslation());

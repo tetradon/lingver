@@ -5,6 +5,7 @@ import com.kotlart.lingver.model.dto.AggregatedProfileTranslationsDto;
 import com.kotlart.lingver.model.dto.IdListDto;
 import com.kotlart.lingver.model.dto.ProfileTranslationDto;
 import com.kotlart.lingver.model.dto.ValueDto;
+import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileTranslationService;
@@ -12,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,8 +41,9 @@ public class ProfileTranslationController {
 
     @GetMapping
     ResponseEntity getProfileTranslations(QueryParameters queryParameters) {
+        Profile activeProfile = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         final Page<ProfileTranslation> translationsPage = profileTranslationService
-                .getTranslationsOfActiveProfile(queryParameters);
+                .getTranslationsOfProfile(queryParameters, activeProfile);
         final List<ProfileTranslation> paginatedTranslations = translationsPage.getContent();
         final long totalFound = translationsPage.getTotalElements();
 
@@ -49,7 +52,7 @@ public class ProfileTranslationController {
                 .map(tr -> modelMapper.map(tr, ProfileTranslationDto.class))
                 .collect(Collectors.toList());
 
-        final List<Long> allAddedTranslationIds = profileTranslationService.findAllTranslationIdsOfActiveProfile();
+        final List<Long> allAddedTranslationIds = profileTranslationService.findAllTranslationIdsOfProfile(activeProfile);
         final AggregatedProfileTranslationsDto responseDto =
                 AggregatedProfileTranslationsDto.builder()
                         .translations(paginatedTranslationDtos)
@@ -64,13 +67,15 @@ public class ProfileTranslationController {
         if (result.hasErrors()) {
             return ResponseUtil.badRequest(result.getFieldErrors());
         }
-        final ProfileTranslation profileTranslation = profileTranslationService.addTranslationToActiveProfile(translationDto.getId());
+        Profile activeProfile = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final ProfileTranslation profileTranslation = profileTranslationService.addTranslationToProfile(translationDto.getId(), activeProfile);
         return ResponseEntity.ok().body(modelMapper.map(profileTranslation, ProfileTranslationDto.class));
     }
 
     @DeleteMapping
     ResponseEntity removeTranslationsFromProfile(@RequestBody IdListDto dto) {
-        final int removed = profileTranslationService.removeTranslationsFromActiveProfile(dto.getIds());
+        Profile activeProfile = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final int removed = profileTranslationService.removeTranslationsFromProfile(dto.getIds(), activeProfile);
         return ResponseEntity.ok().body(removed);
     }
 }

@@ -1,6 +1,7 @@
 package com.kotlart.lingver.service;
 
 import com.kotlart.lingver.model.QueryParameters;
+import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import org.springframework.data.domain.Page;
 
@@ -8,11 +9,11 @@ import java.util.List;
 
 
 public interface ProfileTranslationService {
-    ProfileTranslation addTranslationToActiveProfile(Long translationId);
+    ProfileTranslation addTranslationToProfile(Long translationId, Profile profile);
 
-    Page<ProfileTranslation> getTranslationsOfActiveProfile(QueryParameters queryParameters);
+    Page<ProfileTranslation> getTranslationsOfProfile(QueryParameters queryParameters, Profile profile);
 
-    int removeTranslationsFromActiveProfile(List<Long> id);
+    int removeTranslationsFromProfile(List<Long> id, Profile profile);
 
-    List<Long> findAllTranslationIdsOfActiveProfile();
+    List<Long> findAllTranslationIdsOfProfile(Profile profile);
 }
