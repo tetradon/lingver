@@ -4,9 +4,9 @@ import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
 import com.kotlart.lingver.model.projection.TranslationRatingProjection;
 import com.kotlart.lingver.service.TranslationService;
-import com.kotlart.lingver.service.exception.util.ExceptionConverterUtil;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.service.respository.WordRepository;
+import com.kotlart.lingver.util.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -45,7 +45,7 @@ public class TranslationServiceBean implements TranslationService {
             return translationRepository.save(newTranslation);
 
         } catch (DataIntegrityViolationException exception) {
-            ExceptionConverterUtil.handlePersistException(exception);
+            ExceptionUtil.handleDataIntegrityViolationException(exception);
         }
         return null;
     }

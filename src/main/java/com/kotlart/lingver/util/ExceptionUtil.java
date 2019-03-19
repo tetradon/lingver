@@ -1,11 +1,12 @@
-package com.kotlart.lingver.service.exception.util;
+package com.kotlart.lingver.util;
 
-import com.kotlart.lingver.service.exception.UniqueConstraintViolation;
+import com.kotlart.lingver.exception.UniqueConstraintViolation;
 import org.hibernate.exception.ConstraintViolationException;
+import org.springframework.dao.DataIntegrityViolationException;
 
 
-public class ExceptionConverterUtil {
-    public static void handlePersistException(RuntimeException exception) throws RuntimeException {
+public class ExceptionUtil {
+    public static void handleDataIntegrityViolationException(DataIntegrityViolationException exception) {
         if ((exception.getCause() != null) && (exception.getCause() instanceof ConstraintViolationException)) {
             /*  Postgres driver doesn't give access to the violated constraint name through calling {@link org.hibernate.exception.ConstraintViolationException#getConstraintName()}
                 So the only way to get the field name is from string returned by {@link java.sql.SQLException#getMessage()} which looks like this
