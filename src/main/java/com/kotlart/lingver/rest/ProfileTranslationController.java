@@ -1,8 +1,8 @@
 package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.QueryParameters;
-import com.kotlart.lingver.model.dto.AggregatedProfileTranslationsDto;
 import com.kotlart.lingver.model.dto.IdListDto;
+import com.kotlart.lingver.model.dto.PaginatedProfileTranslationsDto;
 import com.kotlart.lingver.model.dto.ProfileTranslationDto;
 import com.kotlart.lingver.model.dto.ValueDto;
 import com.kotlart.lingver.model.entity.Profile;
@@ -52,11 +52,9 @@ public class ProfileTranslationController {
                 .map(tr -> modelMapper.map(tr, ProfileTranslationDto.class))
                 .collect(Collectors.toList());
 
-        final List<Long> allAddedTranslationIds = profileTranslationService.findAllTranslationIdsOfProfile(activeProfile);
-        final AggregatedProfileTranslationsDto responseDto =
-                AggregatedProfileTranslationsDto.builder()
+        final PaginatedProfileTranslationsDto responseDto =
+                PaginatedProfileTranslationsDto.builder()
                         .translations(paginatedTranslationDtos)
-                        .allTranslationIds(allAddedTranslationIds)
                         .total(totalFound)
                         .build();
         return ResponseEntity.ok().body(responseDto);

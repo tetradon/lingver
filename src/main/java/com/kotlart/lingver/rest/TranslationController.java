@@ -2,13 +2,15 @@ package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.dto.NewTranslationDto;
 import com.kotlart.lingver.model.dto.ValueDto;
+import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.Translation;
-import com.kotlart.lingver.model.projection.TranslationRatingProjection;
+import com.kotlart.lingver.model.projection.TranslationSearchProjection;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.TranslationService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,7 +36,8 @@ public class TranslationController {
 
     @GetMapping
     ResponseEntity getTranslations(@RequestParam("word") String wordToSearch) {
-        final List<TranslationRatingProjection> foundTranslations = translationService.findByWordValue(wordToSearch);
+        Profile activeProfile = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        final List<TranslationSearchProjection> foundTranslations = translationService.findByWordValue(wordToSearch, activeProfile.getId());
         return ResponseEntity.ok().body(foundTranslations);
     }
 

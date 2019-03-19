@@ -24,7 +24,6 @@ class Dictionary extends Component {
         this.state = {
             dialogIsOpen: false,
             translations: [],
-            translationIds: [],
             total: 0,
             params: {
                 sortField: 'insertDate',
@@ -47,7 +46,6 @@ class Dictionary extends Component {
             .then((response) => {
                 this.setState({translations: response.data.translations});
                 this.setState({total: response.data.total});
-                this.setState({translationIds: response.data.allTranslationIds});
             })
             .finally(() => {
                     this.setState({isLoading: false})
@@ -73,7 +71,7 @@ class Dictionary extends Component {
                   justify="center"
                   spacing={40}>
                 <Grid item xs={10} lg={7}>
-                    {this.state.translationIds.length === 0 && !this.state.isLoading
+                    {this.state.total === 0 && !this.state.params.search && !this.state.isLoading
                         ?
                         <Paper className={classes.noWordsMessage}>
                             <Typography variant={"h5"}><MoodBadIcon fontSize={"large"}/> You haven't added any words yet
@@ -93,7 +91,6 @@ class Dictionary extends Component {
                 <Grid item xs={10} lg={3}>
                     <TranslationSearch
                         onNewWord={this.reload}
-                        translationIds={this.state.translationIds}
                         onRemove={this.remove}
                     />
                 </Grid>

@@ -5,7 +5,7 @@ import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.entity.Role;
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
-import com.kotlart.lingver.model.projection.TranslationRatingProjection;
+import com.kotlart.lingver.model.projection.TranslationSearchProjection;
 import com.kotlart.lingver.service.impl.TranslationServiceBean;
 import com.kotlart.lingver.service.respository.ProfileRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
@@ -42,11 +42,16 @@ public class TranslationServiceBeanTest {
     @Autowired
     private ProfileRepository profileRepository;
 
+    private Profile testProfile;
+
     private TranslationServiceBean sut;
 
     @Before
     public void before() {
         sut = new TranslationServiceBean(translationRepository, wordRepository);
+        final Role role = Role.builder().authority(Role.USER).build();
+        testProfile = profileRepository.save(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
+
     }
 
     @Test
@@ -55,17 +60,15 @@ public class TranslationServiceBeanTest {
         final Translation translation1 = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE_1).word(word).build());
         final Translation translation2 = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE_2).word(word).build());
 
-        final Role role = Role.builder().authority(Role.USER).build();
-        final Profile profile = profileRepository.save(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
 
-        //Saving translation1 to profile, so translation1 rating will be equals to 1
+        //Saving translation1 to testProfile, so translation1 rating will be equals to 1
         profileTranslationRepository.save(ProfileTranslation
                 .builder()
-                .profile(profile)
+                .profile(testProfile)
                 .translation(translation1)
                 .build());
 
-        final List<TranslationRatingProjection> foundTranslations = sut.findByWordValue(WORD_VALUE);
+        final List<TranslationSearchProjection> foundTranslations = sut.findByWordValue(WORD_VALUE, testProfile.getId());
 
         Assert.assertEquals(2, foundTranslations.size());
 
@@ -82,7 +85,7 @@ public class TranslationServiceBeanTest {
 
     @Test
     public void test_createTranslationForWord() {
-        Assert.assertEquals(0, sut.findByWordValue(WORD_VALUE).size());
+        Assert.assertEquals(0, sut.findByWordValue(WORD_VALUE, testProfile.getId()).size());
 
         final Translation newTranslationForNewWord = sut.createTranslationForWord(TRANSLATION_VALUE_1, WORD_VALUE);
         Assert.assertEquals(TRANSLATION_VALUE_1, newTranslationForNewWord.getValue());

@@ -2,7 +2,7 @@ package com.kotlart.lingver.service.impl;
 
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
-import com.kotlart.lingver.model.projection.TranslationRatingProjection;
+import com.kotlart.lingver.model.projection.TranslationSearchProjection;
 import com.kotlart.lingver.service.TranslationService;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.service.respository.WordRepository;
@@ -26,8 +26,8 @@ public class TranslationServiceBean implements TranslationService {
     }
 
     @Override
-    public List<TranslationRatingProjection> findByWordValue(String word) {
-        return translationRepository.findByWordValueIgnoreCase(word);
+    public List<TranslationSearchProjection> findByWordValue(String word, Long profileId) {
+        return translationRepository.findByWordValueIgnoreCase(word, profileId);
     }
 
     @Override

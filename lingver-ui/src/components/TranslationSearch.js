@@ -90,24 +90,25 @@ class TranslationSearch extends Component {
 
     render() {
         const {translations} = this.state;
-        const {classes, translationIds} = this.props;
+        const {classes} = this.props;
 
         const translationList = translations.map(translation => {
             return (
                 <React.Fragment key={translation.id}>
                     <ListItem>
-                        {!translationIds.includes(translation.id)
-                            ?
-                            <Fab size="small"
-                                 color="primary"
-                                 className={classes.fab}
-                                 onClick={() => this.addTranslation(translation)}><AddIcon/></Fab>
-                            :
+                        {translation.added ?
                             <Fab size="small"
                                  color="primary"
                                  disabled
                                  className={classes.fab}
                             ><DoneIcon/></Fab>
+                            :
+                            <Fab size="small"
+                                 color="primary"
+                                 className={classes.fab}
+                                 onClick={() => this.addTranslation(translation)}
+                            ><AddIcon/></Fab>
+
                         }
                         <Badge badgeContent={translation.rating} color="primary">
                             <Typography className={classes.padding}>{translation.value}</Typography>

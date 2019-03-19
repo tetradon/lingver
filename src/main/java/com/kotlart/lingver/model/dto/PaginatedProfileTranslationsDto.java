@@ -11,8 +11,7 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AggregatedProfileTranslationsDto {
+public class PaginatedProfileTranslationsDto {
     List<ProfileTranslationDto> translations;
-    List<Long> allTranslationIds;
     long total;
 }
