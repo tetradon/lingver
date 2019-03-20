@@ -12,7 +12,7 @@ public interface TranslationService {
      *
      * @param word      word value to search
      * @param profileId id of the profile that should be checked on presence of translation
-     * @return TranslationSearchProjection
+     * @return instance of {@link TranslationSearchProjection}
      */
     List<TranslationSearchProjection> findByWordValue(String word, Long profileId);
 

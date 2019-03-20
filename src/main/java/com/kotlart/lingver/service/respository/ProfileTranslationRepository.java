@@ -30,6 +30,4 @@ public interface ProfileTranslationRepository extends PagingAndSortingRepository
     @Query("delete from ProfileTranslation pt where pt.id in ?1")
     int deleteAllByIds(List<Long> ids);
 
-    @Query("select pt.translation.id from ProfileTranslation pt where pt.profile.id = ?1")
-    List<Long> findAllTranslationIdsByProfileId(Long profileId);
 }

@@ -44,7 +44,7 @@ public class ProfileServiceBeanTest {
                 .build();
         Profile persisted = sut.createProfile(profile);
         Profile found = profileRepository.findById(persisted.getId()).orElse(null);
-
+        Assert.assertNotNull(found);
         Assert.assertEquals(found.getUsername(), profile.getUsername());
         Assert.assertEquals(found.getEmail(), profile.getEmail());
         Assert.assertNotEquals(found.getPassword(), rawPassword);

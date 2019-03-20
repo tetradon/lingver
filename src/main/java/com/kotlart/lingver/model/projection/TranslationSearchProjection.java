@@ -4,6 +4,5 @@ public interface TranslationSearchProjection {
     Long getId();
     String getValue();
     int getRating();
-
     boolean getAdded();
 }

@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -62,11 +61,5 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     @Override
     public int removeTranslationsFromProfile(List<Long> ids, Profile profile) {
         return profileTranslationRepository.deleteAllByIds(ids);
-    }
-
-    @Override
-    public List<Long> findAllTranslationIdsOfProfile(Profile profile) {
-        Profile activeUser = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        return profileTranslationRepository.findAllTranslationIdsByProfileId(activeUser.getId());
     }
 }
