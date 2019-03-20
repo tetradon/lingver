@@ -107,7 +107,7 @@ class TranslationTable extends Component {
     };
 
     render() {
-        const {translations, classes} = this.props;
+        const {translations} = this.props;
         return (
             <React.Fragment>
                 <ConfirmationDialog
@@ -117,7 +117,7 @@ class TranslationTable extends Component {
                     title={"Confirm delete"}
                     contentText={"Are you sure to delete selected items?"}
                 />
-                <Paper className={classes.root}>
+                <Paper>
                     <TableToolbar
                         onDelete={this.handleDeleteClick}
                         onQueryParamsChange={this.props.onQueryParamsChange}
@@ -155,7 +155,6 @@ class TranslationTable extends Component {
                                             </Tooltip>
                                         </TableCell>
                                     ))}
-
                             </TableRow>
                         </TableHead>
                         <TableBody>{
