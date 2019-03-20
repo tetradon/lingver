@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import TranslationSearch from "./TranslationSearch";
 import {Grid, LinearProgress, Typography} from '@material-ui/core';
 import {translationService} from "../service/translationService";
-import TranslationTable from "./TranslationTable";
+import TranslationTable from "./table/TranslationTable";
 import Paper from "@material-ui/core/Paper";
 import MoodBadIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import withStyles from "@material-ui/core/styles/withStyles";

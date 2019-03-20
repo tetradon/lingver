@@ -50,7 +50,7 @@ const styles = theme => ({
 
 });
 
-class SearchBar extends React.Component {
+class ToolbarSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -88,8 +88,8 @@ class SearchBar extends React.Component {
     }
 }
 
-SearchBar.propTypes = {
+ToolbarSearch.propTypes = {
     onQueryParamsChange: PropTypes.func,
     hidden: PropTypes.bool
 };
-export default withStyles(styles)(SearchBar);
+export default withStyles(styles)(ToolbarSearch);
