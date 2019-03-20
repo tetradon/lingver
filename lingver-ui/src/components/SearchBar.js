@@ -64,27 +64,32 @@ class SearchBar extends React.Component {
     };
 
     render() {
+
         const {classes} = this.props;
-        return (
-            <div className={classes.search}>
-                <div className={classes.searchIcon}>
-                    <SearchIcon/>
+        if (!this.props.hidden) {
+            return (
+                <div className={classes.search}>
+                    <div className={classes.searchIcon}>
+                        <SearchIcon/>
+                    </div>
+                    <InputBase
+                        value={this.state.search}
+                        onChange={this.handleSearchChange}
+                        placeholder="Search…"
+                        classes={{
+                            root: classes.inputRoot,
+                            input: classes.inputInput,
+                        }}
+                    />
                 </div>
-                <InputBase
-                    value={this.state.search}
-                    onChange={this.handleSearchChange}
-                    placeholder="Search…"
-                    classes={{
-                        root: classes.inputRoot,
-                        input: classes.inputInput,
-                    }}
-                />
-            </div>
-        )
+            )
+        }
+        return null;
     }
 }
 
 SearchBar.propTypes = {
-    onQueryParamsChange: PropTypes.func
+    onQueryParamsChange: PropTypes.func,
+    hidden: PropTypes.bool
 };
 export default withStyles(styles)(SearchBar);

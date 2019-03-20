@@ -201,7 +201,8 @@ class TranslationTable extends Component {
                             }
                         </div>
                         <div className={classes.spacer}/>
-                        <SearchBar onQueryParamsChange={this.props.onQueryParamsChange}/>
+                        <SearchBar hidden={this.state.selected.length > 0}
+                                   onQueryParamsChange={this.props.onQueryParamsChange}/>
                         <div className={classes.actions}>
                             {this.state.selected.length > 0 ? (
                                 <Tooltip title="Delete">
@@ -210,9 +211,7 @@ class TranslationTable extends Component {
                                         <DeleteIcon/>
                                     </IconButton>
                                 </Tooltip>
-                            ) : null
-
-                            }
+                            ) : null}
                         </div>
                     </Toolbar>
                     <Table padding={"dense"}>
