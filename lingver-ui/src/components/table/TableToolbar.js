@@ -99,7 +99,7 @@ class TableToolbar extends Component {
                     }
                 </div>
                 <div className={classes.spacer}/>
-                <ExerciseMenu hidden={selected.length === 0}/>
+                <ExerciseMenu selected={this.props.selected} hidden={selected.length === 0}/>
                 <ToolbarSearch hidden={selected.length > 0}
                                onQueryParamsChange={this.props.onQueryParamsChange}/>
                 <div className={classes.actions}>

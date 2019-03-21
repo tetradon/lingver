@@ -5,11 +5,7 @@ import * as PropTypes from "prop-types";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import TrainIcon from "@material-ui/icons/FitnessCenterTwoTone";
-
-const options = [
-    'Word - Translation',
-    'Translation - Word'
-];
+import {exerciseService} from "../../service/exerciseService"
 
 class ExerciseMenu extends Component {
     state = {
@@ -23,6 +19,12 @@ class ExerciseMenu extends Component {
     handleTrainClose = () => {
         this.setState({trainMenuAnchor: null});
     };
+
+    handleWordTranslationClick = () => {
+        exerciseService.getWordTranslationExerciseSet(this.props.selected);
+    };
+
+
 
 
     render() {
@@ -47,11 +49,12 @@ class ExerciseMenu extends Component {
                         open={open}
                         onClose={this.handleTrainClose}
                     >
-                        {options.map(option => (
-                            <MenuItem key={option} onClick={this.handleTrainClose}>
-                                {option}
-                            </MenuItem>
-                        ))}
+                        <MenuItem onClick={this.handleWordTranslationClick}>
+                            Word - Translation
+                        </MenuItem>
+                        <MenuItem onClick={this.handleTrainClose}>
+                            Translation - Translation
+                        </MenuItem>
                     </Menu>
                 </div>
             )
@@ -62,6 +65,7 @@ class ExerciseMenu extends Component {
 }
 
 ExerciseMenu.propTypes = {
-    hidden: PropTypes.bool
+    hidden: PropTypes.bool,
+    selected: PropTypes.array
 };
 export default ExerciseMenu;

@@ -13,6 +13,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.NamedSubgraph;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -27,8 +30,26 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
+@NamedEntityGraph(name = ProfileTranslation.DETAIL_ENTITY_GRAPH,
+        attributeNodes = {
+                @NamedAttributeNode(value = "translation", subgraph = "translationSubgraph"),
+                @NamedAttributeNode(value = "profile", subgraph = "profileSubgraph")
+        }, subgraphs = {
+        @NamedSubgraph(name = "translationSubgraph",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "word")
+                }),
+        @NamedSubgraph(name = "profileSubgraph",
+                attributeNodes = {
+                        @NamedAttributeNode(value = "authorities")
+                })
+}
+
+)
+
 public class ProfileTranslation extends AbstractEntity {
     public static final String TABLE_NAME = "profile_translation";
+    public static final String DETAIL_ENTITY_GRAPH = TABLE_NAME + ".detail";
 
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
