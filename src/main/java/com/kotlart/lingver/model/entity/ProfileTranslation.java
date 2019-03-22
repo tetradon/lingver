@@ -30,26 +30,21 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = false)
-@NamedEntityGraph(name = ProfileTranslation.DETAIL_ENTITY_GRAPH,
+@NamedEntityGraph(name = ProfileTranslation.ENTITY_GRAPH,
         attributeNodes = {
                 @NamedAttributeNode(value = "translation", subgraph = "translationSubgraph"),
-                @NamedAttributeNode(value = "profile", subgraph = "profileSubgraph")
+                @NamedAttributeNode(value = "profile")
         }, subgraphs = {
         @NamedSubgraph(name = "translationSubgraph",
-                attributeNodes = {
+                attributeNodes =
                         @NamedAttributeNode(value = "word")
-                }),
-        @NamedSubgraph(name = "profileSubgraph",
-                attributeNodes = {
-                        @NamedAttributeNode(value = "authorities")
-                })
+        )
 }
-
 )
 
 public class ProfileTranslation extends AbstractEntity {
     public static final String TABLE_NAME = "profile_translation";
-    public static final String DETAIL_ENTITY_GRAPH = TABLE_NAME + ".detail";
+    public static final String ENTITY_GRAPH = TABLE_NAME + ".detail";
 
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)

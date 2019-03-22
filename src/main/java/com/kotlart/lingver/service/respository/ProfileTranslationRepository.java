@@ -14,16 +14,12 @@ import java.util.List;
 public interface ProfileTranslationRepository extends PagingAndSortingRepository<ProfileTranslation, Long> {
     @Query(
             value = "select pt from ProfileTranslation pt "
-                    + "join fetch pt.translation translation "
-                    + "join fetch translation.word word "
-                    + "join fetch pt.profile profile "
-                    + "where profile.id = ?1 "
-                    + "and (translation.value like ?2% or word.value like ?2%)",
+                    + "where pt.profile.id = ?1 "
+                    + "and (pt.translation.value like ?2% or pt.translation.word.value like ?2%)",
             countQuery = "select count(pt) from ProfileTranslation pt "
-                    + "join pt.translation translation "
-                    + "join translation.word word "
-                    + "where pt.profile.id = ?1 and "
-                    + "(translation.value like ?2% or word.value like ?2%)")
+                         + "where pt.profile.id = ?1 and "
+                         + "(pt.translation.value like ?2% or pt.translation.word.value like ?2%)")
+    @EntityGraph(value = ProfileTranslation.ENTITY_GRAPH, type = EntityGraph.EntityGraphType.LOAD)
     Page<ProfileTranslation> findAllByProfileIdAndByWordValueOrTranslationValue(Long id, String search, Pageable pageable);
 
     @Transactional
@@ -31,7 +27,7 @@ public interface ProfileTranslationRepository extends PagingAndSortingRepository
     @Query("delete from ProfileTranslation pt where pt.id in ?1")
     int deleteAllByIds(List<Long> ids);
 
-    @EntityGraph(value = ProfileTranslation.DETAIL_ENTITY_GRAPH, type = EntityGraph.EntityGraphType.LOAD)
+    @EntityGraph(value = ProfileTranslation.ENTITY_GRAPH, type = EntityGraph.EntityGraphType.LOAD)
     List<ProfileTranslation> findByIdIn(List<Long> ids);
 
 }
