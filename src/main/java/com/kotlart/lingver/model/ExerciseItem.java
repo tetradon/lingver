@@ -7,6 +7,6 @@ import java.util.List;
 @Data
 public class ExerciseItem {
     Long profileTranslationId;
-    String trainingItem;
-    List<ResponseVariant> responseVariants;
+    String questionText;
+    List<Answer> answers;
 }
