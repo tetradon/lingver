@@ -197,12 +197,12 @@ class ExerciseDialog extends React.Component {
                     <DialogActions>
                         {this.state.selectedAnswer
                             ?
-                            <Button onClick={this.onNext} color="primary">
+                            <Button size={"large"} onClick={this.onNext} color="primary">
                                 Next
                             </Button>
                             : null}
                         {this.isExerciseFinished() ?
-                            <Button onClick={this.props.onClose} color="primary">
+                            <Button size={"large"} onClick={this.props.onClose} color="primary">
                                 Close
                             </Button> : null}
                     </DialogActions>
