@@ -22,6 +22,7 @@ class ConfirmationDialog extends React.Component {
                     TransitionComponent={Transition}
                     keepMounted
                     onClose={this.props.onCancel}
+
                 >
                     <DialogTitle>
                         {this.props.title}

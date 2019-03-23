@@ -6,10 +6,13 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import TrainIcon from "@material-ui/icons/FitnessCenterTwoTone";
 import {exerciseService} from "../../service/exerciseService"
+import ExerciseDialog from "../ExcerciseDialog";
 
 class ExerciseMenu extends Component {
     state = {
         trainMenuAnchor: null,
+        exerciseDialogIsOpen: false,
+        trainingSet: []
     };
 
     handleTrainClick = event => {
@@ -20,20 +23,37 @@ class ExerciseMenu extends Component {
         this.setState({trainMenuAnchor: null});
     };
 
+    closeExerciseDialog = () => {
+        this.setState({exerciseDialogIsOpen: false});
+    };
+
     handleWordTranslationClick = () => {
-        exerciseService.getWordTranslationExerciseSet(this.props.selected);
+        this.handleTrainClose();
+        exerciseService.getWordTranslationExerciseSet(this.props.selected)
+            .then(response => {
+                this.setState({trainingSet: response.data});
+            });
+        this.setState({exerciseDialogIsOpen: true});
+
     };
 
 
-
-
     render() {
-        const {trainMenuAnchor} = this.state;
+        const {trainMenuAnchor, exerciseDialogIsOpen} = this.state;
         const open = Boolean(trainMenuAnchor);
 
         if (!this.props.hidden) {
             return (
                 <div>
+                    {
+                        exerciseDialogIsOpen
+                            ?
+                            <ExerciseDialog
+                                onClose={this.closeExerciseDialog}
+                                trainingSet={this.state.trainingSet}/>
+                            : null
+                    }
+
                     <Tooltip title="Train">
                         <IconButton
                             aria-label="Train"

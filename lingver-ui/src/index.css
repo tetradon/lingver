@@ -1,0 +1,7 @@
+button {
+    outline: none !important
+}
+
+.spacer {
+    flex: 1 1 100%
+}

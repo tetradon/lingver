@@ -5,13 +5,14 @@ import com.kotlart.lingver.model.ExerciseItem;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.service.ExerciseService;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
+import com.kotlart.lingver.util.CollectionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,60 +30,49 @@ public class ExerciseServiceBean implements ExerciseService {
         final List<ExerciseItem> result = new ArrayList<>();
         final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(translationIds);
 
-        final List<String> translations = profileTranslations
+        final Set<String> translations = profileTranslations
                 .stream()
                 .map(profileTranslation -> profileTranslation.getTranslation().getValue())
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
         profileTranslations.forEach(profileTranslation -> {
-                    ExerciseItem exerciseItem = new ExerciseItem();
-                    exerciseItem.setProfileTranslationId(profileTranslation.getId());
-            exerciseItem.setQuestionText(profileTranslation.getTranslation().getWord().getValue());
-            exerciseItem.setAnswers(generateResponseVariants(translations, profileTranslation.getTranslation().getValue()));
+            ExerciseItem exerciseItem = ExerciseItem.builder()
+                    .profileTranslationId(profileTranslation.getId())
+                    .question(profileTranslation.getTranslation().getWord().getValue())
+                    .answers(generateResponseVariants(translations, profileTranslation.getTranslation().getValue()))
+                    .build();
                     result.add(exerciseItem);
                 }
         );
         return result;
     }
 
-    private List<Answer> generateResponseVariants(List<String> allTranslationValues, String correct) {
-        List<String> incorrectAnswers = createIncorrectAnswerList(allTranslationValues, correct);
+    private List<Answer> generateResponseVariants(Set<String> allTranslationValues, String correct) {
+        List<String> incorrectAnswerList = CollectionUtil.createListFromCollectionWithoutElement(allTranslationValues, correct);
         int maxNumberOfIncorrectAnswers = 4;
 
-        if (incorrectAnswers.size() >= maxNumberOfIncorrectAnswers) {
-            int numberOfElementsToDelete = incorrectAnswers.size() - maxNumberOfIncorrectAnswers;
-            removeRandomlyFromList(incorrectAnswers, numberOfElementsToDelete);
+        if (incorrectAnswerList.size() >= maxNumberOfIncorrectAnswers) {
+            int numberOfElementsToDelete = incorrectAnswerList.size() - maxNumberOfIncorrectAnswers;
+            CollectionUtil.removeRandomlyFromList(incorrectAnswerList, numberOfElementsToDelete);
         }
 
-        List<Answer> answers = createResponseVariantList(correct, incorrectAnswers);
+        List<Answer> answers = createResponseVariantList(correct, incorrectAnswerList);
         Collections.shuffle(answers);
 
         return answers;
     }
 
-    private void removeRandomlyFromList(List<String> list, int numberOfElementsToDelete) {
-        final Random random = new Random();
-        for (int i = 0; i < numberOfElementsToDelete; i++) {
-            list.remove(random.nextInt(list.size()));
-        }
-    }
-
-    private List<String> createIncorrectAnswerList(List<String> allTranslationValues, String correct) {
-        List<String> translationVariants = new ArrayList<>(allTranslationValues);
-        translationVariants.remove(correct);
-        return translationVariants;
-    }
 
     private List<Answer> createResponseVariantList(String correctAnswer, List<String> incorrectAnswers) {
         List<Answer> result = new ArrayList<>();
         result.add(Answer.builder()
-                .answerText(correctAnswer)
-                .correct(true)
+                .value(correctAnswer)
+                .isCorrect(true)
                 .build());
         incorrectAnswers.forEach(v ->
                 result.add(Answer.builder()
-                        .answerText(v)
-                        .correct(false)
+                        .value(v)
+                        .isCorrect(false)
                         .build())
         );
         return result;
