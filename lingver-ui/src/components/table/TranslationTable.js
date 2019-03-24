@@ -29,7 +29,7 @@ class TranslationTable extends Component {
                 {displayName: 'Word', path: 'translation.word.value'},
                 {displayName: 'Translation', path: 'translation.value'},
                 {displayName: 'Insert Date', path: 'insertDate'},
-                {displayName: 'Last Repeat Date', path: 'translation.exerciseHistory'},
+                {displayName: 'Last Repeat Date', path: ''},
                 {displayName: 'Progress', path: ''}
 
             ],
