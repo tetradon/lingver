@@ -6,22 +6,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedAttributeNode;
-import javax.persistence.NamedEntityGraph;
-import javax.persistence.NamedSubgraph;
-import javax.persistence.PrePersist;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = ProfileTranslation.TABLE_NAME)
@@ -33,11 +21,16 @@ import java.util.Date;
 @NamedEntityGraph(name = ProfileTranslation.ENTITY_GRAPH,
         attributeNodes = {
                 @NamedAttributeNode(value = "translation", subgraph = "translationSubgraph"),
-                @NamedAttributeNode(value = "profile")
+                @NamedAttributeNode(value = "profile"),
+                @NamedAttributeNode(value = "exerciseHistory", subgraph = "exerciseHistorySubgraph")
         }, subgraphs = {
         @NamedSubgraph(name = "translationSubgraph",
                 attributeNodes =
                         @NamedAttributeNode(value = "word")
+        ),
+        @NamedSubgraph(name = "exerciseHistorySubgraph",
+                attributeNodes =
+                @NamedAttributeNode(value = "exercise")
         )
 }
 )
@@ -66,6 +59,9 @@ public class ProfileTranslation extends AbstractEntity {
     @JoinColumn(name = Profile.TABLE_NAME + FK_SUFFIX)
     @NotNull
     private Profile profile;
+
+    @OneToMany(mappedBy = "profileTranslation")
+    private List<ExerciseHistory> exerciseHistory;
 
     @PrePersist
     private void fillInsertInfo() {

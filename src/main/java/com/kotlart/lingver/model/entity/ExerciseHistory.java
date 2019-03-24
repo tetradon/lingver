@@ -27,13 +27,16 @@ public class ExerciseHistory extends AbstractEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date date;
+
     private Boolean result;
+
+    @ManyToOne
+    @JoinColumn(name = ProfileTranslation.TABLE_NAME + FK_SUFFIX)
+    private ProfileTranslation profileTranslation;
 
     @ManyToOne
     @JoinColumn(name = Exercise.TABLE_NAME + FK_SUFFIX)
     private Exercise exercise;
-
-
 }

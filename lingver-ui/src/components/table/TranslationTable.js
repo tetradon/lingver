@@ -28,7 +28,10 @@ class TranslationTable extends Component {
             titles: [
                 {displayName: 'Word', path: 'translation.word.value'},
                 {displayName: 'Translation', path: 'translation.value'},
-                {displayName: 'Insert Date', path: 'insertDate'}
+                {displayName: 'Insert Date', path: 'insertDate'},
+                {displayName: 'Last Repeat Date', path: 'translation.exerciseHistory'},
+                {displayName: 'Progress', path: ''}
+
             ],
         };
     }
@@ -174,6 +177,8 @@ class TranslationTable extends Component {
                                         </TableCell>
                                         <TableCell>{row.translation.value}</TableCell>
                                         <TableCell>{row.insertDate}</TableCell>
+                                        <TableCell>{row.lastRepeatedDate}</TableCell>
+                                        <TableCell>{row.numberOfSuccessRepeating}</TableCell>
                                     </TableRow>
                                 );
                             })}

@@ -5,6 +5,8 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -19,9 +21,26 @@ public class Exercise extends AbstractEntity {
     public static final String TABLE_NAME = "exercise";
 
     @Id
-    @Column(name = TABLE_NAME + FK_SUFFIX)
+    @Column(name = TABLE_NAME + PK_SUFFIX)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+
+    @Enumerated(EnumType.STRING)
+    private Name name;
+
+    public enum Name {
+        WORD_TRANSLATION("Word-Translation"),
+        TRANSLATION_WORD("Translation-Word");
+
+        private String displayName;
+
+        Name(String displayName) {
+            this.displayName = displayName;
+        }
+
+        public String getDisplayName() {
+            return displayName;
+        }
+    }
 }
 

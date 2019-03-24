@@ -5,6 +5,7 @@ import com.kotlart.lingver.model.dto.IdListDto;
 import com.kotlart.lingver.model.dto.PaginatedProfileTranslationsDto;
 import com.kotlart.lingver.model.dto.ProfileTranslationDto;
 import com.kotlart.lingver.model.dto.ValueDto;
+import com.kotlart.lingver.model.entity.ExerciseHistory;
 import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.rest.util.ResponseUtil;
@@ -23,8 +24,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("profile/translations")
@@ -37,6 +38,7 @@ public class ProfileTranslationController {
     public ProfileTranslationController(ModelMapper modelMapper, ProfileTranslationService profileTranslationService) {
         this.modelMapper = modelMapper;
         this.profileTranslationService = profileTranslationService;
+
     }
 
     @GetMapping
@@ -47,14 +49,22 @@ public class ProfileTranslationController {
         final List<ProfileTranslation> paginatedTranslations = translationsPage.getContent();
         final long totalFound = translationsPage.getTotalElements();
 
-        final List<ProfileTranslationDto> paginatedTranslationDtos = paginatedTranslations
-                .stream()
-                .map(tr -> modelMapper.map(tr, ProfileTranslationDto.class))
-                .collect(Collectors.toList());
+        final List<ProfileTranslationDto> profileTranslationDtos = new ArrayList<>();
+
+        paginatedTranslations.forEach(profileTranslation -> {
+            ProfileTranslationDto dto = modelMapper.map(profileTranslation, ProfileTranslationDto.class);
+            if (profileTranslation.getExerciseHistory().size() != 0) {
+                dto.setLastRepeatedDate(profileTranslation.getExerciseHistory().get(0).getDate());
+                dto.setNumberOfSuccessRepeating((int) profileTranslation.getExerciseHistory().stream().filter(ExerciseHistory::getResult).count());
+            }
+            profileTranslationDtos.add(dto);
+
+
+        });
 
         final PaginatedProfileTranslationsDto responseDto =
                 PaginatedProfileTranslationsDto.builder()
-                        .translations(paginatedTranslationDtos)
+                        .translations(profileTranslationDtos)
                         .total(totalFound)
                         .build();
         return ResponseEntity.ok().body(responseDto);

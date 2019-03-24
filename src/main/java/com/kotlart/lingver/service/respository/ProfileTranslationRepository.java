@@ -15,10 +15,7 @@ public interface ProfileTranslationRepository extends PagingAndSortingRepository
     @Query(
             value = "select pt from ProfileTranslation pt "
                     + "where pt.profile.id = ?1 "
-                    + "and (pt.translation.value like ?2% or pt.translation.word.value like ?2%)",
-            countQuery = "select count(pt) from ProfileTranslation pt "
-                         + "where pt.profile.id = ?1 and "
-                         + "(pt.translation.value like ?2% or pt.translation.word.value like ?2%)")
+                    + "and (pt.translation.value like ?2% or pt.translation.word.value like ?2%)")
     @EntityGraph(value = ProfileTranslation.ENTITY_GRAPH, type = EntityGraph.EntityGraphType.LOAD)
     Page<ProfileTranslation> findAllByProfileIdAndByWordValueOrTranslationValue(Long id, String search, Pageable pageable);
 

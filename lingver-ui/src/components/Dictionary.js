@@ -70,7 +70,7 @@ class Dictionary extends Component {
             <Grid container
                   justify="center"
                   spacing={40}>
-                <Grid item xs={10} lg={7}>
+                <Grid item xs={10} lg={8}>
                     {this.state.total === 0 && !this.state.params.search && !this.state.isLoading
                         ?
                         <Paper className={classes.noWordsMessage}>
@@ -80,6 +80,7 @@ class Dictionary extends Component {
                         </Paper>
                         :
                         <TranslationTable onQueryParamsChange={this.updateParams}
+                                          onReload={this.reload}
                                           onRemove={this.remove}
                                           params={this.state.params}
                                           selected={this.state.selected}

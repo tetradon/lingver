@@ -25,6 +25,7 @@ class ExerciseMenu extends Component {
 
     closeExerciseDialog = () => {
         this.setState({exerciseDialogIsOpen: false});
+        this.props.onQueryParamsChange();
     };
 
     handleWordTranslationClick = () => {
@@ -35,6 +36,15 @@ class ExerciseMenu extends Component {
             });
         this.setState({exerciseDialogIsOpen: true});
 
+    };
+
+    handleTranslationWordClick = () => {
+        this.handleTrainClose();
+        exerciseService.getTranslationWordExerciseSet(this.props.selected)
+            .then(response => {
+                this.setState({trainingSet: response.data});
+            });
+        this.setState({exerciseDialogIsOpen: true});
     };
 
 
@@ -72,8 +82,8 @@ class ExerciseMenu extends Component {
                         <MenuItem onClick={this.handleWordTranslationClick}>
                             Word - Translation
                         </MenuItem>
-                        <MenuItem onClick={this.handleTrainClose}>
-                            Translation - Translation
+                        <MenuItem onClick={this.handleTranslationWordClick}>
+                            Translation - Word
                         </MenuItem>
                     </Menu>
                 </div>
@@ -86,6 +96,7 @@ class ExerciseMenu extends Component {
 
 ExerciseMenu.propTypes = {
     hidden: PropTypes.bool,
-    selected: PropTypes.array
+    selected: PropTypes.array,
+    onQueryParamsChange: PropTypes.func
 };
 export default ExerciseMenu;

@@ -17,6 +17,7 @@ import CorrectIcon from "@material-ui/icons/Done";
 import IncorrectIcon from "@material-ui/icons/Clear";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import IconButton from "@material-ui/core/IconButton";
+import {exerciseService} from "../service/exerciseService";
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -59,7 +60,8 @@ class ExerciseDialog extends React.Component {
             currentIndex: 0,
             selectedAnswer: null,
             closeDialogIsOpen: false,
-            correctAnswersCount: 0
+            correctAnswersCount: 0,
+            results: []
         };
 
     }
@@ -79,12 +81,25 @@ class ExerciseDialog extends React.Component {
     };
 
     onNext = () => {
-        if (this.state.selectedAnswer.isCorrect) {
+        let {selectedAnswer, currentIndex, results} = this.state;
+        if (selectedAnswer.isCorrect) {
             this.setState({correctAnswersCount: this.state.correctAnswersCount + 1})
         }
-
+        results.push(
+            {
+                profileTranslationId: this.props.trainingSet[currentIndex].profileTranslationId,
+                answerCorrect: selectedAnswer.isCorrect,
+                exerciseId: this.props.trainingSet[currentIndex].exerciseId
+            }
+        );
+        this.props.trainingSet[currentIndex].isUserAnswerCorrect = selectedAnswer.isCorrect;
         this.setState({selectedAnswer: null});
-        this.setState({currentIndex: this.state.currentIndex + 1});
+        this.setState({currentIndex: this.state.currentIndex + 1}, () => {
+            if (this.isExerciseFinished()) {
+                exerciseService.saveResults(this.state.results)
+            }
+        });
+
     };
 
     openCloseDialog = () => {

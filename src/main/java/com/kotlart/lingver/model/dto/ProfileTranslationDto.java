@@ -13,4 +13,7 @@ public class ProfileTranslationDto {
     private Date insertDate;
     private String example;
     private String description;
+    @JsonFormat(pattern = "dd.MM.yyyy")
+    private Date lastRepeatedDate;
+    private int numberOfSuccessRepeating;
 }

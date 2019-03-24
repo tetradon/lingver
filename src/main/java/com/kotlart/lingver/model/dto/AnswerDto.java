@@ -1,4 +1,4 @@
-package com.kotlart.lingver.model;
+package com.kotlart.lingver.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Answer {
+public class AnswerDto {
     String value;
     Boolean isCorrect;
 }

@@ -36,7 +36,7 @@ public class Word extends AbstractEntity {
     private Long id;
     private String value;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date insertDate;
     private String insertedBy;
 

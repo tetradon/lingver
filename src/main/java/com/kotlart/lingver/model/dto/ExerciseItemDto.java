@@ -1,4 +1,4 @@
-package com.kotlart.lingver.model;
+package com.kotlart.lingver.model.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,8 +11,9 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExerciseItem {
+public class ExerciseItemDto {
     Long profileTranslationId;
     String question;
-    List<Answer> answers;
+    List<AnswerDto> answers;
+    Long exerciseId;
 }

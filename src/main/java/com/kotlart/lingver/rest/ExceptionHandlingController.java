@@ -1,5 +1,6 @@
 package com.kotlart.lingver.rest;
 
+import com.kotlart.lingver.exception.UniqueConstraintViolation;
 import com.kotlart.lingver.model.dto.MessageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,8 +15,8 @@ import java.util.Collections;
 public class ExceptionHandlingController extends ResponseEntityExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionHandlingController.class);
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity runtime(RuntimeException ex) {
+    @ExceptionHandler(UniqueConstraintViolation.class)
+    public ResponseEntity uniqueConstraint(UniqueConstraintViolation ex) {
         return ResponseEntity.badRequest().body(Collections.singletonList(new MessageDto(ex.getMessage())));
     }
 
