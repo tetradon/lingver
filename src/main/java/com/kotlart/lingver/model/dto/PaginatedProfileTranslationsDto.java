@@ -1,5 +1,6 @@
 package com.kotlart.lingver.model.dto;
 
+import com.kotlart.lingver.model.projection.ProfileTranslationProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaginatedProfileTranslationsDto {
-    List<ProfileTranslationDto> translations;
+    List<ProfileTranslationProjection> translations;
     long total;
 }
