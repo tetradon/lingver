@@ -18,7 +18,7 @@ public interface ProfileTranslationRepository extends PagingAndSortingRepository
                    + "       t.value                                                as translation, "
                    + "       w.value                                                as word, "
                    + "       pt.insert_date                                         as insertDate, "
-                   + "       count(case when eh.result = true then 1 ELSE NULL END) as numberOfSuccessRepeating, "
+                   + "       count(case when eh.result = true then 1 else null end) as numberOfSuccessRepeating, "
                    + "       max(eh.date)                                           as lastRepeatDate "
                    + "from profile_translation pt "
                    + "       join translation t on t.translation_pk = pt.translation_fk "
