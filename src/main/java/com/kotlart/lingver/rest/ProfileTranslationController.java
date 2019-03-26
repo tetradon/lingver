@@ -24,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -48,19 +47,6 @@ public class ProfileTranslationController {
                 .getTranslationsOfProfile(queryParameters, activeProfile);
         final List<ProfileTranslationProjection> paginatedTranslations = translationsPage.getContent();
         final long totalFound = translationsPage.getTotalElements();
-
-        final List<ProfileTranslationDto> profileTranslationDtos = new ArrayList<>();
-
-       /* paginatedTranslations.forEach(profileTranslation -> {
-            ProfileTranslationDto dto = modelMapper.map(profileTranslation, ProfileTranslationDto.class);
-            if (profileTranslation.getExerciseHistory().size() != 0) {
-                dto.setLastRepeatedDate(profileTranslation.getExerciseHistory().get(0).getDate());
-                dto.setNumberOfSuccessRepeating((int) profileTranslation.getExerciseHistory().stream().filter(ExerciseHistory::getResult).count());
-            }
-            profileTranslationDtos.add(dto);
-
-
-        });*/
 
         final PaginatedProfileTranslationsDto responseDto =
                 PaginatedProfileTranslationsDto.builder()

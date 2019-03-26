@@ -26,8 +26,8 @@ class TranslationTable extends Component {
             dialogIsOpen: false,
             selected: [],
             titles: [
-                {displayName: 'Word', path: 'w.value'},
-                {displayName: 'Translation', path: 't.value'},
+                {displayName: 'Word', path: 'word.value'},
+                {displayName: 'Translation', path: 'translation.value'},
                 {displayName: 'Insert Date', path: 'insert_date'},
                 {displayName: 'Last Repeat Date', path: 'lastRepeatDate'},
                 {displayName: 'Progress', path: 'numberOfSuccessRepeating'}
