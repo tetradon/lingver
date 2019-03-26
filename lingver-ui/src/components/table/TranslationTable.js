@@ -26,12 +26,11 @@ class TranslationTable extends Component {
             dialogIsOpen: false,
             selected: [],
             titles: [
-                {displayName: 'Word', path: 'translation.word.value'},
-                {displayName: 'Translation', path: 'translation.value'},
+                {displayName: 'Word', path: 'word'},
+                {displayName: 'Translation', path: 'translation'},
                 {displayName: 'Insert Date', path: 'insertDate'},
-                {displayName: 'Last Repeat Date', path: ''},
-                {displayName: 'Progress', path: ''}
-
+                {displayName: 'Last Repeat Date', path: 'lastRepeatDate'},
+                {displayName: 'Progress', path: 'numberOfSuccessRepeating'}
             ],
         };
     }
@@ -57,7 +56,7 @@ class TranslationTable extends Component {
         const {translations} = this.props;
         if (event.target.checked) {
             //filter ids that already were selected
-            let translationsToAdd = translations.map(translation => translation.id)
+            let translationsToAdd = translations.map(profileTranslation => profileTranslation.id)
                 .filter(id => !selected.includes(id));
             this.setState({selected: selected.concat(translationsToAdd)});
         } else {
@@ -172,12 +171,10 @@ class TranslationTable extends Component {
                                                       onClick={event => this.handleCheckboxClick(event, row.id)}
                                                       checked={isSelected}/>
                                         </TableCell>
-                                        <TableCell>
-                                            {row.translation.word.value}
-                                        </TableCell>
-                                        <TableCell>{row.translation.value}</TableCell>
+                                        <TableCell>{row.word}</TableCell>
+                                        <TableCell>{row.translation}</TableCell>
                                         <TableCell>{row.insertDate}</TableCell>
-                                        <TableCell>{row.lastRepeatedDate}</TableCell>
+                                        <TableCell>{row.lastRepeatDate}</TableCell>
                                         <TableCell>{row.numberOfSuccessRepeating}</TableCell>
                                     </TableRow>
                                 );

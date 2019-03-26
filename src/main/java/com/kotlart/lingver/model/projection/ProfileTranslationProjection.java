@@ -18,19 +18,15 @@ public interface ProfileTranslationProjection {
     private Date lastRepeatedDate;
     private int numberOfSuccessRepeating;*/
 
-    public Long getId();
+    Long getId();
 
-    public Long getTranslationId();
+    String getTranslation();
 
-    public String getTranslation();
-
-    public Long getWordId();
-
-    public String getWord();
+    String getWord();
     @JsonFormat(pattern = "dd.MM.yyyy")
-    public Date getInsertDate();
+    Date getInsertDate();
     @JsonFormat(pattern = "dd.MM.yyyy")
-    public Date getLastRepeatedDate();
+    Date getLastRepeatDate();
 
-    public int getNumberOfSuccessRepeating();
+    int getNumberOfSuccessRepeating();
 }

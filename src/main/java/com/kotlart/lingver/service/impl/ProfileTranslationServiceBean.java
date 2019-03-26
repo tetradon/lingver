@@ -51,7 +51,7 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
         Pageable pageable = PageRequest.of(
                 queryParameters.getPage(),
                 queryParameters.getSize(),
-                JpaSort.unsafe(queryParameters.getSortDirection(), "("+queryParameters.getSortField()+")"));
+                JpaSort.unsafe(queryParameters.getSortDirection(), "(" + queryParameters.getSortField() + ")"));
 
         return profileTranslationRepository
                 .findAllByProfileIdAndByWordValueOrTranslationValue(

@@ -13,39 +13,29 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 public interface ProfileTranslationRepository extends PagingAndSortingRepository<ProfileTranslation, Long> {
-//    @Query(
-//            value = "select pt from ProfileTranslation pt "
-//                    + "where pt.profile.id = ?1 "
-//                    + "and (pt.translation.value like ?2% or pt.translation.word.value like ?2%)")
-//    @EntityGraph(value = ProfileTranslation.ENTITY_GRAPH, type = EntityGraph.EntityGraphType.LOAD)
-//    Page<ProfileTranslation> findAllByProfileIdAndByWordValueOrTranslationValue(Long id, String search, Pageable pageable);
 
+    @Query(value = "select pt.profile_translation_pk                                as id, "
+                   + "       t.value                                                as translation, "
+                   + "       w.value                                                as word, "
+                   + "       pt.insert_date                                         as insertDate, "
+                   + "       count(case when eh.result = true then 1 ELSE NULL END) as numberOfSuccessRepeating, "
+                   + "       max(eh.date)                                           as lastRepeatDate "
+                   + "from profile_translation pt "
+                   + "       join translation t on t.translation_pk = pt.translation_fk "
+                   + "       join word w on t.word_fk = w.word_pk "
+                   + "       left join exercise_history eh on pt.profile_translation_pk = eh.profile_translation_fk "
+                   + "where pt.profile_fk = ?1 "
+                   + "and (t.value like concat(?1,'%') or w.value like concat(?2,'%'))"
+                   + "group by id, translation, word "
+                   + "order by ?#{#pageble}",
 
-        @Query(value = "select pt.profile_translation_pk                                as id, "
-                       + "       t.value                                                as translation, "
-                       + "       t.translation_pk                                       as translationId, "
-                       + "       w.value                                                as word, "
-                       + "       w.word_pk                                              as wordId, "
-                       + "       pt.insert_date                                         as insertDate, "
-                       + "       count(case when eh.result = true then 1 ELSE NULL END) as numberOfSuccessRepeating, "
-                       + "       max(eh.date)                                           as lastRepeatedDate "
-                       + "from profile_translation pt "
-                       + "       join translation t on t.translation_pk = pt.translation_fk "
-                       + "       join word w on t.word_fk = w.word_pk "
-                       + "       left join exercise_history eh on pt.profile_translation_pk = eh.profile_translation_fk "
-                       + "where pt.profile_fk = ?1 "
-                       + "and (t.value like concat(?1,'%') or w.value like concat(?2,'%'))"
-                       + "group by id, translationId, wordId "
-                       + "order by ?#{#pageable}",
-
-                countQuery = "select count(pt.profile_translation_pk) from profile_translation pt "
-                             + "       join translation t on t.translation_pk = pt.translation_fk "
-                             + "       join word w on t.word_fk = w.word_pk "
-                             + "where pt.profile_fk = ?1 and "
-                             + "(t.value like concat(?1,'%') or w.value like concat(?2,'%'))",
-                nativeQuery = true)
-
-        Page<ProfileTranslationProjection> findAllByProfileIdAndByWordValueOrTranslationValue(Long id, String search, Pageable pageable);
+            countQuery = "select count(pt.profile_translation_pk) from profile_translation pt "
+                         + "       join translation t on t.translation_pk = pt.translation_fk "
+                         + "       join word w on t.word_fk = w.word_pk "
+                         + "where pt.profile_fk = ?1 and  "
+                         + "(t.value like concat(?1,'%') or w.value like concat(?2,'%'))",
+            nativeQuery = true)
+    Page<ProfileTranslationProjection> findAllByProfileIdAndByWordValueOrTranslationValue(Long id, String search, Pageable pageable);
 
     @Transactional
     @Modifying
