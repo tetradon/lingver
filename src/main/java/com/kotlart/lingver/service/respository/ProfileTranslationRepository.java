@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface ProfileTranslationRepository extends PagingAndSortingRepository<ProfileTranslation, Long> {
 
-    @Query(value = "select pt.profile_translation_pk                                as id, "
+    @Query(value = "select   pt.profile_translation_pk                              as id, "
                    + "       t.value                                                as translation, "
                    + "       w.value                                                as word, "
                    + "       pt.insert_date                                         as insertDate, "
@@ -25,15 +25,15 @@ public interface ProfileTranslationRepository extends PagingAndSortingRepository
                    + "       join word w on t.word_fk = w.word_pk "
                    + "       left join exercise_history eh on pt.profile_translation_pk = eh.profile_translation_fk "
                    + "where pt.profile_fk = ?1 "
-                   + "and (t.value like concat(?1,'%') or w.value like concat(?2,'%'))"
-                   + "group by id, translation, word "
-                   + "order by ?#{#pageble}",
+                   + "and (t.value like concat(?2,'%') or w.value like concat(?2,'%')) "
+                   + "group by id, translation, word",
+
 
             countQuery = "select count(pt.profile_translation_pk) from profile_translation pt "
                          + "       join translation t on t.translation_pk = pt.translation_fk "
                          + "       join word w on t.word_fk = w.word_pk "
                          + "where pt.profile_fk = ?1 and  "
-                         + "(t.value like concat(?1,'%') or w.value like concat(?2,'%'))",
+                         + "(t.value like concat(?2,'%') or w.value like concat(?2,'%'))",
             nativeQuery = true)
     Page<ProfileTranslationProjection> findAllByProfileIdAndByWordValueOrTranslationValue(Long id, String search, Pageable pageable);
 

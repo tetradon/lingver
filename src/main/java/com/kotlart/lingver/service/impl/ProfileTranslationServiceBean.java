@@ -14,7 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.JpaSort;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -51,7 +51,8 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
         Pageable pageable = PageRequest.of(
                 queryParameters.getPage(),
                 queryParameters.getSize(),
-                JpaSort.unsafe(queryParameters.getSortDirection(), "(" + queryParameters.getSortField() + ")"));
+                //JpaSort.unsafe(queryParameters.getSortDirection(), "(" + queryParameters.getSortField() + ")"));
+                Sort.by(queryParameters.getSortDirection(), queryParameters.getSortField()));
 
         return profileTranslationRepository
                 .findAllByProfileIdAndByWordValueOrTranslationValue(

@@ -26,7 +26,7 @@ class Dictionary extends Component {
             translations: [],
             total: 0,
             params: {
-                sortField: 'insertDate',
+                sortField: 'insert_date',
                 sortDirection: 'desc',
                 page: 0,
                 size: 10,
