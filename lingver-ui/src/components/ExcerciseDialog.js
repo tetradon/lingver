@@ -111,7 +111,7 @@ class ExerciseDialog extends React.Component {
     };
 
     isExerciseFinished = () => {
-        return this.state.currentIndex === this.props.trainingSet.length;
+        return this.state.currentIndex === this.props.trainingSet.length && this.state.current !== 0;
     };
 
 
