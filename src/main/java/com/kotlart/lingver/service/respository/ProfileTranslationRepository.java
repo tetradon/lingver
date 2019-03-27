@@ -14,7 +14,7 @@ import java.util.List;
 
 public interface ProfileTranslationRepository extends PagingAndSortingRepository<ProfileTranslation, Long> {
 
-    @Query(value = "select   pt.profile_translation_pk                              as id, "
+    @Query(value = "select pt.profile_translation_pk                              as id, "
                    + "       t.value                                                as translation, "
                    + "       w.value                                                as word, "
                    + "       pt.insert_date                                         as insertDate, "
