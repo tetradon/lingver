@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import Home from './Home';
 import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
 import Dictionary from './Dictionary';
 import LingverNavbar from "./LingverNavbar";
@@ -31,7 +30,7 @@ class App extends Component {
             <React.Fragment>
                 <LingverNavbar/>
                 <Switch>
-                    <ProtectedRoute exact path='/' component={Home}/>
+                    <ProtectedRoute exact path='/' component={Dictionary}/>
                     <ProtectedRoute path='/dictionary' component={Dictionary}/>
                     <ProtectedRoute path='/404' component={NotFound}/>
                     <Route path='/register' component={Register}/>
