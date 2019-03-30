@@ -9,8 +9,6 @@ import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -29,11 +27,8 @@ public class Role extends AbstractEntity implements GrantedAuthority {
 
     @Id
     @Column(name = TABLE_NAME + PK_SUFFIX)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "name")
     private String authority;
-
-
 }

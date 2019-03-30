@@ -31,7 +31,7 @@ public class ProfileServiceBeanTest {
     @Before
     public void before() {
         sut = new ProfileServiceBean(profileRepository, roleRepository, new BCryptPasswordEncoder());
-        roleRepository.save(Role.builder().authority(Role.USER).build());
+        roleRepository.save(Role.builder().id(1L).authority(Role.USER).build());
     }
 
     @Test
@@ -55,13 +55,13 @@ public class ProfileServiceBeanTest {
 
     @Test
     public void test_loadUserByUsername() {
+        Role role = roleRepository.findByAuthority(Role.USER);
         String usernameOfProfileToLoad = "test";
         Profile profile = Profile.builder()
                 .username(usernameOfProfileToLoad)
                 .email("test")
                 .password("test")
-                .authorities(Collections.singletonList(Role.builder().authority(Role.USER).build()))
-                .build();
+                .authorities(Collections.singletonList(role)).build();
         profileRepository.save(profile);
 
         Assert.assertNotNull(sut.loadUserByUsername(usernameOfProfileToLoad));

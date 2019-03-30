@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -47,6 +48,8 @@ public class ProfileTranslationController {
                 .getTranslationsOfProfile(queryParameters, activeProfile);
         final List<ProfileTranslationProjection> paginatedTranslations = translationsPage.getContent();
         final long totalFound = translationsPage.getTotalElements();
+
+        final List<ProfileTranslationDto> profileTranslationDtos = new ArrayList<>();
 
         final PaginatedProfileTranslationsDto responseDto =
                 PaginatedProfileTranslationsDto.builder()

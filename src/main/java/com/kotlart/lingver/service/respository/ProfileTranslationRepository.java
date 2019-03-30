@@ -14,19 +14,19 @@ import java.util.List;
 
 public interface ProfileTranslationRepository extends PagingAndSortingRepository<ProfileTranslation, Long> {
 
-    @Query(value = "select   pt.profile_translation_pk                                            as id, "
-                   + "       translation.value                                                    as translation, "
-                   + "       word.value                                                           as word, "
-                   + "       pt.insert_date                                                       as insertDate, "
-                   + "       count(case when exercise_history.result = true then 1 else null end) as numberOfSuccessRepeating, "
-                   + "       max(exercise_history.date)                                           as lastRepeatDate "
+    @Query(value = "select pt.profile_translation_pk                              as id, "
+                   + "       t.value                                                as translation, "
+                   + "       w.value                                                as word, "
+                   + "       pt.insert_date                                         as insertDate, "
+                   + "       count(case when eh.result = true then 1 else null end) as numberOfSuccessRepeating, "
+                   + "       max(eh.date)                                           as lastRepeatDate "
                    + "from profile_translation pt "
-                   + "       join translation translation on translation.translation_pk = pt.translation_fk "
-                   + "       join word word on translation.word_fk = word.word_pk "
-                   + "       left join exercise_history on pt.profile_translation_pk = exercise_history.profile_translation_fk "
+                   + "       join translation t on t.translation_pk = pt.translation_fk "
+                   + "       join word w on t.word_fk = w.word_pk "
+                   + "       left join exercise_history eh on pt.profile_translation_pk = eh.profile_translation_fk "
                    + "where pt.profile_fk = ?1 "
-                   + "and (translation.value like concat(?2,'%') or word.value like concat(?2,'%')) "
-                   + "group by id, translation.value,  word.value",
+                   + "and (t.value like concat(?2,'%') or w.value like concat(?2,'%')) "
+                   + "group by id, translation, word",
 
 
             countQuery = "select count(pt.profile_translation_pk) from profile_translation pt "

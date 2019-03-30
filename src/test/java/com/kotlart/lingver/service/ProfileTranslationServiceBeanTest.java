@@ -6,9 +6,11 @@ import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.entity.Role;
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
+import com.kotlart.lingver.model.projection.ProfileTranslationProjection;
 import com.kotlart.lingver.service.impl.ProfileTranslationServiceBean;
 import com.kotlart.lingver.service.respository.ProfileRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
+import com.kotlart.lingver.service.respository.RoleRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.service.respository.WordRepository;
 import org.junit.Assert;
@@ -41,13 +43,16 @@ public class ProfileTranslationServiceBeanTest {
     @Autowired
     private ProfileRepository profileRepository;
 
+    @Autowired
+    private RoleRepository roleRepository;
+
     private ProfileTranslationServiceBean sut;
 
     private Profile profile;
 
     @Before
     public void before() {
-        final Role role = Role.builder().authority(Role.USER).build();
+        final Role role = roleRepository.save(Role.builder().id(1L).authority(Role.USER).build());
         profile = profileRepository.save(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
         sut = new ProfileTranslationServiceBean(profileTranslationRepository, translationRepository);
     }
@@ -60,9 +65,9 @@ public class ProfileTranslationServiceBeanTest {
         Translation translation = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
         profileTranslationRepository.save(ProfileTranslation.builder().profile(profile).translation(translation).build());
 
-        final Page<ProfileTranslation> translationsOfActiveProfile = sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile);
+        final Page<ProfileTranslationProjection> translationsOfActiveProfile = sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile);
         Assert.assertEquals(1, translationsOfActiveProfile.getTotalElements());
-        Assert.assertEquals(translation, translationsOfActiveProfile.getContent().get(0).getTranslation());
+        Assert.assertEquals(TRANSLATION_VALUE, translationsOfActiveProfile.getContent().get(0).getTranslation());
     }
 
     @Test
