@@ -7,6 +7,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import TrainIcon from "@material-ui/icons/FitnessCenterTwoTone";
 import {exerciseService} from "../../service/exerciseService"
 import ExerciseDialog from "../ExcerciseDialog";
+import {withSnackbar} from "notistack";
 
 class ExerciseMenu extends Component {
     state = {
@@ -33,9 +34,13 @@ class ExerciseMenu extends Component {
         exerciseService.getWordTranslationExerciseSet(this.props.selected)
             .then(response => {
                 this.setState({trainingSet: response.data});
+                this.setState({exerciseDialogIsOpen: true});
+            })
+            .catch((error) => {
+                error.response.data.forEach((error) => {
+                    this.props.enqueueSnackbar(error.message);
+                });
             });
-        this.setState({exerciseDialogIsOpen: true});
-
     };
 
     handleTranslationWordClick = () => {
@@ -43,8 +48,14 @@ class ExerciseMenu extends Component {
         exerciseService.getTranslationWordExerciseSet(this.props.selected)
             .then(response => {
                 this.setState({trainingSet: response.data});
+                this.setState({exerciseDialogIsOpen: true});
+            })
+            .catch((error) => {
+                error.response.data.forEach((error) => {
+                    this.props.enqueueSnackbar(error.message);
+                });
             });
-        this.setState({exerciseDialogIsOpen: true});
+
     };
 
 
@@ -99,4 +110,4 @@ ExerciseMenu.propTypes = {
     selected: PropTypes.array,
     onQueryParamsChange: PropTypes.func
 };
-export default ExerciseMenu;
+export default withSnackbar(ExerciseMenu);

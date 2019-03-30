@@ -54,7 +54,7 @@ public class ProfileTranslationServiceBeanTest {
     public void before() {
         final Role role = roleRepository.save(Role.builder().id(1L).authority(Role.USER).build());
         profile = profileRepository.save(Profile.builder().username("test").email("test").password("test").authorities(Collections.singletonList(role)).build());
-        sut = new ProfileTranslationServiceBean(profileTranslationRepository, translationRepository);
+        sut = new ProfileTranslationServiceBean(profileTranslationRepository, translationRepository, exerciseHistoryRepository);
     }
 
     @Test

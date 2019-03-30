@@ -159,7 +159,7 @@ class TranslationTable extends Component {
                                     ))}
                             </TableRow>
                         </TableHead>
-                        <TableBody>{
+                        <TableBody stripedRows>{
                             translations.map(row => {
                                 const isSelected = this.isSelected(row.id);
                                 return (

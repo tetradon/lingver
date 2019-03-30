@@ -1,6 +1,5 @@
-package com.kotlart.lingver.rest;
+package com.kotlart.lingver.exception;
 
-import com.kotlart.lingver.exception.UniqueConstraintViolation;
 import com.kotlart.lingver.model.dto.MessageDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,11 +11,11 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import java.util.Collections;
 
 @ControllerAdvice
-public class ExceptionHandlingController extends ResponseEntityExceptionHandler {
-    private static final Logger LOG = LoggerFactory.getLogger(ExceptionHandlingController.class);
+public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
+    private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
-    @ExceptionHandler(UniqueConstraintViolation.class)
-    public ResponseEntity uniqueConstraint(UniqueConstraintViolation ex) {
+    @ExceptionHandler({UniqueConstraintViolation.class, NotUniqueExcerciseQuestionExeption.class})
+    public ResponseEntity uniqueConstraint(RuntimeException ex) {
         return ResponseEntity.badRequest().body(Collections.singletonList(new MessageDto(ex.getMessage())));
     }
 

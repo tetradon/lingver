@@ -60,7 +60,7 @@ public class ProfileTranslation extends AbstractEntity {
     @NotNull
     private Profile profile;
 
-    @OneToMany(mappedBy = "profileTranslation")
+    @OneToMany(mappedBy = "profileTranslation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExerciseHistory> exerciseHistory;
 
     @PrePersist

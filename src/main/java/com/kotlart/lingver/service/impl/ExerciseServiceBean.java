@@ -1,5 +1,6 @@
 package com.kotlart.lingver.service.impl;
 
+import com.kotlart.lingver.exception.NotUniqueExcerciseQuestionExeption;
 import com.kotlart.lingver.model.dto.AnswerDto;
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
@@ -42,6 +43,15 @@ public class ExerciseServiceBean implements ExerciseService {
         final List<ExerciseItemDto> result = new ArrayList<>();
         final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(translationIds);
 
+
+        final List<String> words = profileTranslations
+                .stream()
+                .map(profileTranslation -> profileTranslation.getTranslation().getWord().getValue())
+                .collect(Collectors.toList());
+        if(CollectionUtil.hasDuplicate(words)) {
+            throw new NotUniqueExcerciseQuestionExeption("Only unique words can be present in one exercise");
+        }
+
         Exercise exercise = exerciseRepository.findByName(Exercise.Name.WORD_TRANSLATION);
         final Set<String> translations = profileTranslations
                 .stream()
@@ -61,10 +71,19 @@ public class ExerciseServiceBean implements ExerciseService {
         return result;
     }
 
+
     @Override
     public List<ExerciseItemDto> generateTranslationWordTrainingSet(List<Long> translationIds) {
         final List<ExerciseItemDto> result = new ArrayList<>();
         final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(translationIds);
+
+        final List<String> translations = profileTranslations
+                .stream()
+                .map(profileTranslation -> profileTranslation.getTranslation().getValue())
+                .collect(Collectors.toList());
+        if(CollectionUtil.hasDuplicate(translations)) {
+            throw new NotUniqueExcerciseQuestionExeption("Only unique translations can be present in one exercise");
+        }
 
         Exercise exercise = exerciseRepository.findByName(Exercise.Name.TRANSLATION_WORD);
         final Set<String> words = profileTranslations
@@ -124,4 +143,6 @@ public class ExerciseServiceBean implements ExerciseService {
         );
         return result;
     }
+
+
 }

@@ -14,5 +14,5 @@ public interface ProfileTranslationService {
 
     Page<ProfileTranslationProjection> getTranslationsOfProfile(QueryParameters queryParameters, Profile profile);
 
-    int removeTranslationsFromProfile(List<Long> id, Profile profile);
+    int removeTranslationsFromProfile(List<Long> id);
 }

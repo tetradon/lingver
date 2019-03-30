@@ -46,4 +46,5 @@ public class ExerciseController {
         exerciseService.saveResults(results);
         return ResponseEntity.ok().build();
     }
+    
 }

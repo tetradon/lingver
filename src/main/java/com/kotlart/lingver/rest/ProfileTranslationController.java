@@ -70,9 +70,8 @@ public class ProfileTranslationController {
     }
 
     @DeleteMapping
-    ResponseEntity removeTranslationsFromProfile(@RequestBody IdListDto dto) {
-        Profile activeProfile = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final int removed = profileTranslationService.removeTranslationsFromProfile(dto.getIds(), activeProfile);
+    ResponseEntity removeTranslationsFromProfile(@RequestBody IdListDto profileTranslationIds) {
+        final int removed = profileTranslationService.removeTranslationsFromProfile(profileTranslationIds.getIds());
         return ResponseEntity.ok().body(removed);
     }
 }

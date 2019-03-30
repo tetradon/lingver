@@ -6,6 +6,7 @@ import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.projection.ProfileTranslationProjection;
 import com.kotlart.lingver.service.ProfileTranslationService;
+import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
 import com.kotlart.lingver.util.ExceptionUtil;
@@ -24,12 +25,14 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
 
     private final ProfileTranslationRepository profileTranslationRepository;
     private final TranslationRepository translationRepository;
+    private final ExerciseHistoryRepository exerciseHistoryRepository;
 
     @Autowired
     public ProfileTranslationServiceBean(ProfileTranslationRepository profileTranslationRepository,
-                                         TranslationRepository translationRepository) {
+                                         TranslationRepository translationRepository, ExerciseHistoryRepository exerciseHistoryRepository) {
         this.profileTranslationRepository = profileTranslationRepository;
         this.translationRepository = translationRepository;
+        this.exerciseHistoryRepository = exerciseHistoryRepository;
     }
 
     @Override
@@ -61,7 +64,8 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public int removeTranslationsFromProfile(List<Long> ids, Profile profile) {
+    public int removeTranslationsFromProfile(List<Long> ids) {
+        exerciseHistoryRepository.deleteByProfileTranslationIds(ids);
         return profileTranslationRepository.deleteAllByIds(ids);
     }
 }

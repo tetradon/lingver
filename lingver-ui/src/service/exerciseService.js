@@ -15,7 +15,6 @@ function getTranslationWordExerciseSet(translationIds) {
 }
 
 function saveResults(results) {
-    console.log(results);
     return axios.post('/exercise/result',
         results
     );
