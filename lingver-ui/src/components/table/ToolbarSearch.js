@@ -54,13 +54,25 @@ class ToolbarSearch extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            search: ''
+            search: '',
+            typing: false,
+            typingTimeout: 0,
         }
     }
 
     handleSearchChange = (event) => {
-        this.setState({search: event.target.value});
-        this.props.onQueryParamsChange({search: event.target.value});
+
+        if (this.state.typingTimeout) {
+            clearTimeout(this.state.typingTimeout);
+        }
+
+        this.setState({
+            search: event.target.value,
+            typing: false,
+            typingTimeout: setTimeout(() => {
+                this.props.onQueryParamsChange({search: this.state.search});
+            }, 100)
+        });
     };
 
     render() {
