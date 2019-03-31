@@ -30,17 +30,6 @@ class LingverNavbar extends Component {
                     Lingver
                 </Typography>
                 <div style={styles.grow}/>
-                {
-                    userService.getActiveUser() && (
-                        <Button component={Link}
-                                to="/dictionary"
-                                color="inherit"
-                                style={styles.link}
-                        >
-                            Dictionary
-                        </Button>
-                    )
-                }
                 <Button
                     color="inherit"
                     style={styles.link}

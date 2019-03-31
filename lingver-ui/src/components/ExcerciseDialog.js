@@ -180,7 +180,7 @@ class ExerciseDialog extends React.Component {
                     disableEscapeKeyDown
                 >
                     <MuiDialogTitle disableTypography className={classes.dialogTitle}>
-                        <Typography variant="h6">Word-Translation</Typography>
+                        <Typography variant="h6">{this.props.exerciseName}</Typography>
                         <IconButton className={classes.closeButton}
                                     onClick={this.isExerciseFinished() ? this.props.onClose : this.openCloseDialog}>
                             <CloseIcon/>
@@ -237,6 +237,7 @@ class ExerciseDialog extends React.Component {
 ExerciseDialog.propTypes = {
     trainingSet: PropTypes.array,
     onClose: PropTypes.func,
+    exerciseName: PropTypes.string
 
 };
 export default withStyles(styles)(ExerciseDialog);

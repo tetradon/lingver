@@ -13,7 +13,8 @@ class ExerciseMenu extends Component {
     state = {
         trainMenuAnchor: null,
         exerciseDialogIsOpen: false,
-        trainingSet: []
+        trainingSet: [],
+        exerciseName: ''
     };
 
     handleTrainClick = event => {
@@ -34,6 +35,7 @@ class ExerciseMenu extends Component {
         exerciseService.getWordTranslationExerciseSet(this.props.selected)
             .then(response => {
                 this.setState({trainingSet: response.data});
+                this.setState({exerciseName: "Word - Translation"});
                 this.setState({exerciseDialogIsOpen: true});
             })
             .catch((error) => {
@@ -48,6 +50,7 @@ class ExerciseMenu extends Component {
         exerciseService.getTranslationWordExerciseSet(this.props.selected)
             .then(response => {
                 this.setState({trainingSet: response.data});
+                this.setState({exerciseName: "Translation - Word"});
                 this.setState({exerciseDialogIsOpen: true});
             })
             .catch((error) => {
@@ -71,7 +74,9 @@ class ExerciseMenu extends Component {
                             ?
                             <ExerciseDialog
                                 onClose={this.closeExerciseDialog}
-                                trainingSet={this.state.trainingSet}/>
+                                trainingSet={this.state.trainingSet}
+                                exerciseName={this.state.exerciseName}
+                            />
                             : null
                     }
 
