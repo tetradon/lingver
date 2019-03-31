@@ -26,9 +26,9 @@ class TranslationTable extends Component {
             dialogIsOpen: false,
             selected: [],
             titles: [
-                {displayName: 'Word', path: 'word.value'},
-                {displayName: 'Translation', path: 'translation.value'},
-                {displayName: 'Insert Date', path: 'insert_date'},
+                {displayName: 'Word', path: 'word'},
+                {displayName: 'Translation', path: 'translation'},
+                {displayName: 'Insert Date', path: 'insertDate'},
                 {displayName: 'Last Repeat Date', path: 'lastRepeatDate'},
                 {displayName: 'Progress', path: 'numberOfSuccessRepeating'}
             ],
@@ -108,6 +108,10 @@ class TranslationTable extends Component {
         this.closeDialog();
     };
 
+    getYearFromString = (date) => {
+        return parseInt(date.split('.')[2]);
+    };
+
     render() {
         const {translations} = this.props;
         return (
@@ -174,7 +178,7 @@ class TranslationTable extends Component {
                                         <TableCell>{row.word}</TableCell>
                                         <TableCell>{row.translation}</TableCell>
                                         <TableCell>{row.insertDate}</TableCell>
-                                        <TableCell>{row.lastRepeatDate}</TableCell>
+                                        <TableCell>{this.getYearFromString(row.lastRepeatDate) < 2000 ? null : row.lastRepeatDate}</TableCell>
                                         <TableCell>{row.numberOfSuccessRepeating}</TableCell>
                                     </TableRow>
                                 );
