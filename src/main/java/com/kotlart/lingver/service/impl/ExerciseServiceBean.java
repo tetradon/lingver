@@ -19,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ExerciseServiceBean implements ExerciseService {
@@ -43,20 +44,13 @@ public class ExerciseServiceBean implements ExerciseService {
         final List<ExerciseItemDto> result = new ArrayList<>();
         final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(translationIds);
 
-
-        final List<String> words = profileTranslations
-                .stream()
-                .map(profileTranslation -> profileTranslation.getTranslation().getWord().getValue())
-                .collect(Collectors.toList());
-        if(CollectionUtil.hasDuplicate(words)) {
+        final List<String> words = getWordValuesStream(profileTranslations).collect(Collectors.toList());
+        if (CollectionUtil.hasDuplicate(words)) {
             throw new NotUniqueExcerciseQuestionExeption("Only unique words can be present in one exercise");
         }
 
         Exercise exercise = exerciseRepository.findByName(Exercise.Name.WORD_TRANSLATION);
-        final Set<String> translations = profileTranslations
-                .stream()
-                .map(profileTranslation -> profileTranslation.getTranslation().getValue())
-                .collect(Collectors.toSet());
+        final Set<String> translations = getTranslationValuesStream(profileTranslations).collect(Collectors.toSet());
 
         profileTranslations.forEach(profileTranslation -> {
                     ExerciseItemDto exerciseItem = ExerciseItemDto.builder()
@@ -77,19 +71,13 @@ public class ExerciseServiceBean implements ExerciseService {
         final List<ExerciseItemDto> result = new ArrayList<>();
         final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(translationIds);
 
-        final List<String> translations = profileTranslations
-                .stream()
-                .map(profileTranslation -> profileTranslation.getTranslation().getValue())
-                .collect(Collectors.toList());
-        if(CollectionUtil.hasDuplicate(translations)) {
+        final List<String> translations = getTranslationValuesStream(profileTranslations).collect(Collectors.toList());
+        if (CollectionUtil.hasDuplicate(translations)) {
             throw new NotUniqueExcerciseQuestionExeption("Only unique translations can be present in one exercise");
         }
 
         Exercise exercise = exerciseRepository.findByName(Exercise.Name.TRANSLATION_WORD);
-        final Set<String> words = profileTranslations
-                .stream()
-                .map(profileTranslation -> profileTranslation.getTranslation().getWord().getValue())
-                .collect(Collectors.toSet());
+        final Set<String> words = getWordValuesStream(profileTranslations).collect(Collectors.toSet());
 
         profileTranslations.forEach(profileTranslation -> {
             ExerciseItemDto exerciseItem = ExerciseItemDto.builder()
@@ -112,6 +100,17 @@ public class ExerciseServiceBean implements ExerciseService {
         }
     }
 
+    private Stream<String> getWordValuesStream(List<ProfileTranslation> profileTranslations) {
+        return profileTranslations
+                .stream()
+                .map(profileTranslation -> profileTranslation.getTranslation().getWord().getValue());
+    }
+
+    private Stream<String> getTranslationValuesStream(List<ProfileTranslation> profileTranslations) {
+        return profileTranslations
+                .stream()
+                .map(profileTranslation -> profileTranslation.getTranslation().getValue());
+    }
 
     private List<AnswerDto> generateResponseVariants(Set<String> allTranslationValues, String correct) {
         List<String> incorrectAnswerList = CollectionUtil.createListFromCollectionWithoutElement(allTranslationValues, correct);

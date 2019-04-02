@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 public class QueryParameters {
     private int size = 10;
     private int page = 0;
-    private String sortField = "insert_date";
+    private String sortField = "insertDate";
     private Sort.Direction sortDirection = Sort.Direction.ASC;
     private String search = "";
 }

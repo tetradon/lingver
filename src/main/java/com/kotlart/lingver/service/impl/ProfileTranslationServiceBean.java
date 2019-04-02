@@ -64,7 +64,7 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public int removeTranslationsFromProfile(List<Long> ids) {
+    public int removeProfileTranslations(List<Long> ids) {
         exerciseHistoryRepository.deleteByProfileTranslationIds(ids);
         return profileTranslationRepository.deleteAllByIds(ids);
     }

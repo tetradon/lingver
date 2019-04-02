@@ -8,6 +8,7 @@ import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
 import com.kotlart.lingver.model.projection.ProfileTranslationProjection;
 import com.kotlart.lingver.service.impl.ProfileTranslationServiceBean;
+import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
 import com.kotlart.lingver.service.respository.ProfileRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.RoleRepository;
@@ -46,6 +47,9 @@ public class ProfileTranslationServiceBeanTest {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private ExerciseHistoryRepository exerciseHistoryRepository;
+
     private ProfileTranslationServiceBean sut;
 
     private Profile profile;
@@ -77,7 +81,7 @@ public class ProfileTranslationServiceBeanTest {
 
         final ProfileTranslation profileTranslation = profileTranslationRepository.save(ProfileTranslation.builder().profile(profile).translation(translation).build());
         Assert.assertEquals(1, sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile).getTotalElements());
-        Assert.assertEquals(1, sut.removeTranslationsFromProfile(Collections.singletonList(profileTranslation.getId()), profile));
+        Assert.assertEquals(1, sut.removeProfileTranslations(Collections.singletonList(profileTranslation.getId())));
         Assert.assertEquals(0, sut.getTranslationsOfProfile(QUERY_PARAMETERS, profile).getTotalElements());
     }
 

@@ -71,7 +71,7 @@ public class ProfileTranslationController {
 
     @DeleteMapping
     ResponseEntity removeTranslationsFromProfile(@RequestBody IdListDto profileTranslationIds) {
-        final int removed = profileTranslationService.removeTranslationsFromProfile(profileTranslationIds.getIds());
+        final int removed = profileTranslationService.removeProfileTranslations(profileTranslationIds.getIds());
         return ResponseEntity.ok().body(removed);
     }
 }
