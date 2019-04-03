@@ -40,9 +40,9 @@ public class ExerciseServiceBean implements ExerciseService {
 
 
     @Override
-    public List<ExerciseItemDto> generateWordTranslationTrainingSet(List<Long> translationIds) {
+    public List<ExerciseItemDto> generateWordTranslationTrainingSet(List<Long> profileTranslationIds) {
         final List<ExerciseItemDto> result = new ArrayList<>();
-        final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(translationIds);
+        final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(profileTranslationIds);
 
         final List<String> words = getWordValuesStream(profileTranslations).collect(Collectors.toList());
         if (CollectionUtil.hasDuplicate(words)) {
@@ -67,9 +67,9 @@ public class ExerciseServiceBean implements ExerciseService {
 
 
     @Override
-    public List<ExerciseItemDto> generateTranslationWordTrainingSet(List<Long> translationIds) {
+    public List<ExerciseItemDto> generateTranslationWordTrainingSet(List<Long> profileTranslationIds) {
         final List<ExerciseItemDto> result = new ArrayList<>();
-        final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(translationIds);
+        final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(profileTranslationIds);
 
         final List<String> translations = getTranslationValuesStream(profileTranslations).collect(Collectors.toList());
         if (CollectionUtil.hasDuplicate(translations)) {

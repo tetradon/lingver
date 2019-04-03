@@ -3,13 +3,10 @@ package com.kotlart.lingver.service;
 import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.Role;
 import com.kotlart.lingver.service.impl.ProfileServiceBean;
-import com.kotlart.lingver.service.respository.ProfileRepository;
-import com.kotlart.lingver.service.respository.RoleRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -18,20 +15,13 @@ import java.util.Collections;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
-public class ProfileServiceBeanTest {
-
-    @Autowired
-    private ProfileRepository profileRepository;
-
-    @Autowired
-    private RoleRepository roleRepository;
+public class ProfileServiceBeanTest extends AbstractServiceBeanTest {
 
     private ProfileServiceBean sut;
 
     @Before
     public void before() {
-        sut = new ProfileServiceBean(profileRepository, roleRepository, new BCryptPasswordEncoder());
-        roleRepository.save(Role.builder().id(1L).authority(Role.USER).build());
+        sut = new ProfileServiceBean(super.profileRepository, super.roleRepository, new BCryptPasswordEncoder());
     }
 
     @Test
@@ -43,7 +33,7 @@ public class ProfileServiceBeanTest {
                 .password(rawPassword)
                 .build();
         Profile persisted = sut.createProfile(profile);
-        Profile found = profileRepository.findById(persisted.getId()).orElse(null);
+        Profile found = super.profileRepository.findById(persisted.getId()).orElse(null);
         Assert.assertNotNull(found);
         Assert.assertEquals(found.getUsername(), profile.getUsername());
         Assert.assertEquals(found.getEmail(), profile.getEmail());
@@ -55,14 +45,14 @@ public class ProfileServiceBeanTest {
 
     @Test
     public void test_loadUserByUsername() {
-        Role role = roleRepository.findByAuthority(Role.USER);
+        Role role = super.roleRepository.findByAuthority(Role.USER);
         String usernameOfProfileToLoad = "test";
         Profile profile = Profile.builder()
                 .username(usernameOfProfileToLoad)
                 .email("test")
                 .password("test")
                 .authorities(Collections.singletonList(role)).build();
-        profileRepository.save(profile);
+        super.profileRepository.save(profile);
 
         Assert.assertNotNull(sut.loadUserByUsername(usernameOfProfileToLoad));
     }

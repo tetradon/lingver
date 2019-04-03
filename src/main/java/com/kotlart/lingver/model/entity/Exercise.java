@@ -1,7 +1,10 @@
 package com.kotlart.lingver.model.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -17,6 +20,9 @@ import javax.persistence.Table;
 @Table(name = Exercise.TABLE_NAME)
 @Data
 @EqualsAndHashCode(callSuper = false)
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Exercise extends AbstractEntity {
     public static final String TABLE_NAME = "exercise";
 
