@@ -10,34 +10,18 @@ import * as PropTypes from 'prop-types';
 import {withStyles} from "@material-ui/core";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
-import classNames from 'classnames';
 
 import CloseIcon from '@material-ui/icons/Close';
-import CorrectIcon from "@material-ui/icons/Done";
-import IncorrectIcon from "@material-ui/icons/Clear";
 import ConfirmationDialog from "../components/ConfirmationDialog";
 import IconButton from "@material-ui/core/IconButton";
 import {exerciseService} from "../service/exerciseService";
+import ExercisePage from "./ExercisePage";
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
 
 const styles = (theme) => ({
-    green: {
-        color: '#0ff235 !important',
-    },
-    red: {
-        color: '#ef3b3b !important',
-    },
-    checked: {},
-    answerButton: {
-        textTransform: 'none',
-        marginTop: theme.spacing.unit,
-        '&:hover': {
-            background: "#dad8ff",
-        },
-    },
     dialogTitle: {
         borderBottom: `1px solid ${theme.palette.divider}`,
         padding: theme.spacing.unit * 2,
@@ -64,16 +48,6 @@ class ExerciseDialog extends React.Component {
             results: []
         };
 
-    }
-
-    correctWasSelected(oneOfAnswers) {
-        return this.state.selectedAnswer && oneOfAnswers.isCorrect === true
-    }
-
-    incorrectWasSelected(oneOfAnswers) {
-        return this.state.selectedAnswer
-            && this.state.selectedAnswer === oneOfAnswers
-            && this.state.selectedAnswer.isCorrect === false
     }
 
     handleResponse = (event, answer) => {
@@ -119,51 +93,8 @@ class ExerciseDialog extends React.Component {
         const {classes} = this.props;
         const questionList = this.props.trainingSet.map(item => {
             return (
-                <div>
-
-                    <Grid key={item.profileTranslationId}
-                          container
-                          direction={"row"}
-                          spacing={16}
-                          alignItems={"center"}
-                          justify={"center"}>
-                        <Grid xs={6} item>
-                            <Typography align={"center"} variant={"title"}> {item.question} </Typography>
-                        </Grid>
-                        <Grid xs={6} item>
-                            <Grid container direction={"column"}>
-                                {
-                                    item.answers.map(answer => {
-                                        return (
-                                            <Grid item key={answer.value}>
-                                                <Button
-                                                    size={"large"}
-                                                    disabled={this.state.selectedAnswer !== null}
-                                                    onClick={(e) => this.handleResponse(e, answer)}
-                                                    className={classNames(classes.answerButton,
-                                                        {
-                                                            [classes.red]: this.incorrectWasSelected(answer),
-                                                            [classes.green]: this.correctWasSelected(answer)
-                                                        }
-                                                    )}
-                                                >
-
-                                                    {answer.value}
-                                                    {
-                                                        this.correctWasSelected(answer) ?
-                                                            <CorrectIcon/> : this.incorrectWasSelected(answer) ?
-                                                            <IncorrectIcon/> : null
-
-                                                    }</Button>
-                                            </Grid>
-
-                                        )
-                                    })
-                                }
-                            </Grid>
-                        </Grid>
-                    </Grid>
-                </div>
+                <ExercisePage exerciseItem={item} selectedAnswer={this.state.selectedAnswer}
+                              onResponse={this.handleResponse}/>
             )
         });
         return (
@@ -202,24 +133,30 @@ class ExerciseDialog extends React.Component {
                                             is {this.state.correctAnswersCount} / {this.props.trainingSet.length}</Typography>
                                     </Grid>
                                 </Grid>
-
                                 :
                                 questionList[this.state.currentIndex]
 
                         }
-
                     </DialogContent>
                     <DialogActions>
-                        {this.state.selectedAnswer
-                            ?
-                            <Button size={"large"} onClick={this.onNext} color="primary">
-                                Next
-                            </Button>
-                            : null}
-                        {this.isExerciseFinished() ?
-                            <Button size={"large"} onClick={this.props.onClose} color="primary">
-                                Close
-                            </Button> : null}
+                        {
+                            this.state.selectedAnswer
+                                ?
+                                <Button size={"large"} onClick={this.onNext} color="primary">
+                                    Next
+                                </Button>
+                                :
+                                null
+                        }
+                        {
+                            this.isExerciseFinished()
+                                ?
+                                <Button size={"large"} onClick={this.props.onClose} color="primary">
+                                    Close
+                                </Button>
+                                :
+                                null
+                        }
                     </DialogActions>
                     <ConfirmationDialog
                         open={this.state.closeDialogIsOpen}
