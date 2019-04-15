@@ -22,11 +22,10 @@ import java.util.List;
         attributeNodes = {
                 @NamedAttributeNode(value = "translation", subgraph = "translationSubgraph"),
                 @NamedAttributeNode(value = "profile"),
-                @NamedAttributeNode(value = "exerciseHistory", subgraph = "exerciseHistorySubgraph")
         }, subgraphs = {
         @NamedSubgraph(name = "translationSubgraph",
                 attributeNodes =
-                        @NamedAttributeNode(value = "word")
+                @NamedAttributeNode(value = "word")
         )
 }
 )
