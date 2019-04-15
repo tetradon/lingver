@@ -14,16 +14,15 @@ import java.util.List;
 
 public interface ProfileTranslationRepository extends PagingAndSortingRepository<ProfileTranslation, Long> {
 
-    @Query(value = "select pt.profile_translation_pk                                as id, "
+    @Query(value = "select   pt.profile_translation_pk                              as id, "
                    + "       t.value                                                as translation, "
                    + "       w.value                                                as word, "
                    + "       pt.insert_date                                         as insertDate, "
-                   + "       count(case when eh.result = true then 1 else null end) as numberOfSuccessRepeating, "
-                   + "       coalesce(max(eh.date), date '1900-01-01')              as lastRepeatDate "
+                   + "       pt.success_repeat_count                                as numberOfSuccessRepeating, "
+                   + "       pt.last_repeat_date                                    as lastRepeatDate "
                    + "from profile_translation pt "
                    + "       join translation t on t.translation_pk = pt.translation_fk "
                    + "       join word w on t.word_fk = w.word_pk "
-                   + "       left join exercise_history eh on pt.profile_translation_pk = eh.profile_translation_fk "
                    + "where pt.profile_fk = ?1 "
                    + "and (t.value like concat(?2,'%') or w.value like concat(?2,'%')) "
                    + "group by id, translation, word",

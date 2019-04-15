@@ -1,11 +1,12 @@
 package com.kotlart.lingver.service.impl;
 
+import com.kotlart.lingver.exception.EntityNotFoundException;
 import com.kotlart.lingver.exception.NotUniqueExcerciseQuestionExeption;
 import com.kotlart.lingver.model.dto.AnswerDto;
-import com.kotlart.lingver.model.dto.ExerciseHistoryDto;
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
 import com.kotlart.lingver.model.entity.Exercise;
+import com.kotlart.lingver.model.entity.ExerciseHistory;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.service.ExerciseService;
 import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -81,31 +83,36 @@ public class ExerciseServiceBean implements ExerciseService {
         final Set<String> words = getWordValuesStream(profileTranslations).collect(Collectors.toSet());
 
         profileTranslations.forEach(profileTranslation -> {
-            ExerciseItemDto exerciseItem = ExerciseItemDto.builder()
-                    .profileTranslationId(profileTranslation.getId())
-                    .question(profileTranslation.getTranslation().getValue())
-                    .answers(generateResponseVariants(words, profileTranslation.getTranslation().getWord().getValue()))
-                    .exerciseId(exercise.getId())
-                    .build();
+                    ExerciseItemDto exerciseItem = ExerciseItemDto.builder()
+                            .profileTranslationId(profileTranslation.getId())
+                            .question(profileTranslation.getTranslation().getValue())
+                            .answers(generateResponseVariants(words, profileTranslation.getTranslation().getWord().getValue()))
+                            .exerciseId(exercise.getId())
+                            .build();
                     result.add(exerciseItem);
                 }
         );
         return result;
     }
 
-    @Override
-    public void saveResults(List<ExerciseResultDto> results) {
-        for (ExerciseResultDto dto : results) {
-            exerciseHistoryRepository.saveExerciseResult(dto.getProfileTranslationId(),
-                    dto.getExerciseId(), dto.getAnswerCorrect());
-        }
-    }
 
     @Override
-    public ExerciseHistoryDto saveResult(ExerciseResultDto result) {
-        exerciseHistoryRepository.saveExerciseResult(result.getProfileTranslationId(),
-                result.getExerciseId(), result.getAnswerCorrect());
-        return new ExerciseHistoryDto();
+    public ExerciseHistory saveResult(ExerciseResultDto result) {
+        final ProfileTranslation profileTranslation = profileTranslationRepository
+                .findById(result.getProfileTranslationId()).orElseThrow(EntityNotFoundException::new);
+        final Exercise exercise = exerciseRepository
+                .findById(result.getExerciseId()).orElseThrow(EntityNotFoundException::new);
+        profileTranslation.setRepeatCount(profileTranslation.getRepeatCount() + 1);
+        profileTranslation.setSuccessRepeatCount(result.isAnswerCorrect() ?
+                profileTranslation.getSuccessRepeatCount() + 1 : profileTranslation.getSuccessRepeatCount());
+        profileTranslation.setLastRepeatDate(new Date());
+        profileTranslationRepository.save(profileTranslation);
+        return exerciseHistoryRepository.save(ExerciseHistory.builder()
+                .profileTranslation(profileTranslation)
+                .exercise(exercise)
+                .result(result.isAnswerCorrect())
+                .date(new Date())
+                .build());
     }
 
     private Stream<String> getWordValuesStream(List<ProfileTranslation> profileTranslations) {

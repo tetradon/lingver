@@ -109,7 +109,10 @@ class TranslationTable extends Component {
     };
 
     getYearFromString = (date) => {
-        return parseInt(date.split('.')[2]);
+        if(date) {
+            return parseInt(date.split('.')[2]);
+        }
+        return null;
     };
 
     render() {

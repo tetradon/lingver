@@ -1,6 +1,6 @@
 package com.kotlart.lingver.util;
 
-import com.kotlart.lingver.exception.UniqueConstraintViolation;
+import com.kotlart.lingver.exception.UniqueConstraintViolationException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -14,7 +14,7 @@ public class ExceptionUtil {
             */
             final String fullErrorMessage = ((ConstraintViolationException) exception.getCause()).getSQLException().getMessage();
             final String message = fullErrorMessage.substring(fullErrorMessage.indexOf("Key"));
-            throw new UniqueConstraintViolation(message, exception);
+            throw new UniqueConstraintViolationException(message, exception);
         } else {
             throw exception;
         }

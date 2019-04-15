@@ -1,5 +1,6 @@
 package com.kotlart.lingver.rest;
 
+import com.kotlart.lingver.model.dto.ExerciseHistoryDto;
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
 import com.kotlart.lingver.service.ExerciseService;
@@ -42,9 +43,9 @@ public class ExerciseController {
     }
 
     @PostMapping(value = "/result")
-    public ResponseEntity test(@RequestBody List<ExerciseResultDto> results) {
-        exerciseService.saveResults(results);
-        return ResponseEntity.ok().build();
+    public ResponseEntity saveSingleResult(@RequestBody ExerciseResultDto result) {
+        final ExerciseHistoryDto dto = modelMapper.map(exerciseService.saveResult(result), ExerciseHistoryDto.class);
+        return ResponseEntity.ok(dto);
     }
-    
+
 }

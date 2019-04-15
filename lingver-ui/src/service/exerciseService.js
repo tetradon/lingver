@@ -3,7 +3,8 @@ import axios from 'axios'
 export const exerciseService = {
     getWordTranslationExerciseSet,
     getTranslationWordExerciseSet,
-    saveResults
+    saveResults,
+    saveSingleResult
 };
 
 function getWordTranslationExerciseSet(translationIds) {
@@ -15,9 +16,11 @@ function getTranslationWordExerciseSet(translationIds) {
 }
 
 function saveResults(results) {
-    return axios.post('/exercise/result',
-        results
-    );
+    return axios.post('/exercise/results', results);
+}
+
+function saveSingleResult(result) {
+    return axios.post('/exercise/result', result);
 }
 
 

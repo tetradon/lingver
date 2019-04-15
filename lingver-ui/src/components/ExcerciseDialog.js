@@ -55,25 +55,20 @@ class ExerciseDialog extends React.Component {
     };
 
     onNext = () => {
-        let {selectedAnswer, currentIndex, results} = this.state;
+        let {selectedAnswer, currentIndex} = this.state;
         if (selectedAnswer.isCorrect) {
             this.setState({correctAnswersCount: this.state.correctAnswersCount + 1})
         }
-        results.push(
-            {
+        this.props.trainingSet[currentIndex].isUserAnswerCorrect = selectedAnswer.isCorrect;
+        this.setState({selectedAnswer: null});
+        this.setState({currentIndex: this.state.currentIndex + 1});
+
+        exerciseService.saveSingleResult({
                 profileTranslationId: this.props.trainingSet[currentIndex].profileTranslationId,
                 answerCorrect: selectedAnswer.isCorrect,
                 exerciseId: this.props.trainingSet[currentIndex].exerciseId
             }
         );
-        this.props.trainingSet[currentIndex].isUserAnswerCorrect = selectedAnswer.isCorrect;
-        this.setState({selectedAnswer: null});
-        this.setState({currentIndex: this.state.currentIndex + 1}, () => {
-            if (this.isExerciseFinished()) {
-                exerciseService.saveResults(this.state.results)
-            }
-        });
-
     };
 
     openCloseDialog = () => {
