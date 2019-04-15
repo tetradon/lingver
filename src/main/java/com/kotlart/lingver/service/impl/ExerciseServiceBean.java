@@ -2,6 +2,7 @@ package com.kotlart.lingver.service.impl;
 
 import com.kotlart.lingver.exception.NotUniqueExcerciseQuestionExeption;
 import com.kotlart.lingver.model.dto.AnswerDto;
+import com.kotlart.lingver.model.dto.ExerciseHistoryDto;
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
 import com.kotlart.lingver.model.entity.Exercise;
@@ -98,6 +99,13 @@ public class ExerciseServiceBean implements ExerciseService {
             exerciseHistoryRepository.saveExerciseResult(dto.getProfileTranslationId(),
                     dto.getExerciseId(), dto.getAnswerCorrect());
         }
+    }
+
+    @Override
+    public ExerciseHistoryDto saveResult(ExerciseResultDto result) {
+        exerciseHistoryRepository.saveExerciseResult(result.getProfileTranslationId(),
+                result.getExerciseId(), result.getAnswerCorrect());
+        return new ExerciseHistoryDto();
     }
 
     private Stream<String> getWordValuesStream(List<ProfileTranslation> profileTranslations) {

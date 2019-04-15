@@ -27,10 +27,6 @@ import java.util.List;
         @NamedSubgraph(name = "translationSubgraph",
                 attributeNodes =
                         @NamedAttributeNode(value = "word")
-        ),
-        @NamedSubgraph(name = "exerciseHistorySubgraph",
-                attributeNodes =
-                @NamedAttributeNode(value = "exercise")
         )
 }
 )
@@ -62,6 +58,13 @@ public class ProfileTranslation extends AbstractEntity {
 
     @OneToMany(mappedBy = "profileTranslation", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ExerciseHistory> exerciseHistory;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastRepeatDate;
+
+    private int repeatCount;
+    private int successRepeatCount;
+
 
     @PrePersist
     private void fillInsertInfo() {
