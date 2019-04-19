@@ -4,7 +4,6 @@ import com.kotlart.lingver.model.QueryParameters;
 import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.entity.Translation;
-import com.kotlart.lingver.model.projection.ProfileTranslationProjection;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
@@ -15,7 +14,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.JpaSort;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -50,14 +49,14 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
     }
 
     @Override
-    public Page<ProfileTranslationProjection> getTranslationsOfProfile(QueryParameters queryParameters, Profile profile) {
+    public Page<ProfileTranslation> getTranslationsOfProfile(QueryParameters queryParameters, Profile profile) {
         Pageable pageable = PageRequest.of(
                 queryParameters.getPage(),
                 queryParameters.getSize(),
-                JpaSort.unsafe(queryParameters.getSortDirection(), "(" + queryParameters.getSortField() + ")"));
+                Sort.by(queryParameters.getSortDirection(), queryParameters.getSortField()));
 
         return profileTranslationRepository
-                .findAllByProfileIdAndByWordValueOrTranslationValue(
+                .findAllByProfileIdAndTranslationWordValueStartsWithIgnoreCase(
                         profile.getId(),
                         queryParameters.getSearch(),
                         pageable);

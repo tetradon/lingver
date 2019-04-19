@@ -4,7 +4,6 @@ import com.kotlart.lingver.model.QueryParameters;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
-import com.kotlart.lingver.model.projection.ProfileTranslationProjection;
 import com.kotlart.lingver.service.impl.ProfileTranslationServiceBean;
 import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
@@ -55,9 +54,9 @@ public class ProfileTranslationServiceBeanTest extends AbstractServiceBeanTest {
         Translation translation = translationRepository.save(Translation.builder().value(TRANSLATION_VALUE).word(word).build());
         profileTranslationRepository.save(ProfileTranslation.builder().profile(DEFAULT_PROFILE).translation(translation).build());
 
-        final Page<ProfileTranslationProjection> translationsOfActiveProfile = sut.getTranslationsOfProfile(QUERY_PARAMETERS, DEFAULT_PROFILE);
+        final Page<ProfileTranslation> translationsOfActiveProfile = sut.getTranslationsOfProfile(QUERY_PARAMETERS, DEFAULT_PROFILE);
         Assert.assertEquals(1, translationsOfActiveProfile.getTotalElements());
-        Assert.assertEquals(TRANSLATION_VALUE, translationsOfActiveProfile.getContent().get(0).getTranslation());
+        Assert.assertEquals(TRANSLATION_VALUE, translationsOfActiveProfile.getContent().get(0).getTranslation().getValue());
     }
 
     @Test

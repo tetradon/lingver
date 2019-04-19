@@ -26,11 +26,11 @@ class TranslationTable extends Component {
             dialogIsOpen: false,
             selected: [],
             titles: [
-                {displayName: 'Word', path: 'word'},
-                {displayName: 'Translation', path: 'translation'},
+                {displayName: 'Word', path: 'translation.word.value'},
+                {displayName: 'Translation', path: 'translation.value'},
                 {displayName: 'Insert Date', path: 'insertDate'},
                 {displayName: 'Last Repeat Date', path: 'lastRepeatDate'},
-                {displayName: 'Progress', path: 'numberOfSuccessRepeating'}
+                {displayName: 'Progress', path: 'successRepeatCount'}
             ],
         };
     }
@@ -109,7 +109,7 @@ class TranslationTable extends Component {
     };
 
     getYearFromString = (date) => {
-        if(date) {
+        if (date) {
             return parseInt(date.split('.')[2]);
         }
         return null;
@@ -182,7 +182,7 @@ class TranslationTable extends Component {
                                         <TableCell>{row.translation}</TableCell>
                                         <TableCell>{row.insertDate}</TableCell>
                                         <TableCell>{this.getYearFromString(row.lastRepeatDate) < 2000 ? null : row.lastRepeatDate}</TableCell>
-                                        <TableCell>{row.numberOfSuccessRepeating}</TableCell>
+                                        <TableCell>{row.successRepeatCount}</TableCell>
                                     </TableRow>
                                 );
                             })}

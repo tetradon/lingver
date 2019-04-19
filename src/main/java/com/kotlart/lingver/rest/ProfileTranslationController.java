@@ -7,7 +7,6 @@ import com.kotlart.lingver.model.dto.ProfileTranslationDto;
 import com.kotlart.lingver.model.dto.ValueDto;
 import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
-import com.kotlart.lingver.model.projection.ProfileTranslationProjection;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileTranslationService;
 import org.modelmapper.ModelMapper;
@@ -24,8 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("profile/translations")
@@ -44,16 +43,16 @@ public class ProfileTranslationController {
     @GetMapping
     ResponseEntity getProfileTranslations(QueryParameters queryParameters) {
         Profile activeProfile = (Profile) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        final Page<ProfileTranslationProjection> translationsPage = profileTranslationService
+        final Page<ProfileTranslation> translationsPage = profileTranslationService
                 .getTranslationsOfProfile(queryParameters, activeProfile);
-        final List<ProfileTranslationProjection> paginatedTranslations = translationsPage.getContent();
+
+        final List<ProfileTranslation> paginatedTranslations = translationsPage.getContent();
         final long totalFound = translationsPage.getTotalElements();
 
-        final List<ProfileTranslationDto> profileTranslationDtos = new ArrayList<>();
-
+        final List<ProfileTranslationDto> profileTranslationDtos = paginatedTranslations.stream().map(pt -> modelMapper.map(pt, ProfileTranslationDto.class)).collect(Collectors.toList());
         final PaginatedProfileTranslationsDto responseDto =
                 PaginatedProfileTranslationsDto.builder()
-                        .translations(paginatedTranslations)
+                        .translations(profileTranslationDtos)
                         .total(totalFound)
                         .build();
         return ResponseEntity.ok().body(responseDto);
