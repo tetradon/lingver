@@ -8,6 +8,7 @@ import com.kotlart.lingver.service.ProfileTranslationService;
 import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
 import com.kotlart.lingver.service.respository.TranslationRepository;
+import com.kotlart.lingver.service.specification.ProfileTranslationSpecification;
 import com.kotlart.lingver.util.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -17,6 +18,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -40,6 +42,7 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
         ProfileTranslation profileTranslation = new ProfileTranslation();
         profileTranslation.setProfile(profile);
         profileTranslation.setTranslation(translationEntity);
+        profileTranslation.setLastRepeatDate(new Date(0));
         try {
             return profileTranslationRepository.save(profileTranslation);
         } catch (DataIntegrityViolationException exception) {
@@ -55,11 +58,9 @@ public class ProfileTranslationServiceBean implements ProfileTranslationService 
                 queryParameters.getSize(),
                 Sort.by(queryParameters.getSortDirection(), queryParameters.getSortField()));
 
-        return profileTranslationRepository
-                .findAllByProfileIdAndTranslationWordValueStartsWithIgnoreCase(
-                        profile.getId(),
-                        queryParameters.getSearch(),
-                        pageable);
+        return profileTranslationRepository.findAll(
+                ProfileTranslationSpecification.withProfileAndSearch(profile, queryParameters.getSearch()),
+                pageable);
     }
 
     @Override
