@@ -28,6 +28,7 @@ class ExerciseMenu extends Component {
     closeExerciseDialog = () => {
         this.setState({exerciseDialogIsOpen: false});
         this.props.onQueryParamsChange();
+        this.props.clearSelected();
     };
 
     handleWordTranslationClick = () => {
@@ -111,6 +112,7 @@ class ExerciseMenu extends Component {
 }
 
 ExerciseMenu.propTypes = {
+    clearSelected: PropTypes.func,
     hidden: PropTypes.bool,
     selected: PropTypes.array,
     onQueryParamsChange: PropTypes.func

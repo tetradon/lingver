@@ -43,6 +43,11 @@ class TranslationTable extends Component {
         this.props.onQueryParamsChange({sortDirection: sortDirection, sortField: field});
     };
 
+    clearSelected = () => {
+        this.setState({selected: []});
+    };
+
+
     handleChangePage = (event, page) => {
         this.props.onQueryParamsChange({page: page});
     };
@@ -130,6 +135,7 @@ class TranslationTable extends Component {
                     <TableToolbar
                         onDelete={this.handleDeleteClick}
                         onQueryParamsChange={this.props.onQueryParamsChange}
+                        clearSelected={this.clearSelected}
                         selected={this.state.selected}/>
                     <Table padding={"dense"}>
                         <TableHead>

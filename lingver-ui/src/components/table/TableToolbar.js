@@ -100,7 +100,9 @@ class TableToolbar extends Component {
                 </div>
                 <div className={classes.spacer}/>
                 <ExerciseMenu selected={this.props.selected} hidden={selected.length === 0}
-                              onQueryParamsChange={this.props.onQueryParamsChange}/>
+                              onQueryParamsChange={this.props.onQueryParamsChange}
+                              clearSelected={this.props.clearSelected}
+                />
                 <ToolbarSearch hidden={selected.length > 0}
                                onQueryParamsChange={this.props.onQueryParamsChange}/>
                 <div className={classes.actions}>
@@ -120,6 +122,7 @@ class TableToolbar extends Component {
 
 TableToolbar.propTypes = {
     onQueryParamsChange: PropTypes.func,
+    clearSelected: PropTypes.func,
     onDelete: PropTypes.func,
     selected: PropTypes.array,
 };
