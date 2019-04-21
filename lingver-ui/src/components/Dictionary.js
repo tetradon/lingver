@@ -67,35 +67,37 @@ class Dictionary extends Component {
     render() {
         const {classes} = this.props;
         return (
-            <Grid container
-                  justify="center"
-                  spacing={40}>
-                <Grid item xs={10} lg={8}>
-                    {this.state.total === 0 && !this.state.params.search && !this.state.isLoading
-                        ?
-                        <Paper className={classes.noWordsMessage}>
-                            <Typography variant={"h5"}><MoodBadIcon fontSize={"large"}/> You haven't added any words yet
-                            </Typography>
-                            <Typography align={"right"} variant={"h5"}>Do it now!</Typography>
-                        </Paper>
-                        :
-                        <TranslationTable onQueryParamsChange={this.updateParams}
-                                          onReload={this.reload}
-                                          onRemove={this.remove}
-                                          params={this.state.params}
-                                          selected={this.state.selected}
-                                          totalElements={this.state.total}
-                                          translations={this.state.translations}/>}
+            <div style={{padding: 20}}>
+                <Grid container justify="center" spacing={32}>
+                    <Grid item xs={10} lg={8}>
+                        {this.state.total === 0 && !this.state.params.search && !this.state.isLoading
+                            ?
+                            <Paper className={classes.noWordsMessage}>
+                                <Typography variant={"h5"}>
+                                    <MoodBadIcon fontSize={"large"}/>
+                                    You haven't added any words yet
+                                </Typography>
+                                <Typography align={"right"} variant={"h5"}>Do it now!</Typography>
+                            </Paper>
+                            :
+                            <TranslationTable onQueryParamsChange={this.updateParams}
+                                              onReload={this.reload}
+                                              onRemove={this.remove}
+                                              params={this.state.params}
+                                              selected={this.state.selected}
+                                              totalElements={this.state.total}
+                                              translations={this.state.translations}/>}
 
-                    <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>
+                        <LinearProgress variant={"query"} hidden={!this.state.isLoading}/>
+                    </Grid>
+                    <Grid item xs={10} lg={3}>
+                        <TranslationSearch
+                            onNewWord={this.reload}
+                            onRemove={this.remove}
+                        />
+                    </Grid>
                 </Grid>
-                <Grid item xs={10} lg={3}>
-                    <TranslationSearch
-                        onNewWord={this.reload}
-                        onRemove={this.remove}
-                    />
-                </Grid>
-            </Grid>
+            </div>
         );
     }
 }

@@ -125,26 +125,28 @@ class TranslationSearch extends Component {
                 <Input type="text" value={this.state.userSearch} fullWidth
                        onChange={this.handleSearchChange}/>
                 <List>{translationList}
-                    <ListItem key={this.state.userSearch} hidden={!this.state.userSearch}>
-                        <Input
-                            value={this.state.userNewTranslation}
-                            onChange={this.handleUserNewTranslationChange}
-                            fullWidth
-                            placeholder="Your variant"
-                            className={classes.userNewTranslation}
-                            startAdornment={
-                                <InputAdornment position="start">
-                                    <Fab size="small"
-                                         color="primary"
-                                         className={classes.fab}
-                                         onClick={this.saveNewTranslation}
-                                    > <AddIcon/>
-                                    </Fab>
-                                </InputAdornment>
-                            }
-                        >
-                        </Input>
-                    </ListItem>
+                    {this.state.userSearch ?
+                        <ListItem key={this.state.userSearch}>
+                            <Input
+                                value={this.state.userNewTranslation}
+                                onChange={this.handleUserNewTranslationChange}
+                                fullWidth
+                                placeholder="Your variant"
+                                className={classes.userNewTranslation}
+                                startAdornment={
+                                    <InputAdornment position="start">
+                                        <Fab size="small"
+                                             color="primary"
+                                             className={classes.fab}
+                                             onClick={this.saveNewTranslation}
+                                        > <AddIcon/>
+                                        </Fab>
+                                    </InputAdornment>
+                                }
+                            >
+                            </Input>
+                        </ListItem>
+                        : null}
                 </List>
             </Paper>
         );

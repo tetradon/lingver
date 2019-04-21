@@ -17,11 +17,14 @@ const styles = {
     },
     icon: {
         marginLeft: '10px',
-        fontSize: '1.4em'
+        fontSize: '2em'
     }
 };
 
+
 class LingverNavbar extends Component {
+
+
     render() {
         return <AppBar position="static" style={styles.appBar}>
             <Toolbar>
@@ -33,8 +36,8 @@ class LingverNavbar extends Component {
                     color="inherit"
                 >
                     Lingver
-                    <SchoolIcon style={styles.icon}/>
                 </Typography>
+                <SchoolIcon style={styles.icon}/>
                 <div style={styles.grow}/>
                 <Button
                     color="inherit"
