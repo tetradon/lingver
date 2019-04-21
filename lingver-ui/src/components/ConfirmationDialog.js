@@ -7,6 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 import * as PropTypes from 'prop-types';
+import {Trans} from "react-i18next";
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -34,10 +35,10 @@ class ConfirmationDialog extends React.Component {
                     </DialogContent>
                     <DialogActions>
                         <Button onClick={this.props.onCancel} color="primary">
-                            Cancel
+                            <Trans>Cancel</Trans>
                         </Button>
                         <Button onClick={this.props.onConfirm} color="secondary">
-                            Confirm
+                            <Trans>Confirm</Trans>
                         </Button>
                     </DialogActions>
                 </Dialog>
@@ -48,8 +49,8 @@ class ConfirmationDialog extends React.Component {
 
 ConfirmationDialog.propTypes = {
     open: PropTypes.bool,
-    title: PropTypes.string,
-    contentText: PropTypes.string,
+    title: PropTypes.object,
+    contentText: PropTypes.object,
     onCancel: PropTypes.func,
     onConfirm: PropTypes.func
 };

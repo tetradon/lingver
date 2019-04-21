@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {Redirect, Route, Switch, withRouter} from 'react-router-dom';
+import React, {Suspense} from 'react';
+import {Redirect, Route, Switch} from 'react-router-dom';
 import Dictionary from './Dictionary';
 import LingverNavbar from "./LingverNavbar";
 import Login from "./Login";
@@ -8,27 +8,32 @@ import Register from "./Registration";
 import NotFound from "./NotFound";
 import axios from "axios";
 import {userService} from '../service/userService'
+import {useTranslation} from 'react-i18next';
 
-class App extends Component {
-    constructor(props) {
-        super(props);
-        axios.interceptors.response.use(
-            response => {
-                return response
-            },
-            error => {
-                if (error.response.status === 401) {
-                    userService.removeUserFromStorage();
-                    this.props.history.push('/login');
-                }
-                return Promise.reject(error);
-            });
-    }
 
-    render() {
-        return (
-            <React.Fragment>
-                <LingverNavbar/>
+export default function App() {
+    const {i18n} = useTranslation();
+    const changeLanguage = lng => {
+        i18n.changeLanguage(lng);
+    };
+
+    axios.interceptors.response.use(
+        response => {
+            return response
+        },
+        error => {
+            if (error.response.status === 401) {
+                userService.removeUserFromStorage();
+                this.props.history.push('/login');
+            }
+            return Promise.reject(error);
+        });
+
+
+    return (
+        <React.Fragment>
+            <Suspense>
+                <LingverNavbar changeLanguage={changeLanguage}/>
                 <Switch>
                     <ProtectedRoute exact path='/' component={Dictionary}/>
                     <ProtectedRoute path='/dictionary' component={Dictionary}/>
@@ -37,9 +42,10 @@ class App extends Component {
                     <Route path='/login' component={Login}/>
                     <Redirect to="/404"/>
                 </Switch>
-            </React.Fragment>
-        )
-    }
+            </Suspense>
+        </React.Fragment>
+    )
+
 }
 
-export default withRouter(App);
+//export default (withRouter(App));

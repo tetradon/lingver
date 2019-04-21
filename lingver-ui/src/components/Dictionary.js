@@ -6,6 +6,7 @@ import TranslationTable from "./table/TranslationTable";
 import Paper from "@material-ui/core/Paper";
 import MoodBadIcon from '@material-ui/icons/SentimentVeryDissatisfied';
 import withStyles from "@material-ui/core/styles/withStyles";
+import {Trans} from "react-i18next";
 
 
 const styles = theme => ({
@@ -75,9 +76,11 @@ class Dictionary extends Component {
                             <Paper className={classes.noWordsMessage}>
                                 <Typography variant={"h5"}>
                                     <MoodBadIcon fontSize={"large"}/>
-                                    You haven't added any words yet
+                                    <Trans>You haven't added any words yet</Trans>
                                 </Typography>
-                                <Typography align={"right"} variant={"h5"}>Do it now!</Typography>
+                                <Typography align={"right"} variant={"h5"}>
+                                    <Trans>Do it now!</Trans>
+                                </Typography>
                             </Paper>
                             :
                             <TranslationTable onQueryParamsChange={this.updateParams}

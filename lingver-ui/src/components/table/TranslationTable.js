@@ -12,6 +12,7 @@ import Paper from "@material-ui/core/Paper";
 import Checkbox from "@material-ui/core/Checkbox";
 import ConfirmationDialog from "../ConfirmationDialog";
 import TableToolbar from "./TableToolbar";
+import {Trans} from "react-i18next";
 
 const styles = theme => ({
     root: {
@@ -26,11 +27,11 @@ class TranslationTable extends Component {
             dialogIsOpen: false,
             selected: [],
             titles: [
-                {displayName: 'Word', path: 'translation.word.value'},
-                {displayName: 'Translation', path: 'translation.value'},
-                {displayName: 'Insert Date', path: 'insertDate'},
-                {displayName: 'Last Repeat Date', path: 'lastRepeatDate'},
-                {displayName: 'Progress', path: 'successRepeatCount'}
+                {displayName: <Trans>Word</Trans>, path: 'translation.word.value'},
+                {displayName: <Trans>Translation</Trans>, path: 'translation.value'},
+                {displayName: <Trans>Insert Date</Trans>, path: 'insertDate'},
+                {displayName: <Trans>Last Repeat Date</Trans>, path: 'lastRepeatDate'},
+                {displayName: <Trans>Progress</Trans>, path: 'successRepeatCount'}
             ],
         };
     }
@@ -128,8 +129,8 @@ class TranslationTable extends Component {
                     open={this.state.dialogIsOpen}
                     onCancel={this.closeDialog}
                     onConfirm={this.performDelete}
-                    title={"Confirm delete"}
-                    contentText={"Are you sure to delete selected items?"}
+                    title={<Trans>Confirm delete</Trans>}
+                    contentText={<Trans>Are you sure to delete selected items?</Trans>}
                 />
                 <Paper>
                     <TableToolbar
@@ -155,7 +156,7 @@ class TranslationTable extends Component {
                                 </TableCell>
                                 {this.state.titles.map(
                                     title => (
-                                        <TableCell key={title.displayName}>
+                                        <TableCell key={title.path}>
                                             <Tooltip
                                                 title="Sort"
                                                 enterDelay={300}
@@ -206,6 +207,7 @@ class TranslationTable extends Component {
                         nextIconButtonProps={{
                             'aria-label': 'Next Page',
                         }}
+                        labelRowsPerPage={<Trans>Rows per page</Trans>}
                         onChangePage={this.handleChangePage}
                         onChangeRowsPerPage={this.handleChangeRowsPerPage}
                     />

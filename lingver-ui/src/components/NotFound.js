@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Button, Divider, Grid, Paper, Typography, withStyles} from "@material-ui/core";
+import {Trans} from "react-i18next";
 
 const styles = theme => ({
 
@@ -33,7 +34,7 @@ class NotFound extends Component {
                                     <Divider variant="middle"/>
                                 </Typography>
                                 <Typography className={classes.subtitle} variant="h2">
-                                    Not Found
+                                    <Trans>Not Found</Trans>
                                 </Typography>
                                 <Button className={classes.button}
                                         size="large"
@@ -41,7 +42,7 @@ class NotFound extends Component {
                                         variant="outlined"
                                         onClick={this.props.history.goBack}
                                         fullWidth>
-                                    Back
+                                    <Trans>Back</Trans>
                                 </Button>
                             </Paper>
                         </Grid>

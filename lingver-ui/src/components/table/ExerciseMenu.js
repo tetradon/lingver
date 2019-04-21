@@ -8,6 +8,7 @@ import TrainIcon from "@material-ui/icons/FitnessCenterTwoTone";
 import {exerciseService} from "../../service/exerciseService"
 import ExerciseDialog from "../ExcerciseDialog";
 import {withSnackbar} from "notistack";
+import {Trans} from "react-i18next";
 
 class ExerciseMenu extends Component {
     state = {
@@ -36,7 +37,7 @@ class ExerciseMenu extends Component {
         exerciseService.getWordTranslationExerciseSet(this.props.selected)
             .then(response => {
                 this.setState({trainingSet: response.data});
-                this.setState({exerciseName: "Word - Translation"});
+                this.setState({exerciseName: <Trans>Word - Translation</Trans>});
                 this.setState({exerciseDialogIsOpen: true});
             })
             .catch((error) => {
@@ -51,7 +52,7 @@ class ExerciseMenu extends Component {
         exerciseService.getTranslationWordExerciseSet(this.props.selected)
             .then(response => {
                 this.setState({trainingSet: response.data});
-                this.setState({exerciseName: "Translation - Word"});
+                this.setState({exerciseName: <Trans>Translation - Word</Trans>});
                 this.setState({exerciseDialogIsOpen: true});
             })
             .catch((error) => {
@@ -81,12 +82,8 @@ class ExerciseMenu extends Component {
                             : null
                     }
 
-                    <Tooltip title="Train">
-                        <IconButton
-                            aria-label="Train"
-                            aria-haspopup="true"
-                            onClick={this.handleTrainClick}
-                        >
+                    <Tooltip title={<Trans>Train</Trans>}>
+                        <IconButton onClick={this.handleTrainClick}>
                             <TrainIcon/>
                         </IconButton>
                     </Tooltip>
@@ -97,10 +94,10 @@ class ExerciseMenu extends Component {
                         onClose={this.handleTrainClose}
                     >
                         <MenuItem onClick={this.handleWordTranslationClick}>
-                            Word - Translation
+                            <Trans>Word - Translation</Trans>
                         </MenuItem>
                         <MenuItem onClick={this.handleTranslationWordClick}>
-                            Translation - Word
+                            <Trans>Translation - Word</Trans>
                         </MenuItem>
                     </Menu>
                 </div>

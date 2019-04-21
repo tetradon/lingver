@@ -4,6 +4,7 @@ import SearchIcon from "@material-ui/icons/Search";
 import React from "react";
 import InputBase from "@material-ui/core/InputBase";
 import * as PropTypes from "prop-types";
+import {withTranslation} from "react-i18next";
 
 const styles = theme => ({
     search: {
@@ -51,6 +52,7 @@ const styles = theme => ({
 });
 
 class ToolbarSearch extends React.Component {
+
     constructor(props) {
         super(props);
         this.state = {
@@ -76,7 +78,7 @@ class ToolbarSearch extends React.Component {
     };
 
     render() {
-
+        const {t} = this.props;
         const {classes} = this.props;
         if (!this.props.hidden) {
             return (
@@ -87,12 +89,13 @@ class ToolbarSearch extends React.Component {
                     <InputBase
                         value={this.state.search}
                         onChange={this.handleSearchChange}
-                        placeholder="Search…"
+                        placeholder={t('Search')}
                         classes={{
                             root: classes.inputRoot,
                             input: classes.inputInput,
                         }}
                     />
+
                 </div>
             )
         }
@@ -104,4 +107,4 @@ ToolbarSearch.propTypes = {
     onQueryParamsChange: PropTypes.func,
     hidden: PropTypes.bool
 };
-export default withStyles(styles)(ToolbarSearch);
+export default withTranslation()(withStyles(styles)(ToolbarSearch));

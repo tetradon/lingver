@@ -9,6 +9,7 @@ import AddIcon from '@material-ui/icons/Add';
 import DoneIcon from '@material-ui/icons/Done';
 import Paper from "@material-ui/core/Paper";
 import Badge from "@material-ui/core/Badge";
+import {Trans, withTranslation} from "react-i18next";
 
 const styles = theme => ({
     fab: {
@@ -90,24 +91,25 @@ class TranslationSearch extends Component {
 
     render() {
         const {translations} = this.state;
-        const {classes} = this.props;
+        const {classes, t} = this.props;
 
         const translationList = translations.map(translation => {
             return (
                 <React.Fragment key={translation.id}>
                     <ListItem>
-                        {translation.added ?
-                            <Fab size="small"
-                                 color="primary"
-                                 disabled
-                                 className={classes.fab}
-                            ><DoneIcon/></Fab>
-                            :
-                            <Fab size="small"
-                                 color="primary"
-                                 className={classes.fab}
-                                 onClick={() => this.addTranslation(translation)}
-                            ><AddIcon/></Fab>
+                        {
+                            translation.added ?
+                                <Fab size="small"
+                                     color="primary"
+                                     disabled
+                                     className={classes.fab}
+                                ><DoneIcon/></Fab>
+                                :
+                                <Fab size="small"
+                                     color="primary"
+                                     className={classes.fab}
+                                     onClick={() => this.addTranslation(translation)}
+                                ><AddIcon/></Fab>
 
                         }
                         <Badge badgeContent={translation.rating} color="primary">
@@ -121,36 +123,37 @@ class TranslationSearch extends Component {
 
         return (
             <Paper className={classes.root}>
-                <Typography variant={"h5"}>Add new word</Typography>
+                <Typography variant={"h5"}><Trans>Add new word</Trans></Typography>
                 <Input type="text" value={this.state.userSearch} fullWidth
                        onChange={this.handleSearchChange}/>
                 <List>{translationList}
-                    {this.state.userSearch ?
-                        <ListItem key={this.state.userSearch}>
-                            <Input
-                                value={this.state.userNewTranslation}
-                                onChange={this.handleUserNewTranslationChange}
-                                fullWidth
-                                placeholder="Your variant"
-                                className={classes.userNewTranslation}
-                                startAdornment={
-                                    <InputAdornment position="start">
-                                        <Fab size="small"
-                                             color="primary"
-                                             className={classes.fab}
-                                             onClick={this.saveNewTranslation}
-                                        > <AddIcon/>
-                                        </Fab>
-                                    </InputAdornment>
-                                }
-                            >
-                            </Input>
-                        </ListItem>
-                        : null}
+                    {
+                        this.state.userSearch ?
+                            <ListItem key={this.state.userSearch}>
+                                <Input
+                                    value={this.state.userNewTranslation}
+                                    onChange={this.handleUserNewTranslationChange}
+                                    fullWidth
+                                    placeholder={t("Your variant")}
+                                    className={classes.userNewTranslation}
+                                    startAdornment={
+                                        <InputAdornment position="start">
+                                            <Fab size="small"
+                                                 color="primary"
+                                                 className={classes.fab}
+                                                 onClick={this.saveNewTranslation}
+                                            > <AddIcon/>
+                                            </Fab>
+                                        </InputAdornment>
+                                    }
+                                >
+                                </Input>
+                            </ListItem>
+                            : null}
                 </List>
             </Paper>
         );
     }
 }
 
-export default withStyles(styles)(withSnackbar(TranslationSearch));
+export default withTranslation()(withStyles(styles)(withSnackbar(TranslationSearch)));

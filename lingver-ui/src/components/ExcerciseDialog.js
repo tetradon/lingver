@@ -16,6 +16,7 @@ import ConfirmationDialog from "../components/ConfirmationDialog";
 import IconButton from "@material-ui/core/IconButton";
 import {exerciseService} from "../service/exerciseService";
 import ExercisePage from "./ExercisePage";
+import {Trans} from "react-i18next";
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -121,11 +122,17 @@ class ExerciseDialog extends React.Component {
                                       alignItems={"center"}
                                       direction={"column"}>
                                     <Grid item>
-                                        <Typography variant={"h3"}> Not bad! </Typography>
+                                        <Typography variant={"h3"}>
+                                            <Trans>Not bad!</Trans>
+                                        </Typography>
                                     </Grid>
-                                    <Grid className={classes.dialogMargin}>
-                                        <Typography variant={"h5"}>Your result
-                                            is {this.state.correctAnswersCount} / {this.props.trainingSet.length}</Typography>
+                                    <Grid item className={classes.dialogMargin}>
+                                        <Typography variant={"h5"}>
+                                            <Trans>Your result is</Trans>
+                                        </Typography>
+                                        <Typography align={"center"} variant={"h5"}>
+                                            {this.state.correctAnswersCount} / {this.props.trainingSet.length}
+                                        </Typography>
                                     </Grid>
                                 </Grid>
                                 :
@@ -138,7 +145,7 @@ class ExerciseDialog extends React.Component {
                             this.state.selectedAnswer
                                 ?
                                 <Button size={"large"} onClick={this.onNext} color="primary">
-                                    Next
+                                    <Trans>Next</Trans>
                                 </Button>
                                 :
                                 null
@@ -157,8 +164,8 @@ class ExerciseDialog extends React.Component {
                         open={this.state.closeDialogIsOpen}
                         onCancel={this.closeCloseDialog}
                         onConfirm={this.props.onClose}
-                        title={"Confirm closing"}
-                        contentText={"Are you sure?\n All your progress will be lost!"}
+                        title={<Trans>Confirm closing</Trans>}
+                        contentText={<Trans>Are you sure? Your progress will be saved</Trans>}
                     />
                 </Dialog>
             </div>

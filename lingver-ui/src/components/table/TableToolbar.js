@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import ToolbarSearch from "./ToolbarSearch";
 import * as PropTypes from "prop-types";
 import ExerciseMenu from "./ExerciseMenu";
+import {Trans} from "react-i18next";
 
 const styles = theme => ({
     root: {
@@ -88,14 +89,15 @@ class TableToolbar extends Component {
                 })}
             >
                 <div className={classes.title}>
-                    {selected.length > 0 ?
-                        <Typography color="inherit" variant="subtitle1">
-                            {selected.length} selected
-                        </Typography>
-                        :
-                        <Typography variant="h5" id="tableTitle">
-                            Your words
-                        </Typography>
+                    {
+                        selected.length > 0 ?
+                            <Typography color="inherit" variant="subtitle1">
+                                {selected.length} <Trans>selected</Trans>
+                            </Typography>
+                            :
+                            <Typography variant="h5" id="tableTitle">
+                                <Trans>Your dictionary</Trans>
+                            </Typography>
                     }
                 </div>
                 <div className={classes.spacer}/>
@@ -106,14 +108,17 @@ class TableToolbar extends Component {
                 <ToolbarSearch hidden={selected.length > 0}
                                onQueryParamsChange={this.props.onQueryParamsChange}/>
                 <div className={classes.actions}>
-                    {selected.length > 0 ? (
-                        <Tooltip title="Delete">
-                            <IconButton aria-label="Delete"
-                                        onClick={this.props.onDelete}>
-                                <DeleteIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    ) : null}
+                    {
+                        selected.length > 0 ?
+                            (
+                                <Tooltip title={<Trans>Delete</Trans>}>
+                                    <IconButton onClick={this.props.onDelete}>
+                                        <DeleteIcon/>
+                                    </IconButton>
+                                </Tooltip>
+                            )
+                            : null
+                    }
                 </div>
             </Toolbar>
         )
