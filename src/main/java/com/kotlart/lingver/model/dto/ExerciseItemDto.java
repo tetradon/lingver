@@ -6,14 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ExerciseItemDto {
-    Long profileTranslationId;
+    Set<Long> profileTranslationIds;
     String question;
     List<AnswerDto> answers;
     Long exerciseId;
+    Boolean multiple;
 }

@@ -16,9 +16,9 @@ public class CollectionUtil {
         }
     }
 
-    public static <T> List<T> createListFromCollectionWithoutElement(Collection<T> collection, T elementToRemove) {
+    public static <T> List<T> createListFromCollectionWithoutElements(Collection<T> collection, Collection<T> elementsToRemove) {
         List<T> list = new ArrayList<>(collection);
-        list.remove(elementToRemove);
+        list.removeAll(elementsToRemove);
         return list;
     }
 
@@ -26,11 +26,12 @@ public class CollectionUtil {
         Set<T> set = new HashSet<>();
         // Set#add returns false if the set does not change, which
         // indicates that a duplicate element has been added.
-        for (T each: all) {
+        for (T each : all) {
             if (!set.add(each)) {
                 return true;
             }
         }
         return false;
     }
+
 }

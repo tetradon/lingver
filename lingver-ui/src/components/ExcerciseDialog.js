@@ -65,7 +65,7 @@ class ExerciseDialog extends React.Component {
         this.setState({currentIndex: this.state.currentIndex + 1});
 
         exerciseService.saveSingleResult({
-                profileTranslationId: this.props.trainingSet[currentIndex].profileTranslationId,
+                profileTranslationIds: this.props.trainingSet[currentIndex].profileTranslationIds,
                 answerCorrect: selectedAnswer.isCorrect,
                 exerciseId: this.props.trainingSet[currentIndex].exerciseId
             }
