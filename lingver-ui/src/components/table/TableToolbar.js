@@ -20,12 +20,12 @@ const styles = theme => ({
     highlight:
         theme.palette.type === 'light'
             ? {
-                color: theme.palette.primary.main,
-                backgroundColor: lighten(theme.palette.primary.light, 0.85),
+                color: theme.palette.primary.main + '!important',
+                backgroundColor: lighten(theme.palette.primary.light, 0.85) + '!important',
             }
             : {
-                color: theme.palette.text.primary,
-                backgroundColor: theme.palette.primary.dark,
+                color: theme.palette.text.primary + '!important',
+                backgroundColor: theme.palette.primary.dark + '!important',
             },
     spacer: {
         flex: '1 1 100%',
@@ -74,7 +74,12 @@ const styles = theme => ({
             },
         },
     },
-
+    stickyToolbar: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        background: '#fff'
+    }
 });
 
 class TableToolbar extends Component {
@@ -86,7 +91,7 @@ class TableToolbar extends Component {
             <Toolbar
                 className={classNames(classes.root, {
                     [classes.highlight]: selected.length > 0,
-                })}
+                }, classes.stickyToolbar)}
             >
                 <div className={classes.title}>
                     {
