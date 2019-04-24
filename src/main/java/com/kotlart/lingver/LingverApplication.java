@@ -15,8 +15,7 @@ public class LingverApplication implements WebMvcConfigurer {
 
     @Bean
     public ModelMapper modelMapper() {
-        final ModelMapper modelMapper = new ModelMapper();
-        return modelMapper;
+        return new ModelMapper();
     }
 
     @Bean

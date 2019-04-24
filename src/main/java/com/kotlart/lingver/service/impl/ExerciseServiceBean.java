@@ -16,12 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class ExerciseServiceBean implements ExerciseService {
@@ -40,100 +40,70 @@ public class ExerciseServiceBean implements ExerciseService {
         this.exerciseRepository = exerciseRepository;
     }
 
-
-    @Override
-    public List<ExerciseItemDto> generateWordTranslationTrainingSet(List<Long> profileTranslationIds) {
-        final List<ExerciseItemDto> result = new ArrayList<>();
+    public List<ExerciseItemDto> prepareExercise(List<Long> profileTranslationIds, Exercise.Name exerciseName) {
         List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(profileTranslationIds);
         Exercise exercise = exerciseRepository.findByName(Exercise.Name.WORD_TRANSLATION);
-        final Set<String> translations = getTranslationValuesStream(profileTranslations).collect(Collectors.toSet());
-
+        final List<ExerciseItemDto> exerciseList = new ArrayList<>();
         for (ProfileTranslation profileTranslation : profileTranslations) {
-            if (result.stream().noneMatch(i -> i.getQuestion().equals(profileTranslation.getTranslation().getWord().getValue()))) {
-                final Set<ProfileTranslation> profileTranslationsWithSameQuestion = profileTranslations.stream()
-                        .filter(pt -> pt.getTranslation().getWord().getValue()
-                                .equals(profileTranslation.getTranslation().getWord().getValue()))
-                        .collect(Collectors.toSet());
-
-                final Set<Long> ids = profileTranslationsWithSameQuestion.stream().map(ProfileTranslation::getId).collect(Collectors.toSet());
-                final Set<String> correctAnswers = profileTranslationsWithSameQuestion.stream().map(pt -> pt.getTranslation().getValue()).collect(Collectors.toSet());
+            if (!isQuestionPresentInExercise(exerciseList, profileTranslation, exerciseName)) {
+                String question = getQuestion(profileTranslation, exerciseName);
+                Set<String> allPossibleAnswers = getAnswers(profileTranslations, exerciseName);
+                Set<ProfileTranslation> profileTranslationsWithSameQuestion
+                        = findProfileTranslationWithSameQuestions(profileTranslations, profileTranslation, exerciseName);
+                Set<String> correctAnswers = getAnswers(profileTranslationsWithSameQuestion, exerciseName);
+                Set<Long> idsOfProfileTranslationWithSameQuestions = profileTranslationsWithSameQuestion.stream().map(ProfileTranslation::getId).collect(Collectors.toSet());
                 ExerciseItemDto exerciseItem = ExerciseItemDto.builder()
-                        .profileTranslationIds(ids)
-                        .question(profileTranslation.getTranslation().getWord().getValue())
-                        .answers(generateResponseVariants(translations, correctAnswers))
+                        .profileTranslationIds(idsOfProfileTranslationWithSameQuestions)
+                        .question(question)
+                        .answers(generateResponseVariants(allPossibleAnswers, correctAnswers))
                         .exerciseId(exercise.getId())
                         .build();
-                result.add(exerciseItem);
+                exerciseList.add(exerciseItem);
             }
         }
-        return result;
+        return exerciseList;
     }
 
-
-    @Override
-    public List<ExerciseItemDto> generateTranslationWordTrainingSet(List<Long> profileTranslationIds) {
-        final List<ExerciseItemDto> result = new ArrayList<>();
-        final List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(profileTranslationIds);
-
-        Exercise exercise = exerciseRepository.findByName(Exercise.Name.TRANSLATION_WORD);
-        final Set<String> words = getWordValuesStream(profileTranslations).collect(Collectors.toSet());
-
-        for (ProfileTranslation profileTranslation : profileTranslations) {
-            if (result.stream().noneMatch(i -> i.getQuestion().equals(profileTranslation.getTranslation().getValue()))) {
-                final Set<ProfileTranslation> profileTranslationsWithSameQuestion = profileTranslations.stream()
-                        .filter(pt -> pt.getTranslation().getValue()
-                                .equals(profileTranslation.getTranslation().getValue()))
-                        .collect(Collectors.toSet());
-
-                final Set<Long> ids = profileTranslationsWithSameQuestion.stream().map(ProfileTranslation::getId).collect(Collectors.toSet());
-                final Set<String> correctAnswers = profileTranslationsWithSameQuestion.stream().map(pt -> pt.getTranslation().getWord().getValue()).collect(Collectors.toSet());
-                ExerciseItemDto exerciseItem = ExerciseItemDto.builder()
-                        .profileTranslationIds(ids)
-                        .question(profileTranslation.getTranslation().getValue())
-                        .answers(generateResponseVariants(words, correctAnswers))
-                        .exerciseId(exercise.getId())
-                        .build();
-                result.add(exerciseItem);
-            }
-        }
-
-        return result;
-    }
-
-
-    @Override
-    public void saveResult(ExerciseResultDto result) {
-        final List<ProfileTranslation> profileTranslations = profileTranslationRepository
-                .findByIdIn(result.getProfileTranslationIds());
-        final Exercise exercise = exerciseRepository
-                .findById(result.getExerciseId()).orElseThrow(EntityNotFoundException::new);
-        for (ProfileTranslation profileTranslation : profileTranslations) {
-            profileTranslation.setRepeatCount(profileTranslation.getRepeatCount() + 1);
-            profileTranslation.setSuccessRepeatCount(result.isAnswerCorrect() ?
-                    profileTranslation.getSuccessRepeatCount() + 1 : profileTranslation.getSuccessRepeatCount());
-            profileTranslation.setLastRepeatDate(new Date());
-            profileTranslationRepository.save(profileTranslation);
-            exerciseHistoryRepository.save(ExerciseHistory.builder()
-                    .profileTranslation(profileTranslation)
-                    .exercise(exercise)
-                    .result(result.isAnswerCorrect())
-                    .date(new Date())
-                    .build());
+    private String getQuestion(ProfileTranslation profileTranslation, Exercise.Name exerciseName) {
+        if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
+            return profileTranslation.getTranslation().getWord().getValue();
+        } else {
+            return profileTranslation.getTranslation().getValue();
         }
     }
 
-    private Stream<String> getWordValuesStream(List<ProfileTranslation> profileTranslations) {
-        return profileTranslations
-                .stream()
-                .map(profileTranslation -> profileTranslation.getTranslation().getWord().getValue());
+    private Set<ProfileTranslation> findProfileTranslationWithSameQuestions(List<ProfileTranslation> profileTranslations, ProfileTranslation profileTranslation, Exercise.Name exerciseName) {
+        if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
+            return profileTranslations.stream()
+                    .filter(pt -> pt.getTranslation().getWord().getValue()
+                            .equals(profileTranslation.getTranslation().getWord().getValue()))
+                    .collect(Collectors.toSet());
+        } else {
+            return profileTranslations.stream()
+                    .filter(pt -> pt.getTranslation().getValue().equals(profileTranslation.getTranslation().getValue()))
+                    .collect(Collectors.toSet());
+        }
     }
 
-    private Stream<String> getTranslationValuesStream(List<ProfileTranslation> profileTranslations) {
-        return profileTranslations
-                .stream()
-                .map(profileTranslation -> profileTranslation.getTranslation().getValue());
+    private boolean isQuestionPresentInExercise(List<ExerciseItemDto> exerciseList, ProfileTranslation profileTranslation, Exercise.Name exerciseName) {
+        if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
+            return exerciseList.stream().anyMatch(exerciseItem -> exerciseItem.getQuestion().equals(profileTranslation.getTranslation().getWord().getValue()));
+        } else {
+            return exerciseList.stream().anyMatch(exerciseItem -> exerciseItem.getQuestion().equals(profileTranslation.getTranslation().getValue()));
+        }
     }
 
+    private Set<String> getAnswers(Collection<ProfileTranslation> profileTranslations, Exercise.Name exerciseName) {
+        if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
+            return profileTranslations
+                    .stream()
+                    .map(profileTranslation -> profileTranslation.getTranslation().getValue()).collect(Collectors.toSet());
+        } else {
+            return profileTranslations
+                    .stream()
+                    .map(profileTranslation -> profileTranslation.getTranslation().getWord().getValue()).collect(Collectors.toSet());
+        }
+    }
 
     private List<AnswerDto> generateResponseVariants(Set<String> allTranslationValues, Set<String> correct) {
         List<String> incorrectAnswerList = CollectionUtil.createListFromCollectionWithoutElements(allTranslationValues, correct);
@@ -164,6 +134,27 @@ public class ExerciseServiceBean implements ExerciseService {
                         .build())
         );
         return result;
+    }
+
+    @Override
+    public void saveResult(ExerciseResultDto result) {
+        final List<ProfileTranslation> profileTranslations = profileTranslationRepository
+                .findByIdIn(result.getProfileTranslationIds());
+        final Exercise exercise = exerciseRepository
+                .findById(result.getExerciseId()).orElseThrow(EntityNotFoundException::new);
+        for (ProfileTranslation profileTranslation : profileTranslations) {
+            profileTranslation.setRepeatCount(profileTranslation.getRepeatCount() + 1);
+            profileTranslation.setSuccessRepeatCount(result.isAnswerCorrect() ?
+                    profileTranslation.getSuccessRepeatCount() + 1 : profileTranslation.getSuccessRepeatCount());
+            profileTranslation.setLastRepeatDate(new Date());
+            profileTranslationRepository.save(profileTranslation);
+            exerciseHistoryRepository.save(ExerciseHistory.builder()
+                    .profileTranslation(profileTranslation)
+                    .exercise(exercise)
+                    .result(result.isAnswerCorrect())
+                    .date(new Date())
+                    .build());
+        }
     }
 
 

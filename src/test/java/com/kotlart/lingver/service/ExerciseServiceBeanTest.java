@@ -56,7 +56,7 @@ public class ExerciseServiceBeanTest extends AbstractServiceBeanTest {
 
     @Test
     public void test_generateWordTranslationTrainingSet() {
-        final List<ExerciseItemDto> exerciseItems = sut.generateWordTranslationTrainingSet(profileTranslationIds);
+        final List<ExerciseItemDto> exerciseItems = sut.prepareExercise(profileTranslationIds, Exercise.Name.WORD_TRANSLATION);
         Assert.assertEquals(2, exerciseItems.size());
         exerciseItems.forEach(e -> {
             Assert.assertEquals(2, e.getAnswers().size());
@@ -70,7 +70,7 @@ public class ExerciseServiceBeanTest extends AbstractServiceBeanTest {
 
     @Test
     public void test_generateTranslationWordTrainingSet() {
-        final List<ExerciseItemDto> exerciseItems = sut.generateTranslationWordTrainingSet(profileTranslationIds);
+        final List<ExerciseItemDto> exerciseItems = sut.prepareExercise(profileTranslationIds, Exercise.Name.TRANSLATION_WORD);
         Assert.assertEquals(2, exerciseItems.size());
         exerciseItems.forEach(e -> {
             Assert.assertEquals(2, e.getAnswers().size());
