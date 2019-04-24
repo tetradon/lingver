@@ -48,9 +48,9 @@ i18n
                     "Welcome, ": "Добро пожаловать, ",
                     "Wrong credentials!": "Неверные имя пользователя или пароль!",
                     "Confirm closing": "Подтвердите закрытие",
-                    "Are you sure? Your progress will be saved": "Вы уверены? Ваш прогресс будет сохранен"
-
-
+                    "Are you sure? Your progress will be saved": "Вы уверены? Ваш прогресс будет сохранен",
+                    "Close": "Закрыть",
+                    "from": "из"
                 }
             }
         },
