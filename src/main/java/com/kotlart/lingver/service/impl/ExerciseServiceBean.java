@@ -41,17 +41,21 @@ public class ExerciseServiceBean implements ExerciseService {
     }
 
     public List<ExerciseItemDto> prepareExercise(List<Long> profileTranslationIds, Exercise.Name exerciseName) {
+        final List<ExerciseItemDto> exerciseList = new ArrayList<>();
+
         List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(profileTranslationIds);
         Exercise exercise = exerciseRepository.findByName(Exercise.Name.WORD_TRANSLATION);
-        final List<ExerciseItemDto> exerciseList = new ArrayList<>();
+
         for (ProfileTranslation profileTranslation : profileTranslations) {
-            if (!isQuestionPresentInExercise(exerciseList, profileTranslation, exerciseName)) {
-                String question = getQuestion(profileTranslation, exerciseName);
+            String question = getQuestion(profileTranslation, exerciseName);
+            if (!isQuestionPresentInExercise(exerciseList, question)) {
                 Set<String> allPossibleAnswers = getAnswers(profileTranslations, exerciseName);
                 Set<ProfileTranslation> profileTranslationsWithSameQuestion
-                        = findProfileTranslationWithSameQuestions(profileTranslations, profileTranslation, exerciseName);
+                        = findProfileTranslationWithSameQuestions(profileTranslations, question, exerciseName);
                 Set<String> correctAnswers = getAnswers(profileTranslationsWithSameQuestion, exerciseName);
-                Set<Long> idsOfProfileTranslationWithSameQuestions = profileTranslationsWithSameQuestion.stream().map(ProfileTranslation::getId).collect(Collectors.toSet());
+                Set<Long> idsOfProfileTranslationWithSameQuestions = profileTranslationsWithSameQuestion
+                        .stream().map(ProfileTranslation::getId).collect(Collectors.toSet());
+
                 ExerciseItemDto exerciseItem = ExerciseItemDto.builder()
                         .profileTranslationIds(idsOfProfileTranslationWithSameQuestions)
                         .question(question)
@@ -64,6 +68,10 @@ public class ExerciseServiceBean implements ExerciseService {
         return exerciseList;
     }
 
+    private boolean isQuestionPresentInExercise(List<ExerciseItemDto> exerciseList, String question) {
+        return exerciseList.stream().anyMatch(exerciseItem -> exerciseItem.getQuestion().equals(question));
+    }
+
     private String getQuestion(ProfileTranslation profileTranslation, Exercise.Name exerciseName) {
         if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
             return profileTranslation.getTranslation().getWord().getValue();
@@ -72,37 +80,19 @@ public class ExerciseServiceBean implements ExerciseService {
         }
     }
 
-    private Set<ProfileTranslation> findProfileTranslationWithSameQuestions(List<ProfileTranslation> profileTranslations, ProfileTranslation profileTranslation, Exercise.Name exerciseName) {
-        if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
-            return profileTranslations.stream()
-                    .filter(pt -> pt.getTranslation().getWord().getValue()
-                            .equals(profileTranslation.getTranslation().getWord().getValue()))
-                    .collect(Collectors.toSet());
-        } else {
-            return profileTranslations.stream()
-                    .filter(pt -> pt.getTranslation().getValue().equals(profileTranslation.getTranslation().getValue()))
-                    .collect(Collectors.toSet());
-        }
-    }
-
-    private boolean isQuestionPresentInExercise(List<ExerciseItemDto> exerciseList, ProfileTranslation profileTranslation, Exercise.Name exerciseName) {
-        if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
-            return exerciseList.stream().anyMatch(exerciseItem -> exerciseItem.getQuestion().equals(profileTranslation.getTranslation().getWord().getValue()));
-        } else {
-            return exerciseList.stream().anyMatch(exerciseItem -> exerciseItem.getQuestion().equals(profileTranslation.getTranslation().getValue()));
-        }
-    }
-
     private Set<String> getAnswers(Collection<ProfileTranslation> profileTranslations, Exercise.Name exerciseName) {
         if (exerciseName.equals(Exercise.Name.WORD_TRANSLATION)) {
-            return profileTranslations
-                    .stream()
-                    .map(profileTranslation -> profileTranslation.getTranslation().getValue()).collect(Collectors.toSet());
+            return profileTranslations.stream().map(profileTranslation ->
+                    profileTranslation.getTranslation().getValue()).collect(Collectors.toSet());
         } else {
-            return profileTranslations
-                    .stream()
-                    .map(profileTranslation -> profileTranslation.getTranslation().getWord().getValue()).collect(Collectors.toSet());
+            return profileTranslations.stream().map(profileTranslation ->
+                    profileTranslation.getTranslation().getWord().getValue()).collect(Collectors.toSet());
         }
+    }
+
+    private Set<ProfileTranslation> findProfileTranslationWithSameQuestions(List<ProfileTranslation> profileTranslations, String question, Exercise.Name exerciseName) {
+        return profileTranslations.stream().filter(pt -> getQuestion(pt, exerciseName).equals(question))
+                .collect(Collectors.toSet());
     }
 
     private List<AnswerDto> generateResponseVariants(Set<String> allTranslationValues, Set<String> correct) {
