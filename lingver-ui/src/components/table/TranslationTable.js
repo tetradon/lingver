@@ -18,7 +18,7 @@ const styles = {
     stickyHeader: {
         "& th": {
             position: "sticky",
-            top: '6%',
+            top: '64px',
             background: "#fff",
             zIndex: 10
         }
