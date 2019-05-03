@@ -14,11 +14,17 @@ import ConfirmationDialog from "../ConfirmationDialog";
 import TableToolbar from "./TableToolbar";
 import {Trans} from "react-i18next";
 
-const styles = theme => ({
-    root: {
-        paddingRight: theme.spacing.unit,
+const styles = {
+    stickyHeader: {
+        "& th": {
+            position: "sticky",
+            top: '64px',
+            background: "#fff",
+            zIndex: 10
+        }
     },
-});
+
+};
 
 class TranslationTable extends Component {
     constructor(props) {
@@ -122,7 +128,7 @@ class TranslationTable extends Component {
     };
 
     render() {
-        const {translations} = this.props;
+        const {translations, classes} = this.props;
         return (
             <React.Fragment>
                 <ConfirmationDialog
@@ -134,13 +140,14 @@ class TranslationTable extends Component {
                 />
                 <Paper>
                     <TableToolbar
+                        className={classes.stickyToolbar}
                         onDelete={this.handleDeleteClick}
                         onQueryParamsChange={this.props.onQueryParamsChange}
                         clearSelected={this.clearSelected}
                         selected={this.state.selected}/>
                     <Table padding={"dense"}>
                         <TableHead>
-                            <TableRow>
+                            <TableRow className={classes.stickyHeader}>
                                 <TableCell>
                                     <Checkbox
                                         checked={

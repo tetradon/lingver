@@ -10,6 +10,7 @@ import DoneIcon from '@material-ui/icons/Done';
 import Paper from "@material-ui/core/Paper";
 import Badge from "@material-ui/core/Badge";
 import {Trans, withTranslation} from "react-i18next";
+import classNames from 'classnames';
 
 const styles = theme => ({
     fab: {
@@ -24,6 +25,11 @@ const styles = theme => ({
     padding: {
         padding: `0 ${theme.spacing.unit * 2}px`,
     },
+    sticky: {
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+    }
 });
 
 class TranslationSearch extends Component {
@@ -122,7 +128,7 @@ class TranslationSearch extends Component {
         });
 
         return (
-            <Paper className={classes.root}>
+            <Paper className={classNames(classes.root, classes.sticky)}>
                 <Typography variant={"h5"}><Trans>Add new word</Trans></Typography>
                 <Input type="text" value={this.state.userSearch} fullWidth
                        onChange={this.handleSearchChange}/>

@@ -14,7 +14,7 @@ import java.util.Collections;
 public class ControllerExceptionHandler extends ResponseEntityExceptionHandler {
     private static final Logger LOG = LoggerFactory.getLogger(ControllerExceptionHandler.class);
 
-    @ExceptionHandler({UniqueConstraintViolationException.class, NotUniqueExcerciseQuestionExeption.class})
+    @ExceptionHandler({UniqueConstraintViolationException.class})
     public ResponseEntity uniqueConstraint(RuntimeException ex) {
         return ResponseEntity.badRequest().body(Collections.singletonList(new MessageDto(ex.getMessage())));
     }

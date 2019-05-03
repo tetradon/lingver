@@ -2,14 +2,11 @@ package com.kotlart.lingver.service;
 
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
-import com.kotlart.lingver.model.entity.ExerciseHistory;
+import com.kotlart.lingver.model.entity.Exercise;
 
 import java.util.List;
 
 public interface ExerciseService {
-    List<ExerciseItemDto> generateWordTranslationTrainingSet(List<Long> translationIds);
-
-    List<ExerciseItemDto> generateTranslationWordTrainingSet(List<Long> translationIds);
-
-    ExerciseHistory saveResult(ExerciseResultDto result);
+    List<ExerciseItemDto> prepareExercise(List<Long> translationIds, Exercise.Name exerciseName);
+    void saveResult(ExerciseResultDto result);
 }

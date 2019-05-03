@@ -1,8 +1,8 @@
 package com.kotlart.lingver.rest;
 
-import com.kotlart.lingver.model.dto.ExerciseHistoryDto;
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
+import com.kotlart.lingver.model.entity.Exercise;
 import com.kotlart.lingver.service.ExerciseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,20 +32,20 @@ public class ExerciseController {
 
     @GetMapping(value = "/word-translation")
     public ResponseEntity wordTranslation(@RequestParam("ids") List<Long> translationIds) {
-        final List<ExerciseItemDto> exerciseItems = exerciseService.generateWordTranslationTrainingSet(translationIds);
+        final List<ExerciseItemDto> exerciseItems = exerciseService.prepareExercise(translationIds, Exercise.Name.WORD_TRANSLATION);
         return ResponseEntity.ok(exerciseItems);
     }
 
     @GetMapping(value = "/translation-word")
     public ResponseEntity translationWord(@RequestParam("ids") List<Long> translationIds) {
-        final List<ExerciseItemDto> exerciseItems = exerciseService.generateTranslationWordTrainingSet(translationIds);
+        final List<ExerciseItemDto> exerciseItems = exerciseService.prepareExercise(translationIds, Exercise.Name.TRANSLATION_WORD);
         return ResponseEntity.ok(exerciseItems);
     }
 
     @PostMapping(value = "/result")
     public ResponseEntity saveSingleResult(@RequestBody ExerciseResultDto result) {
-        final ExerciseHistoryDto dto = modelMapper.map(exerciseService.saveResult(result), ExerciseHistoryDto.class);
-        return ResponseEntity.ok(dto);
+        exerciseService.saveResult(result);
+        return ResponseEntity.ok().build();
     }
 
 }

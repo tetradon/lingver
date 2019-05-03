@@ -35,6 +35,9 @@ const styles = (theme) => ({
     dialogMargin: {
         marginTop: theme.spacing.unit * 5
     },
+    grow: {
+        flexGrow: 1,
+    },
 });
 
 class ExerciseDialog extends React.Component {
@@ -65,7 +68,7 @@ class ExerciseDialog extends React.Component {
         this.setState({currentIndex: this.state.currentIndex + 1});
 
         exerciseService.saveSingleResult({
-                profileTranslationId: this.props.trainingSet[currentIndex].profileTranslationId,
+                profileTranslationIds: this.props.trainingSet[currentIndex].profileTranslationIds,
                 answerCorrect: selectedAnswer.isCorrect,
                 exerciseId: this.props.trainingSet[currentIndex].exerciseId
             }
@@ -140,7 +143,17 @@ class ExerciseDialog extends React.Component {
 
                         }
                     </DialogContent>
-                    <DialogActions>
+                    <DialogActions style={{justifyContent: 'space-between'}}>
+                        {
+                            !this.isExerciseFinished()
+                                ?
+                                <Typography>
+                                    {this.state.currentIndex + 1} <Trans>from</Trans> {this.props.trainingSet.length}
+                                </Typography>
+                                :
+                                null
+                        }
+                        <div style={styles.grow}/>
                         {
                             this.state.selectedAnswer
                                 ?
@@ -154,7 +167,7 @@ class ExerciseDialog extends React.Component {
                             this.isExerciseFinished()
                                 ?
                                 <Button size={"large"} onClick={this.props.onClose} color="primary">
-                                    Close
+                                    <Trans>Close</Trans>
                                 </Button>
                                 :
                                 null
