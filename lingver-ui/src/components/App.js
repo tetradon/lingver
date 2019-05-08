@@ -9,10 +9,12 @@ import NotFound from "./NotFound";
 import axios from "axios";
 import {userService} from '../service/userService'
 import {withTranslation} from 'react-i18next';
+import dotenv from "dotenv";
 
 class App extends Component {
     constructor(props) {
         super(props);
+        dotenv.config();
         axios.interceptors.response.use(
             response => {
                 return response

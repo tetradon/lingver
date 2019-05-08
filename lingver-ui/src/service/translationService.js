@@ -9,11 +9,11 @@ export const translationService = {
 };
 
 function addTranslation(translation) {
-    return axios.post('/profile/translations', translation);
+    return axios.post(process.env.SERVER + '/profile/translations', translation);
 }
 
 function searchTranslationsByWord(word) {
-    return axios.get(`/translations?word=${word}`)
+    return axios.get(process.env.SERVER + `/translations?word=${word}`)
         .then(response => {
             return response.data;
         }).catch(error => {
