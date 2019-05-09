@@ -11,10 +11,12 @@ import {userService} from '../service/userService'
 import {withTranslation} from 'react-i18next';
 import dotenv from "dotenv";
 
+dotenv.config();
+axios.defaults.withCredentials = true;
+
 class App extends Component {
     constructor(props) {
         super(props);
-        dotenv.config();
         axios.interceptors.response.use(
             response => {
                 return response
