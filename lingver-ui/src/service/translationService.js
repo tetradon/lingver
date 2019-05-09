@@ -9,11 +9,11 @@ export const translationService = {
 };
 
 function addTranslation(translation) {
-    return axios.post(process.env.SERVER + '/profile/translations', translation);
+    return axios.post(process.env.REACT_APP_REST_API + '/profile/translations', translation);
 }
 
 function searchTranslationsByWord(word) {
-    return axios.get(process.env.SERVER + `/translations?word=${word}`)
+    return axios.get(process.env.REACT_APP_REST_API + `/translations?word=${word}`)
         .then(response => {
             return response.data;
         }).catch(error => {
@@ -22,7 +22,7 @@ function searchTranslationsByWord(word) {
 }
 
 function getTranslations(params) {
-    return axios.get('/profile/translations', {
+    return axios.get(process.env.REACT_APP_REST_API + '/profile/translations', {
         params: {
             size: params.size,
             page: params.page,
@@ -34,7 +34,7 @@ function getTranslations(params) {
 }
 
 function saveNewTranslation(translation) {
-    return axios.post('/translations', translation)
+    return axios.post(process.env.REACT_APP_REST_API + '/translations', translation)
         .then(response => {
             addTranslation(response.data)
         }).catch(error => {
@@ -44,7 +44,7 @@ function saveNewTranslation(translation) {
 
 
 function removeTranslations(ids) {
-    return axios.delete('/profile/translations', {data: {ids: ids}});
+    return axios.delete(process.env.REACT_APP_REST_API + '/profile/translations', {data: {ids: ids}});
 }
 
 

@@ -5,7 +5,7 @@ export const registrationService = {
 };
 
 function register(user) {
-    return axios.post(process.env.SERVER + '/register', user, {withCredentials: true})
+    return axios.post(process.env.REACT_APP_REST_API + '/register', user, {withCredentials: true})
         .then(response => {
             return response.data;
         }).catch(error => {
