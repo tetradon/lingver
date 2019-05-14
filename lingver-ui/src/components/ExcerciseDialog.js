@@ -17,10 +17,14 @@ import IconButton from "@material-ui/core/IconButton";
 import {exerciseService} from "../service/exerciseService";
 import ExercisePage from "./ExercisePage";
 import {Trans} from "react-i18next";
+import {exerciseKeys} from "../constants";
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
 }
+
+const englishSpeaker = new SpeechSynthesisUtterance();
+englishSpeaker.lang = 'en-US';
 
 const styles = (theme) => ({
     dialogTitle: {
@@ -40,6 +44,7 @@ const styles = (theme) => ({
     },
 });
 
+
 class ExerciseDialog extends React.Component {
 
     constructor(props) {
@@ -49,23 +54,50 @@ class ExerciseDialog extends React.Component {
             selectedAnswer: null,
             closeDialogIsOpen: false,
             correctAnswersCount: 0,
-            results: []
+            results: [],
         };
-
+        this.speakQuestion();
     }
 
+    speakQuestion = () => {
+        const {currentIndex} = this.state;
+        const {trainingSet} = this.props;
+        englishSpeaker.text = trainingSet[currentIndex].question;
+        speechSynthesis.speak(englishSpeaker);
+    };
+
+    speakAnswer = () => {
+        const {currentIndex} = this.state;
+        const {trainingSet} = this.props;
+        const correct = trainingSet[currentIndex].answers.filter(answer => {
+            return answer.isCorrect;
+        })[0];
+        englishSpeaker.text = correct.value;
+        speechSynthesis.speak(englishSpeaker);
+    };
+
     handleResponse = (event, answer) => {
+        const {currentIndex} = this.state;
+        const {trainingSet} = this.props;
         this.setState({selectedAnswer: answer});
+        if (!this.isExerciseFinished() && trainingSet[currentIndex].exerciseKey === exerciseKeys.translationWord) {
+            this.speakAnswer();
+        }
     };
 
     onNext = () => {
         let {selectedAnswer, currentIndex} = this.state;
+        let {trainingSet} = this.props;
         if (selectedAnswer.isCorrect) {
             this.setState({correctAnswersCount: this.state.correctAnswersCount + 1})
         }
         this.props.trainingSet[currentIndex].isUserAnswerCorrect = selectedAnswer.isCorrect;
         this.setState({selectedAnswer: null});
-        this.setState({currentIndex: this.state.currentIndex + 1});
+        this.setState({currentIndex: this.state.currentIndex + 1}, () => {
+            if (!this.isExerciseFinished() && trainingSet[currentIndex].exerciseKey === exerciseKeys.wordTranslation) {
+                this.speakQuestion();
+            }
+        });
 
         exerciseService.saveSingleResult({
                 profileTranslationIds: this.props.trainingSet[currentIndex].profileTranslationIds,
@@ -86,7 +118,6 @@ class ExerciseDialog extends React.Component {
     isExerciseFinished = () => {
         return this.state.currentIndex === this.props.trainingSet.length && this.state.current !== 0;
     };
-
 
     render() {
         const {classes} = this.props;
@@ -189,7 +220,6 @@ class ExerciseDialog extends React.Component {
 ExerciseDialog.propTypes = {
     trainingSet: PropTypes.array,
     onClose: PropTypes.func,
-    exerciseName: PropTypes.string
-
+    exerciseName: PropTypes.object //trans string
 };
 export default withStyles(styles)(ExerciseDialog);

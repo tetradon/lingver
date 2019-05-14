@@ -25,7 +25,13 @@ const styles = (theme) => ({
     },
 });
 
+
 class ExercisePage extends React.Component {
+
+    constructor(props) {
+        super(props);
+
+    }
 
     correctWasSelected(oneOfAnswers) {
         return this.props.selectedAnswer && oneOfAnswers.isCorrect === true;
@@ -92,7 +98,7 @@ class ExercisePage extends React.Component {
 
 ExercisePage.propTypes = {
     exerciseItem: PropTypes.object,
-    selectedAnswer: PropTypes.string,
+    selectedAnswer: PropTypes.object,
     onResponse: PropTypes.func
 };
 export default withStyles(styles)(ExercisePage);

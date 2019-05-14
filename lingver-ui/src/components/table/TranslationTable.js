@@ -127,6 +127,17 @@ class TranslationTable extends Component {
         return null;
     };
 
+    countProgress = (profileTranslation) => {
+        let progress = 0;
+        if (profileTranslation.repeatCount && profileTranslation.successRepeatCount) {
+            progress = (profileTranslation.successRepeatCount / 4) * 100;
+        }
+        if (progress > 100) {
+            progress = 100;
+        }
+        return progress
+    };
+
     render() {
         const {translations, classes} = this.props;
         return (
@@ -196,7 +207,7 @@ class TranslationTable extends Component {
                                         <TableCell>{row.translation}</TableCell>
                                         <TableCell>{row.insertDate}</TableCell>
                                         <TableCell>{this.getYearFromString(row.lastRepeatDate) < 2000 ? null : row.lastRepeatDate}</TableCell>
-                                        <TableCell>{row.successRepeatCount}</TableCell>
+                                        <TableCell>{this.countProgress(row) + '%'}</TableCell>
                                     </TableRow>
                                 );
                             })}

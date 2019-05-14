@@ -9,6 +9,10 @@ import NotFound from "./NotFound";
 import axios from "axios";
 import {userService} from '../service/userService'
 import {withTranslation} from 'react-i18next';
+import dotenv from "dotenv";
+
+dotenv.config();
+axios.defaults.withCredentials = true;
 
 class App extends Component {
     constructor(props) {
