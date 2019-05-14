@@ -66,6 +66,7 @@ public class ExerciseServiceBean implements ExerciseService {
                         .question(question)
                         .answers(generateResponseVariants(allPossibleAnswers, correctAnswersForQuestion))
                         .exerciseId(exercise.getId())
+                        .exerciseKey(exerciseName)
                         .build();
                 exerciseList.add(exerciseItem);
             }

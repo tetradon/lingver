@@ -1,5 +1,6 @@
 package com.kotlart.lingver.model.dto;
 
+import com.kotlart.lingver.model.entity.Exercise;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,5 @@ public class ExerciseItemDto {
     String question;
     List<AnswerDto> answers;
     Long exerciseId;
-    Boolean multiple;
+    Exercise.Name exerciseKey;
 }

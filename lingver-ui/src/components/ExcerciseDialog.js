@@ -17,6 +17,7 @@ import IconButton from "@material-ui/core/IconButton";
 import {exerciseService} from "../service/exerciseService";
 import ExercisePage from "./ExercisePage";
 import {Trans} from "react-i18next";
+import {exerciseKeys} from "../constants";
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
@@ -79,7 +80,7 @@ class ExerciseDialog extends React.Component {
         const {currentIndex} = this.state;
         const {trainingSet} = this.props;
         this.setState({selectedAnswer: answer});
-        if (!this.isExerciseFinished() && trainingSet[currentIndex].exerciseId === 2) { //Translation - Word
+        if (!this.isExerciseFinished() && trainingSet[currentIndex].exerciseKey === exerciseKeys.translationWord) {
             this.speakAnswer();
         }
     };
@@ -93,7 +94,7 @@ class ExerciseDialog extends React.Component {
         this.props.trainingSet[currentIndex].isUserAnswerCorrect = selectedAnswer.isCorrect;
         this.setState({selectedAnswer: null});
         this.setState({currentIndex: this.state.currentIndex + 1}, () => {
-            if (!this.isExerciseFinished() && trainingSet[currentIndex].exerciseId === 1) { //Word - Translation
+            if (!this.isExerciseFinished() && trainingSet[currentIndex].exerciseKey === exerciseKeys.wordTranslation) {
                 this.speakQuestion();
             }
         });
