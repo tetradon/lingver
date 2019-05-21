@@ -2,15 +2,15 @@ package com.kotlart.lingver.service.impl;
 
 import com.kotlart.lingver.exception.EntityNotFoundException;
 import com.kotlart.lingver.exception.ExerciseNotExistsException;
-import com.kotlart.lingver.model.ExerciseStrategy;
-import com.kotlart.lingver.model.TranslationWordExerciseStrategy;
-import com.kotlart.lingver.model.WordTranslationExerciseStrategy;
 import com.kotlart.lingver.model.dto.AnswerDto;
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
 import com.kotlart.lingver.model.entity.Exercise;
 import com.kotlart.lingver.model.entity.ExerciseHistory;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
+import com.kotlart.lingver.model.strategy.ExerciseStrategy;
+import com.kotlart.lingver.model.strategy.TranslationWordExerciseStrategy;
+import com.kotlart.lingver.model.strategy.WordTranslationExerciseStrategy;
 import com.kotlart.lingver.service.ExerciseService;
 import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
 import com.kotlart.lingver.service.respository.ExerciseRepository;

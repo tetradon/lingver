@@ -1,4 +1,4 @@
-package com.kotlart.lingver.model;
+package com.kotlart.lingver.model.strategy;
 
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 
