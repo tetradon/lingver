@@ -25,6 +25,7 @@ function Transition(props) {
 
 const englishSpeaker = new SpeechSynthesisUtterance();
 englishSpeaker.lang = 'en-US';
+englishSpeaker.rate = 0.5;
 
 const styles = (theme) => ({
     dialogTitle: {

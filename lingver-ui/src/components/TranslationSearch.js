@@ -72,8 +72,8 @@ class TranslationSearch extends Component {
 
         translationService.saveNewTranslation(newTranslation)
             .then(() => {
-                this.props.onNewWord();
                 this.setState({userNewTranslation: '', userSearch: '', translations: []});
+                this.props.onNewWord();
             }).catch((error) => {
             error.response.data.forEach((error) => {
                 this.props.enqueueSnackbar(error.message);

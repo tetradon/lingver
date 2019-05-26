@@ -28,11 +28,6 @@ const styles = (theme) => ({
 
 class ExercisePage extends React.Component {
 
-    constructor(props) {
-        super(props);
-
-    }
-
     correctWasSelected(oneOfAnswers) {
         return this.props.selectedAnswer && oneOfAnswers.isCorrect === true;
     }

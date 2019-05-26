@@ -36,7 +36,7 @@ function getTranslations(params) {
 function saveNewTranslation(translation) {
     return axios.post(process.env.REACT_APP_REST_API + '/translations', translation)
         .then(response => {
-            addTranslation(response.data)
+            return addTranslation(response.data);
         }).catch(error => {
             return Promise.reject(error);
         });
