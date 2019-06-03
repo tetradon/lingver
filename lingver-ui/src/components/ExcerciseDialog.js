@@ -37,8 +37,9 @@ const styles = (theme) => ({
         right: theme.spacing.unit,
         top: theme.spacing.unit,
     },
-    dialogMargin: {
-        marginTop: theme.spacing.unit * 5
+    dialog: {
+        marginTop: '64px',
+        backgroundColor: "white"
     },
     grow: {
         flexGrow: 1,
@@ -131,7 +132,7 @@ class ExerciseDialog extends React.Component {
         return (
             <div>
                 <Dialog
-                    className={classes.dialogMargin}
+                    className={classes.dialog}
                     fullWidth
                     maxWidth={'sm'}
                     open={true}
