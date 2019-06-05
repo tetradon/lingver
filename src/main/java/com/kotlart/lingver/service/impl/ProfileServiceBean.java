@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 @Service
@@ -47,7 +46,7 @@ public class ProfileServiceBean implements UserDetailsService, ProfileService {
         profile.setEnabled(true);
         profile.setPassword(encoder.encode(profile.getPassword()));
         Role role = roleRepository.findByAuthority(Role.USER);
-        profile.setAuthorities(new ArrayList<>(Collections.singletonList(role)));
+        profile.setAuthorities(Collections.singletonList(role));
         try {
             return profileRepository.save(profile);
         } catch (DataIntegrityViolationException exception) {
