@@ -1,7 +1,6 @@
 package com.kotlart.lingver.service.impl;
 
 import com.kotlart.lingver.exception.EntityNotFoundException;
-import com.kotlart.lingver.exception.ExerciseNotExistsException;
 import com.kotlart.lingver.model.dto.AnswerDto;
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
@@ -9,8 +8,6 @@ import com.kotlart.lingver.model.entity.Exercise;
 import com.kotlart.lingver.model.entity.ExerciseHistory;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.strategy.ExerciseStrategy;
-import com.kotlart.lingver.model.strategy.TranslationWordExerciseStrategy;
-import com.kotlart.lingver.model.strategy.WordTranslationExerciseStrategy;
 import com.kotlart.lingver.service.ExerciseService;
 import com.kotlart.lingver.service.respository.ExerciseHistoryRepository;
 import com.kotlart.lingver.service.respository.ExerciseRepository;
@@ -44,12 +41,11 @@ public class ExerciseServiceBean implements ExerciseService {
         this.exerciseRepository = exerciseRepository;
     }
 
-    public List<ExerciseItemDto> prepareExercise(List<Long> profileTranslationIds, Exercise.Name exerciseName) {
+    public List<ExerciseItemDto> prepareExercise(List<Long> profileTranslationIds, ExerciseStrategy exerciseStrategy) {
         final List<ExerciseItemDto> exerciseList = new ArrayList<>();
 
         List<ProfileTranslation> profileTranslations = profileTranslationRepository.findByIdIn(profileTranslationIds);
-        Exercise exercise = exerciseRepository.findByName(exerciseName);
-        ExerciseStrategy exerciseStrategy = getExerciseStrategyInstance(exerciseName);
+        Exercise exercise = exerciseRepository.findByName(exerciseStrategy.getExerciseDbName());
 
         for (ProfileTranslation profileTranslation : profileTranslations) {
             String question = exerciseStrategy.getQuestion(profileTranslation);
@@ -66,7 +62,7 @@ public class ExerciseServiceBean implements ExerciseService {
                         .question(question)
                         .answers(generateResponseVariants(allPossibleAnswers, correctAnswersForQuestion))
                         .exerciseId(exercise.getId())
-                        .exerciseKey(exerciseName)
+                        .exerciseKey(exerciseStrategy.getExerciseDbName())
                         .build();
                 exerciseList.add(exerciseItem);
             }
@@ -74,20 +70,6 @@ public class ExerciseServiceBean implements ExerciseService {
         return exerciseList;
     }
 
-    private ExerciseStrategy getExerciseStrategyInstance(Exercise.Name exerciseName) {
-        ExerciseStrategy exerciseStrategy;
-        switch (exerciseName) {
-            case TRANSLATION_WORD:
-                exerciseStrategy = new TranslationWordExerciseStrategy();
-                break;
-            case WORD_TRANSLATION:
-                exerciseStrategy = new WordTranslationExerciseStrategy();
-                break;
-            default:
-                throw new ExerciseNotExistsException("Exercise with name '" + exerciseName + "' does not exist");
-        }
-        return exerciseStrategy;
-    }
 
     private boolean isQuestionPresentInExercise(List<ExerciseItemDto> exerciseList, String question) {
         return exerciseList.stream().anyMatch(exerciseItem -> exerciseItem.getQuestion().equals(question));
@@ -153,6 +135,4 @@ public class ExerciseServiceBean implements ExerciseService {
                     .build());
         }
     }
-
-
 }

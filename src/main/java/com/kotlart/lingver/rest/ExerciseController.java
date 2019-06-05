@@ -2,7 +2,7 @@ package com.kotlart.lingver.rest;
 
 import com.kotlart.lingver.model.dto.ExerciseItemDto;
 import com.kotlart.lingver.model.dto.ExerciseResultDto;
-import com.kotlart.lingver.model.entity.Exercise;
+import com.kotlart.lingver.model.strategy.ExerciseStrategy;
 import com.kotlart.lingver.service.ExerciseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,13 +32,13 @@ public class ExerciseController {
 
     @GetMapping(value = "/word-translation")
     public ResponseEntity wordTranslation(@RequestParam("ids") List<Long> translationIds) {
-        final List<ExerciseItemDto> exerciseItems = exerciseService.prepareExercise(translationIds, Exercise.Name.WORD_TRANSLATION);
+        final List<ExerciseItemDto> exerciseItems = exerciseService.prepareExercise(translationIds, ExerciseStrategy.WORD_TRANSLATION);
         return ResponseEntity.ok(exerciseItems);
     }
 
     @GetMapping(value = "/translation-word")
     public ResponseEntity translationWord(@RequestParam("ids") List<Long> translationIds) {
-        final List<ExerciseItemDto> exerciseItems = exerciseService.prepareExercise(translationIds, Exercise.Name.TRANSLATION_WORD);
+        final List<ExerciseItemDto> exerciseItems = exerciseService.prepareExercise(translationIds, ExerciseStrategy.TRANSLATION_WORD);
         return ResponseEntity.ok(exerciseItems);
     }
 

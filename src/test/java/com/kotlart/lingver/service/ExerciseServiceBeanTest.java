@@ -6,6 +6,7 @@ import com.kotlart.lingver.model.entity.Exercise;
 import com.kotlart.lingver.model.entity.ProfileTranslation;
 import com.kotlart.lingver.model.entity.Translation;
 import com.kotlart.lingver.model.entity.Word;
+import com.kotlart.lingver.model.strategy.ExerciseStrategy;
 import com.kotlart.lingver.service.impl.ExerciseServiceBean;
 import com.kotlart.lingver.service.respository.ExerciseRepository;
 import com.kotlart.lingver.service.respository.ProfileTranslationRepository;
@@ -50,13 +51,13 @@ public class ExerciseServiceBeanTest extends AbstractServiceBeanTest {
     public void before() {
         final List<ProfileTranslation> profileTranslations = prepareProfileTranslations();
         Mockito.when(profileTranslationRepository.findByIdIn(profileTranslationIds)).thenReturn(profileTranslations);
-        Mockito.when(exerciseRepository.findByName(Exercise.Name.WORD_TRANSLATION)).thenReturn(Exercise.builder().id(ID_1).name(Exercise.Name.WORD_TRANSLATION).build());
-        Mockito.when(exerciseRepository.findByName(Exercise.Name.TRANSLATION_WORD)).thenReturn(Exercise.builder().id(ID_2).name(Exercise.Name.WORD_TRANSLATION).build());
+        Mockito.when(exerciseRepository.findByName(ExerciseStrategy.WORD_TRANSLATION.getExerciseDbName())).thenReturn(Exercise.builder().id(ID_1).name(ExerciseStrategy.WORD_TRANSLATION.getExerciseDbName()).build());
+        Mockito.when(exerciseRepository.findByName(ExerciseStrategy.TRANSLATION_WORD.getExerciseDbName())).thenReturn(Exercise.builder().id(ID_2).name(ExerciseStrategy.TRANSLATION_WORD.getExerciseDbName()).build());
     }
 
     @Test
     public void test_generateWordTranslationTrainingSet() {
-        final List<ExerciseItemDto> exerciseItems = sut.prepareExercise(profileTranslationIds, Exercise.Name.WORD_TRANSLATION);
+        final List<ExerciseItemDto> exerciseItems = sut.prepareExercise(profileTranslationIds, ExerciseStrategy.WORD_TRANSLATION);
         Assert.assertEquals(2, exerciseItems.size());
         exerciseItems.forEach(e -> {
             Assert.assertEquals(2, e.getAnswers().size());
@@ -70,7 +71,7 @@ public class ExerciseServiceBeanTest extends AbstractServiceBeanTest {
 
     @Test
     public void test_generateTranslationWordTrainingSet() {
-        final List<ExerciseItemDto> exerciseItems = sut.prepareExercise(profileTranslationIds, Exercise.Name.TRANSLATION_WORD);
+        final List<ExerciseItemDto> exerciseItems = sut.prepareExercise(profileTranslationIds, ExerciseStrategy.TRANSLATION_WORD);
         Assert.assertEquals(2, exerciseItems.size());
         exerciseItems.forEach(e -> {
             Assert.assertEquals(2, e.getAnswers().size());
