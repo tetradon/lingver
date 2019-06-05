@@ -1,6 +1,6 @@
 package com.kotlart.lingver.rest.util;
 
-import com.kotlart.lingver.rest.dto.MessageDto;
+import com.kotlart.lingver.model.dto.MessageDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 

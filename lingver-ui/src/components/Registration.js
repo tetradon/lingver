@@ -1,7 +1,16 @@
 import React, {Component} from 'react';
-import {Button, Grid, LinearProgress, Paper, TextField, Typography, withStyles} from "@material-ui/core"
+import {
+    Button,
+    Grid,
+    LinearProgress,
+    Paper,
+    TextField,
+    Typography,
+    withStyles
+} from "@material-ui/core"
 import {registrationService} from "../service/registrationService"
 import {withSnackbar} from 'notistack';
+import {Trans} from "react-i18next";
 
 const styles = theme => ({
     paper: {
@@ -40,16 +49,12 @@ class Registration extends Component {
         this.setState({loading: true});
         registrationService.register(this.state.user)
             .then(() => {
-                this.props.enqueueSnackbar("Now you can sign in with your credentials", {
-                    variant: 'info'
-                });
+                this.props.enqueueSnackbar(<Trans>Now you can sign in using credentials</Trans>);
                 this.props.history.push("/");
             })
             .catch((error) => {
                 error.response.data.forEach((error) => {
-                    this.props.enqueueSnackbar(error.message, {
-                        variant: 'warning'
-                    });
+                    this.props.enqueueSnackbar(error.message);
                 });
             }).finally(() => {
             this.setState({loading: false});
@@ -76,13 +81,13 @@ class Registration extends Component {
                     <Grid item xs={10} md={8} lg={6}>
                         <Paper className={classes.paper}>
                             <Typography variant="h2" align={"center"}>
-                                Sign up
+                                <Trans>Sign up</Trans>
                             </Typography>
                             <Grid container className={classes.marginTop5} spacing={32}>
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         onChange={this.handleUserChange}
-                                        label="Username"
+                                        label={<Trans>Username</Trans>}
                                         required
                                         name='username'
                                         fullWidth
@@ -100,7 +105,7 @@ class Registration extends Component {
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         onChange={this.handleUserChange}
-                                        label="First name"
+                                        label={<Trans>First name</Trans>}
                                         name="firstName"
                                         fullWidth
                                     />
@@ -108,7 +113,7 @@ class Registration extends Component {
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         onChange={this.handleUserChange}
-                                        label="Last Name"
+                                        label={<Trans>Last name</Trans>}
                                         name="lastName"
                                         fullWidth
                                     />
@@ -116,7 +121,7 @@ class Registration extends Component {
                                 <Grid item xs={12} sm={6}>
                                     <TextField
                                         onChange={this.handleUserChange}
-                                        label="Password"
+                                        label={<Trans>Password</Trans>}
                                         name="password"
                                         fullWidth
                                         required
@@ -127,27 +132,26 @@ class Registration extends Component {
                                     <TextField
                                         onChange={this.handleRepeatPasswordChange}
                                         error={this.state.repeatPassword !== this.state.user.password}
-                                        label={"Repeat password"}
+                                        label={<Trans>Repeat password</Trans>}
                                         name="repeatPassword"
                                         fullWidth
                                         required
                                         type="password"
                                     />
                                 </Grid>
-                                <Grid item xs={8} md={10}/>
-                                <Grid item xs={4} md={2}>
+                                <Grid item xs={6} md={9}/>
+                                <Grid item xs={4} md={3}>
                                     <Button
                                         fullWidth
                                         type="submit"
                                         variant="contained"
                                         color="primary"
-                                        size="large"
                                         onClick={this.handleSubmit}
                                         disabled={
                                             !this.isValid()
                                         }
                                     >
-                                        Submit
+                                        <Trans>Submit</Trans>
                                     </Button>
                                 </Grid>
                             </Grid>

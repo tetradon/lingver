@@ -3,14 +3,15 @@ import axios from 'axios'
 export const userService = {
     login,
     logout,
-    getActiveUser
+    getActiveUser,
+    removeUserFromStorage
 };
 
 function login(username, password) {
     let bodyFormData = new FormData();
     bodyFormData.set('username', username);
     bodyFormData.set('password', password);
-    return axios.post('/login', bodyFormData, {withCredentials: true})
+    return axios.post(process.env.REACT_APP_REST_API + '/login', bodyFormData, {withCredentials: true})
         .then(response => {
             localStorage.setItem('activeUser', JSON.stringify(response.data));
             return response.data;
@@ -20,11 +21,15 @@ function login(username, password) {
 }
 
 function logout() {
-    axios.post("/logout");
-    localStorage.removeItem('activeUser');
+    axios.post(process.env.REACT_APP_REST_API + "/logout");
+    removeUserFromStorage();
 }
 
 function getActiveUser() {
     return localStorage.getItem('activeUser');
+}
+
+function removeUserFromStorage() {
+    return localStorage.removeItem('activeUser');
 }
 

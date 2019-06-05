@@ -13,6 +13,7 @@ import {
 } from "@material-ui/core"
 import {Link} from "react-router-dom";
 import {withSnackbar} from "notistack";
+import {Trans} from "react-i18next";
 
 const styles = theme => ({
     paper: {
@@ -38,7 +39,6 @@ const styles = theme => ({
 class Login extends Component {
     constructor(props) {
         super(props);
-        userService.logout();
         this.state = {
             username: '',
             password: '',
@@ -63,19 +63,13 @@ class Login extends Component {
         this.setState({loading: true});
         userService.login(this.state.username, this.state.password)
             .then((user) => {
-                this.props.enqueueSnackbar(`Welcome, ${user.username}`, {
-                    variant: 'info'
-                });
+                this.props.enqueueSnackbar(<span><Trans>Welcome, </Trans>{user.username}</span>);
                 this.props.history.push("/");
             })
-            .catch((error) => {
-                console.log(error.response);
-                this.props.enqueueSnackbar("Wrong credentials!", {
-                    variant: 'warning'
-                });
-            }).finally(() => {
-            this.setState({loading: false});
-        });
+            .catch(() => {
+                this.props.enqueueSnackbar(<Trans>Wrong credentials!</Trans>);
+                this.setState({loading: false})
+            })
     }
 
     render() {
@@ -86,16 +80,19 @@ class Login extends Component {
                     <Grid item lg={3} md={5} s={8} xs={10}>
                         <Paper className={classes.paper}>
                             <Typography variant="h2">
-                                Login
+                                <Trans>
+                                    Login
+                                </Trans>
                             </Typography>
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel>Username</InputLabel>
+                                <InputLabel><Trans>Username</Trans></InputLabel>
                                 <Input className={classes.input} value={this.state.username}
                                        onChange={this.handleUsernameChange} autoFocus/>
                             </FormControl>
                             <FormControl margin="normal" required fullWidth>
-                                <InputLabel>Password</InputLabel>
-                                <Input className={classes.input} type="password" value={this.state.password}
+                                <InputLabel><Trans>Password</Trans></InputLabel>
+                                <Input className={classes.input} type="password"
+                                       value={this.state.password}
                                        onChange={this.handlePasswordChange}/>
                             </FormControl>
                             <Button className={classes.submit}
@@ -105,15 +102,15 @@ class Login extends Component {
                                     variant="contained"
                                     color="primary"
                             >
-                                Sign in
+                                <Trans>Sign in</Trans>
                             </Button>
-
                             <Typography variant="caption" className={classes.margin}>
-                                Do not have an account?
+                                <Trans>Do not have an account?</Trans>
                             </Typography>
-                            <Button component={Link} to={'/register'} fullWidth variant="outlined" size="small"
+                            <Button component={Link} to={'/register'} fullWidth variant="outlined"
+                                    size="small"
                                     color="primary">
-                                Sign Up
+                                <Trans>Sign up</Trans>
                             </Button>
                         </Paper>
                         <LinearProgress hidden={!this.state.loading}/>

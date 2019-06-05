@@ -1,8 +1,8 @@
 package com.kotlart.lingver.rest;
 
-import com.kotlart.lingver.model.Profile;
-import com.kotlart.lingver.rest.dto.MessageDto;
-import com.kotlart.lingver.rest.dto.ProfileDto;
+import com.kotlart.lingver.model.dto.MessageDto;
+import com.kotlart.lingver.model.dto.ProfileDto;
+import com.kotlart.lingver.model.entity.Profile;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

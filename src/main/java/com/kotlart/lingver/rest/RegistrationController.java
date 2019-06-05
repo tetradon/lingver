@@ -1,8 +1,8 @@
 package com.kotlart.lingver.rest;
 
-import com.kotlart.lingver.model.Profile;
-import com.kotlart.lingver.rest.dto.NewProfileDto;
-import com.kotlart.lingver.rest.dto.ProfileDto;
+import com.kotlart.lingver.model.dto.NewProfileDto;
+import com.kotlart.lingver.model.dto.ProfileDto;
+import com.kotlart.lingver.model.entity.Profile;
 import com.kotlart.lingver.rest.util.ResponseUtil;
 import com.kotlart.lingver.service.ProfileService;
 import org.modelmapper.ModelMapper;

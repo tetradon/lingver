@@ -25,3 +25,5 @@ public class LingverApplication implements WebMvcConfigurer {
 
 }
 
+
+

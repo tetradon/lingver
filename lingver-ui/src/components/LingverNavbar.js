@@ -2,6 +2,12 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import {userService} from "../service/userService";
 import {AppBar, Button, Toolbar, Typography, withStyles} from '@material-ui/core';
+import SchoolIcon from "@material-ui/icons/School";
+import {Trans} from "react-i18next";
+import MenuItem from "@material-ui/core/MenuItem";
+import IconButton from "@material-ui/core/IconButton";
+import Menu from "@material-ui/core/Menu";
+import TranslateIcon from "@material-ui/icons/Translate";
 
 const styles = {
     grow: {
@@ -13,10 +19,35 @@ const styles = {
     },
     appBar: {
         marginBottom: '2em'
+    },
+    icon: {
+        marginLeft: '10px',
+        fontSize: '2em'
     }
 };
 
+
 class LingverNavbar extends Component {
+
+    state = {
+        lngMenuAnchor: null,
+        selectedLng: 'ru'
+    };
+
+    handleLngMenuClick = event => {
+        this.setState({lngMenuAnchor: event.currentTarget});
+    };
+
+    handleLngMenuClose = () => {
+        this.setState({lngMenuAnchor: null});
+    };
+
+    changeLanguage = (lng) => {
+        this.setState({selectedLng: lng});
+        this.props.changeLanguage(lng);
+        this.handleLngMenuClose();
+    };
+
     render() {
         return <AppBar position="static" style={styles.appBar}>
             <Toolbar>
@@ -29,18 +60,26 @@ class LingverNavbar extends Component {
                 >
                     Lingver
                 </Typography>
+                <SchoolIcon style={styles.icon}/>
                 <div style={styles.grow}/>
-                {
-                    userService.getActiveUser() && (
-                        <Button component={Link}
-                                to="/dictionary"
-                                color="inherit"
-                                style={styles.link}
-                        >
-                            Dictionary
-                        </Button>
-                    )
-                }
+                <IconButton style={styles.link} onClick={this.handleLngMenuClick}>
+                    <TranslateIcon/>
+                </IconButton>
+                <Menu
+                    id="lang-menu"
+                    anchorEl={this.state.lngMenuAnchor}
+                    open={Boolean(this.state.lngMenuAnchor)}
+                    onClose={this.handleLngMenuClose}
+                >
+                    <MenuItem selected={this.state.selectedLng === 'ru'}
+                              onClick={() => this.changeLanguage("ru")}>
+                        RU
+                    </MenuItem>
+                    <MenuItem selected={this.state.selectedLng === 'en'}
+                              onClick={() => this.changeLanguage("en")}>
+                        EN
+                    </MenuItem>
+                </Menu>
                 <Button
                     color="inherit"
                     style={styles.link}
@@ -48,7 +87,7 @@ class LingverNavbar extends Component {
                     to="/login"
                     onClick={userService.logout}
                 >
-                    {userService.getActiveUser() ? 'Logout' : 'Login'}
+                    {userService.getActiveUser() ? <Trans>Logout</Trans> : <Trans>Login</Trans>}
                 </Button>
             </Toolbar>
         </AppBar>;

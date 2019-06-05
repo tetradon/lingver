@@ -1,18 +1,19 @@
 package com.kotlart.lingver.service.impl;
 
-import com.kotlart.lingver.model.Profile;
-import com.kotlart.lingver.model.Role;
-import com.kotlart.lingver.respository.ProfileRepository;
-import com.kotlart.lingver.respository.RoleRepository;
+import com.kotlart.lingver.model.entity.Profile;
+import com.kotlart.lingver.model.entity.Role;
 import com.kotlart.lingver.service.ProfileService;
+import com.kotlart.lingver.service.respository.ProfileRepository;
+import com.kotlart.lingver.service.respository.RoleRepository;
+import com.kotlart.lingver.util.ExceptionUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 @Service
@@ -45,7 +46,12 @@ public class ProfileServiceBean implements UserDetailsService, ProfileService {
         profile.setEnabled(true);
         profile.setPassword(encoder.encode(profile.getPassword()));
         Role role = roleRepository.findByAuthority(Role.USER);
-        profile.setAuthorities(new ArrayList<>(Collections.singletonList(role)));
-        return profileRepository.save(profile);
+        profile.setAuthorities(Collections.singletonList(role));
+        try {
+            return profileRepository.save(profile);
+        } catch (DataIntegrityViolationException exception) {
+            ExceptionUtil.handleDataIntegrityViolationException(exception);
+        }
+        return null;
     }
 }
